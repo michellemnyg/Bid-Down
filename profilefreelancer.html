@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Profil Freelancer - BidDown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+  body {
+    background-color: #f6f1eb;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .container {
+    max-width: 1000px;
+  }
+
+  .card {
+    border: none;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(90, 62, 43, 0.1);
+  }
+
+  h3, h5 {
+    color: #5a3e2b;
+  }
+
+  p {
+    color: #7a5c48;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #e6d5c3;
+  }
+
+  .rating {
+    color: #c8a27a;
+    font-size: 18px;
+  }
+
+  .portfolio img {
+    border-radius: 10px;
+    height: 150px;
+    object-fit: cover;
+    transition: 0.3s;
+  }
+
+  .portfolio img:hover {
+    transform: scale(1.05);
+  }
+
+  .review {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+  }
+
+  .review:last-child {
+    border-bottom: none;
+  }
+
+  .badge-skill {
+    background: #e6d5c3;
+    color: #5a3e2b;
+    margin: 2px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+  <!-- Tombol Kembali -->
+  <div class="mb-3">
+    <a href="dashboard.html" class="btn btn-secondary">
+      ← Kembali ke Dashboard
+    </a>
+  </div>
+
+  <!-- Header Profil -->
+  <div class="card p-4 text-center">
+    <img src="https://i.pravatar.cc/150" class="avatar mb-3">
+    <h3>John Doe</h3>
+    <p>Web Developer</p>
+    <div class="rating">⭐⭐⭐⭐⭐ (4.9 / 5)</div>
+
+    <div class="mt-2">
+      <span class="badge badge-skill">HTML</span>
+      <span class="badge badge-skill">CSS</span>
+      <span class="badge badge-skill">JavaScript</span>
+    </div>
+  </div>
+
+  <!-- About Me -->
+  <div class="card p-4 mt-4">
+    <h5>About Me</h5>
+    <p>
+      Saya adalah seorang Web Developer dengan pengalaman lebih dari 3 tahun dalam
+      membangun website modern, responsif, dan user-friendly. Terbiasa menggunakan
+      HTML, CSS, JavaScript, serta framework seperti Bootstrap dan React.
+    </p>
+  </div>
+
+  <!-- Portfolio -->
+  <div class="card p-4 mt-4">
+    <h5>Portofolio</h5>
+    <div class="row portfolio mt-3">
+      <div class="col-md-4 mb-3">
+        <img src="https://picsum.photos/300/200?1" class="w-100">
+      </div>
+      <div class="col-md-4 mb-3">
+        <img src="https://picsum.photos/300/200?2" class="w-100">
+      </div>
+      <div class="col-md-4 mb-3">
+        <img src="https://picsum.photos/300/200?3" class="w-100">
+      </div>
+    </div>
+  </div>
+
+  <!-- Riwayat & Review -->
+  <div class="card p-4 mt-4">
+    <h5>Riwayat Pekerjaan & Ulasan</h5>
+
+    <div class="review">
+      <strong>Website Company Profile</strong><br>
+      <small class="text-muted">Klien: PT Maju Jaya</small><br>
+      <span class="rating">⭐⭐⭐⭐⭐</span>
+      <p>Hasil kerja sangat memuaskan dan cepat!</p>
+    </div>
+
+    <div class="review">
+      <strong>UI Mobile App</strong><br>
+      <small class="text-muted">Klien: CV Kreatif Indo</small><br>
+      <span class="rating">⭐⭐⭐⭐</span>
+      <p>Desain bagus, komunikasi lancar.</p>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
