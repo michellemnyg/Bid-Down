@@ -511,14 +511,16 @@
                 const roleFromStorage = localStorage.getItem("userRole");
                 const role = roleFromUrl || roleFromStorage || "freelancer";
 
-                if (role === "client") {
-                    dashboardLink.href = "dashboardclient.html";
-                    dashboardLink.innerHTML =
-                        '<i class="bi bi-speedometer2 me-1"></i> Dashboard Client';
-                } else {
-                    dashboardLink.href = "dashboardfreelancer.html";
-                    dashboardLink.innerHTML =
-                        '<i class="bi bi-speedometer2 me-1"></i> Dashboard Freelancer';
+                if (dashboardLink) {
+                    if (role === "client") {
+                        dashboardLink.href = "dashboardclient.html";
+                        dashboardLink.innerHTML =
+                            '<i class="bi bi-speedometer2 me-1"></i> Dashboard Client';
+                    } else {
+                        dashboardLink.href = "dashboardfreelancer.html";
+                        dashboardLink.innerHTML =
+                            '<i class="bi bi-speedometer2 me-1"></i> Dashboard Freelancer';
+                    }
                 }
 
                 localStorage.setItem("userRole", role);
@@ -565,6 +567,8 @@
 
                     const col = document.createElement("div");
                     col.className = "col-md-6 col-xl-4";
+                    
+                    // PERUBAHAN DI SINI: <button> diganti menjadi <a> dengan href menuju projectdetailfreelancer.html
                     col.innerHTML = `
                     <div class="card project-card h-100">
                         <div class="card-body d-flex flex-column">
@@ -604,9 +608,9 @@
                                 <div class="small">
                                     <strong class="text-primary">${p.skillsNeeded.length}</strong> skills dibutuhkan
                                 </div>
-                                <button class="btn btn-primary btn-sm fw-semibold" onclick="alert('Fitur detail project akan segera hadir. Project ID: ${p.id}')">
+                                <a href="projectdetailfreelancer.html?id=${p.id}" class="btn btn-primary btn-sm fw-semibold">
                                     Lihat Detail <i class="bi bi-arrow-right ms-1"></i>
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
