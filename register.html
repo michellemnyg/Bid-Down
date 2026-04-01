@@ -329,7 +329,11 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            let selectedRole = "client"; // Default role
+
             function selectRole(role, button) {
+                selectedRole = role;
+
                 // Update active button
                 document
                     .querySelectorAll(".role-tab")
@@ -355,7 +359,59 @@
                 .getElementById("register-form")
                 .addEventListener("submit", function (e) {
                     e.preventDefault();
-                    alert("Form akan diproses ke backend");
+
+                    let email,
+                        name,
+                        password,
+                        isValid = true;
+
+                    if (selectedRole === "client") {
+                        email = document.getElementById("client-email").value;
+                        name = document.getElementById("client-name").value;
+                        password =
+                            document.getElementById("client-password").value;
+                        const terms =
+                            document.getElementById("client-terms").checked;
+
+                        if (!email || !name || !password || !terms) {
+                            alert(
+                                "Semua field harus diisi dan syarat & ketentuan harus disetujui.",
+                            );
+                            isValid = false;
+                        }
+                    } else {
+                        email =
+                            document.getElementById("freelancer-email").value;
+                        name = document.getElementById("freelancer-name").value;
+                        password = document.getElementById(
+                            "freelancer-password",
+                        ).value;
+                        const terms =
+                            document.getElementById("freelancer-terms").checked;
+
+                        if (!email || !name || !password || !terms) {
+                            alert(
+                                "Semua field harus diisi dan syarat & ketentuan harus disetujui.",
+                            );
+                            isValid = false;
+                        }
+                    }
+
+                    if (!isValid) return;
+
+                    // In production, this would call an API to register the user
+                    // For now, we'll just save to localStorage and redirect
+
+                    localStorage.setItem("userName", name);
+                    localStorage.setItem("userEmail", email);
+                    localStorage.setItem("userRole", selectedRole);
+
+                    alert(
+                        "Pendaftaran berhasil! Anda akan diarahkan ke halaman beranda.",
+                    );
+
+                    // Redirect to homepage with role parameter
+                    window.location.href = `homepage.html?role=${selectedRole}`;
                 });
         </script>
     </body>
