@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Proyek | Bid Down</title>
+
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f6f1eb;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card-section {
+            border-radius: 15px;
+            border: none;
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #8b5e3c;
+        }
+
+        .btn-primary {
+            background-color: #8b5e3c;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #6f4b2f;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold">Buat Proyek Baru</h2>
+        <p class="text-muted">Lengkapi detail untuk mulai bidding dari freelancer terbaik</p>
+    </div>
+
+    <form>
+
+        <!-- ================= INFO DASAR ================= -->
+        <div class="card card-section shadow-sm p-4 mb-4">
+            <h5 class="section-title mb-3">
+                <i class="bi bi-info-circle me-2"></i>Informasi Dasar
+            </h5>
+
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <label class="form-label">Judul Proyek</label>
+                    <input type="text" class="form-control" placeholder="Contoh: Website Company Profile">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Kategori</label>
+                    <select class="form-select">
+                        <option selected disabled>Pilih</option>
+                        <option>Web Development</option>
+                        <option>Mobile App</option>
+                        <option>UI/UX</option>
+                        <option>Desain Grafis</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label">Deskripsi Lengkap</label>
+                <textarea class="form-control" rows="5" placeholder="Tuliskan detail kebutuhan proyek..."></textarea>
+            </div>
+        </div>
+
+        <!-- ================= PENGATURAN ================= -->
+        <div class="card card-section shadow-sm p-4 mb-4">
+            <h5 class="section-title mb-3">
+                <i class="bi bi-gear me-2"></i>Pengaturan Bidding
+            </h5>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Harga Maksimal</label>
+                    <div class="input-group">
+                        <span class="input-group-text">Rp</span>
+                        <input type="number" class="form-control" placeholder="5000000">
+                    </div>
+                    <small class="text-muted">Freelancer tidak bisa menawar di atas ini</small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Deadline Bid</label>
+                    <input type="date" class="form-control">
+                </div>
+            </div>
+
+            <!-- Toggle Options -->
+            <div class="bg-light p-3 rounded mt-3">
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="blind">
+                    <label class="form-check-label fw-semibold" for="blind">
+                        Blind Review
+                    </label>
+                    <div class="small text-muted">
+                        Nama freelancer disembunyikan saat bidding berlangsung
+                    </div>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="auto">
+                    <label class="form-check-label fw-semibold" for="auto">
+                        Auto Stop
+                    </label>
+                    <div class="small text-muted">
+                        Bidding otomatis berhenti dalam 24 jam
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= SUBMIT ================= -->
+        <div class="d-flex justify-content-between align-items-center">
+            
+            <!-- 🔥 SUDAH DIUBAH DI SINI -->
+            <a href="dashboardclient.html" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+
+            <button type="submit" class="btn btn-primary px-4 fw-bold">
+                <i class="bi bi-send-check me-1"></i> Terbitkan Proyek
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
