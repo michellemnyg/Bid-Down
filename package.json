@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8",
+    "sharp": "^0.34.5"
+  },
+  "name": "bid-down",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michellemnyg/Bid-Down.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/michellemnyg/Bid-Down/issues"
+  },
+  "homepage": "https://github.com/michellemnyg/Bid-Down#readme"
+}
