@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Homepage | Bid Down</title>
+
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+        />
+
+        <style>
+            :root {
+                --primary: #8b5e3c;
+                --secondary: #c8a27a;
+                --background: #f6f1eb;
+                --text: #5a3e2b;
+                --text-secondary: #8b6b55;
+                --card-bg: #fff;
+                --accent: #d94d4d;
+            }
+
+            body {
+                color: var(--text);
+                background-color: var(--background);
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            .bg-primary {
+                background-color: var(--primary) !important;
+            }
+            .text-primary {
+                color: var(--primary) !important;
+            }
+            .text-secondary-custom {
+                color: var(--text-secondary) !important;
+            }
+
+            .btn-primary {
+                background-color: var(--primary);
+                border-color: var(--primary);
+                color: #fff;
+            }
+
+            .btn-primary:hover {
+                background-color: #724d31;
+                border-color: #724d31;
+                color: #fff;
+            }
+
+            .btn-outline-primary {
+                color: var(--primary);
+                border-color: var(--primary);
+            }
+
+            .btn-outline-primary:hover {
+                background-color: var(--primary);
+                color: #fff;
+            }
+
+            .hero {
+                background: linear-gradient(
+                    135deg,
+                    var(--primary) 0%,
+                    var(--secondary) 100%
+                );
+                color: #fff;
+            }
+
+            .search-card {
+                background: var(--card-bg);
+                border: 0;
+                border-radius: 16px;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+                margin-top: -56px;
+                position: relative;
+                z-index: 2;
+            }
+
+            .project-card {
+                border: 0;
+                border-radius: 14px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+                height: 100%;
+                background-color: #fff;
+            }
+
+            .project-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+            }
+
+            .price-tag {
+                background-color: #f5ebe2;
+                color: var(--primary);
+                padding: 0.4rem 0.8rem;
+                border-radius: 999px;
+                font-weight: 700;
+                font-size: 0.9rem;
+                display: inline-block;
+            }
+
+            .empty-state {
+                border: 2px dashed #d7c5b5;
+                border-radius: 14px;
+                background: #fff;
+                padding: 40px 28px;
+                text-align: center;
+                color: var(--text-secondary);
+            }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0.2rem rgba(139, 94, 60, 0.2);
+            }
+
+            .badge-status {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .category-badge {
+                display: inline-block;
+                background: #f0e6dd;
+                color: var(--text);
+                padding: 0.35rem 0.7rem;
+                border-radius: 6px;
+                font-size: 0.85rem;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+        <div class="container-lg">
+            <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center gap-2" href="#">
+                <img src="/assets/images/icon.svg" alt="Bid-Down Logo" height="30" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
+                Bid Down
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFreelancer">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarFreelancer">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold gap-3">
+                  <li class="nav-item">
+                        <a class="nav-link text-dark" href="dashboardfreelancer.html">Beranda</a>
+                    </li>  
+                  <li class="nav-item">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="explore.html">Eksplor Proyek</a>
+                    </li> 
+                        <a class="nav-link text-dark" href="#bid-aktif">Bid Aktif Saya</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="#proyek-berjalan">Proyek Berjalan</a>
+                    </li>
+                </ul>
+                <div class="d-flex ms-lg-4 mt-3 mt-lg-0 align-items-center gap-3">
+                    <a href="profilefreelancer.html" class="nav-link fw-medium text-secondary-custom">
+                        <i class="bi bi-person-circle me-1"></i> Andi Setiawan
+                    </a>
+                    <a href="login.html" class="btn btn-sm btn-outline-danger fw-bold">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+        <section class="hero py-5">
+            <div class="container-lg py-4">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-10">
+                        <h1 class="display-5 fw-bold mb-3">
+                            Eksplorasi Proyek Aktif
+                        </h1>
+                        <p class="mb-0 fs-5 opacity-90">
+                            Temukan berbagai peluang proyek yang sedang berjalan. Gunakan filter di bawah untuk mencari proyek yang sesuai dengan keahlian atau kebutuhan Anda, lalu masuk ke detail proyek untuk memantau aktivitas atau mengajukan penawaran.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main class="container-lg pb-5">
+            <section id="filter-project" class="search-card p-4 p-md-5 mb-4">
+                <h5 class="fw-bold text-primary mb-4">
+                    <i class="bi bi-funnel me-2"></i> Filter Project
+                </h5>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6 col-lg-4">
+                        <label
+                            for="searchInput"
+                            class="form-label fw-semibold text-primary"
+                            >Kata Kunci</label
+                        >
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="form-control form-control-lg"
+                            placeholder="Contoh: website, UI/UX, API..."
+                        />
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <label
+                            for="categoryFilter"
+                            class="form-label fw-semibold text-primary"
+                            >Kategori</label
+                        >
+                        <select
+                            id="categoryFilter"
+                            class="form-select form-select-lg"
+                        >
+                            <option value="">Semua Kategori</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <label
+                            for="budgetFilter"
+                            class="form-label fw-semibold text-primary"
+                            >Budget Maksimal</label
+                        >
+                        <select
+                            id="budgetFilter"
+                            class="form-select form-select-lg"
+                        >
+                            <option value="">Semua Range</option>
+                            <option value="1000000">Sampai Rp 1.000.000</option>
+                            <option value="3000000">Sampai Rp 3.000.000</option>
+                            <option value="5000000">Sampai Rp 5.000.000</option>
+                            <option value="10000000">
+                                Sampai Rp 10.000.000
+                            </option>
+                            <option value="20000000">
+                                Sampai Rp 20.000.000
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 col-lg-2 d-grid">
+                        <button
+                            id="resetBtn"
+                            class="btn btn-outline-primary btn-lg fw-semibold"
+                        >
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="list-project" class="pt-2">
+                <div
+                    class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4"
+                >
+                    <h2 class="h3 fw-bold text-primary mb-0">
+                        <i class="bi bi-briefcase me-2"></i> Project Tersedia
+                    </h2>
+                    <p
+                        id="resultCount"
+                        class="text-secondary-custom mb-0 fw-semibold"
+                    >
+                        -
+                    </p>
+                </div>
+                <div class="row g-4" id="projectList"></div>
+                <div id="emptyState" class="empty-state mt-4 d-none">
+                    <i class="bi bi-search fs-2 d-block mb-2"></i>
+                    <p class="mb-0">
+                        Tidak ada project yang cocok dengan filter saat ini.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-primary text-white py-4 mt-5">
+            <div class="container-lg">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <h6 class="fw-bold mb-2">Bid Down</h6>
+                        <p class="small opacity-75 mb-0">
+                            Platform reverse bidding terpercaya untuk freelancer
+                            dan client Indonesia.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="fw-bold mb-2">Link Cepat</h6>
+                        <ul class="list-unstyled small">
+                            <li>
+                                <a
+                                    href="#list-project"
+                                    class="text-white-50 text-decoration-none"
+                                    >Project Tersedia</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#filter-project"
+                                    class="text-white-50 text-decoration-none"
+                                    >Cari Project</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="profilefreelancer.html"
+                                    class="text-white-50 text-decoration-none"
+                                    >Profil</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <p class="small opacity-75 mb-0">
+                            © 2026 Bid-Down. Semua hak dilindungi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Mock Data Project
+            const projects = [
+                {
+                    id: 1,
+                    title: "Pembuatan Landing Page Produk SaaS",
+                    category: "Web Development",
+                    budgetMax: 3000000,
+                    client: "PT Solusi Digital",
+                    deadline: "2026-04-20",
+                    bidLowest: 2100000,
+                    status: "Open Bid",
+                    description:
+                        "Membuat landing page responsif dengan conversion optimization + integrasi formulir lead capture.",
+                    skillsNeeded: [
+                        "HTML",
+                        "CSS",
+                        "JavaScript",
+                        "Responsive Design",
+                    ],
+                },
+                {
+                    id: 2,
+                    title: "Desain UI/UX Aplikasi E-Commerce Mobile",
+                    category: "UI/UX Design",
+                    budgetMax: 8000000,
+                    client: "CV BelanjaMaju",
+                    deadline: "2026-04-30",
+                    bidLowest: 6500000,
+                    status: "Open Bid",
+                    description:
+                        "Desain lengkap 18 screen aplikasi mobile e-commerce dengan prototype interaktif di Figma.",
+                    skillsNeeded: [
+                        "Figma",
+                        "UI Design",
+                        "UX Research",
+                        "Prototyping",
+                    ],
+                },
+                {
+                    id: 3,
+                    title: "Setup API Node.js dan Database MySQL Kompleks",
+                    category: "Backend Development",
+                    budgetMax: 5000000,
+                    client: "PT Jaya Abadi",
+                    deadline: "2026-04-15",
+                    bidLowest: null,
+                    status: "Menunggu Bid",
+                    description:
+                        "Membuat REST API Node.js dengan autentikasi JWT, manajemen produk, dan sistem pembayaran.",
+                    skillsNeeded: [
+                        "Node.js",
+                        "Express",
+                        "MySQL",
+                        "JWT",
+                        "REST API",
+                    ],
+                },
+                {
+                    id: 4,
+                    title: "Artikel SEO 20 Topik Bisnis Digital",
+                    category: "Content Writing",
+                    budgetMax: 2000000,
+                    client: "Media Tumbuh",
+                    deadline: "2026-04-25",
+                    bidLowest: 1500000,
+                    status: "Open Bid",
+                    description:
+                        "Menulis artikel blog SEO-friendly, masing-masing 1200-1500 kata, dengan keyword research mendalam.",
+                    skillsNeeded: [
+                        "SEO Writing",
+                        "Keyword Research",
+                        "Content Creation",
+                        "Copy Writing",
+                    ],
+                },
+                {
+                    id: 5,
+                    title: "Video Promosi Produk 60 Detik untuk Social Media",
+                    category: "Video Editing",
+                    budgetMax: 4000000,
+                    client: "Brand Lokal Kita",
+                    deadline: "2026-04-18",
+                    bidLowest: 3200000,
+                    status: "Open Bid",
+                    description:
+                        "Editing video vertikal (9:16) untuk Instagram Reels dan TikTok dengan color grading profesional.",
+                    skillsNeeded: [
+                        "Video Editing",
+                        "Adobe Premiere",
+                        "Color Grading",
+                        "Motion Graphics",
+                    ],
+                },
+                {
+                    id: 6,
+                    title: "Desain Logo dan Brand Identity Lengkap",
+                    category: "Graphic Design",
+                    budgetMax: 2500000,
+                    client: "Startup Teknologi",
+                    deadline: "2026-05-01",
+                    bidLowest: 1800000,
+                    status: "Open Bid",
+                    description:
+                        "Desain logo, style guide, dan visual identity untuk startup teknologi yang sedang berkembang.",
+                    skillsNeeded: [
+                        "Logo Design",
+                        "Branding",
+                        "Adobe Illustrator",
+                        "Design Systems",
+                    ],
+                },
+                {
+                    id: 7,
+                    title: "Pengembangan Fitur Analytics Dashboard",
+                    category: "Web Development",
+                    budgetMax: 6000000,
+                    client: "PT Data Solutions",
+                    deadline: "2026-04-22",
+                    bidLowest: null,
+                    status: "Menunggu Bid",
+                    description:
+                        "Membuat dashboard analytics dengan chart interaktif, real-time data, dan export laporan PDF.",
+                    skillsNeeded: [
+                        "React",
+                        "JavaScript",
+                        "Chart.js",
+                        "API Integration",
+                    ],
+                },
+                {
+                    id: 8,
+                    title: "Copywriting dan Landing Page Optimization",
+                    category: "Content Writing",
+                    budgetMax: 1500000,
+                    client: "E-Learning Platform",
+                    deadline: "2026-04-28",
+                    bidLowest: 1000000,
+                    status: "Open Bid",
+                    description:
+                        "Menulis copy persuasif untuk landing page + A/B testing optimization untuk meningkatkan konversi.",
+                    skillsNeeded: [
+                        "Copywriting",
+                        "Conversion Rate Optimization",
+                        "A/B Testing",
+                    ],
+                },
+            ];
+
+            // DOM Elements
+            const projectList = document.getElementById("projectList");
+            const resultCount = document.getElementById("resultCount");
+            const emptyState = document.getElementById("emptyState");
+            const searchInput = document.getElementById("searchInput");
+            const categoryFilter = document.getElementById("categoryFilter");
+            const budgetFilter = document.getElementById("budgetFilter");
+            const resetBtn = document.getElementById("resetBtn");
+            const dashboardLink = document.getElementById("dashboardLink");
+
+            // Utility Functions
+            function formatRupiah(value) {
+                return new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    maximumFractionDigits: 0,
+                }).format(value);
+            }
+
+            function formatDate(dateStr) {
+                return new Date(dateStr).toLocaleDateString("id-ID", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                });
+            }
+
+            function getDaysRemaining(dateStr) {
+                const deadline = new Date(dateStr);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const diffTime = deadline - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays;
+            }
+
+            // Setup Role Navigation
+            function setupRoleNavigation() {
+                const params = new URLSearchParams(window.location.search);
+                const roleFromUrl = params.get("role");
+                const roleFromStorage = localStorage.getItem("userRole");
+                const role = roleFromUrl || roleFromStorage || "freelancer";
+
+                if (dashboardLink) {
+                    if (role === "client") {
+                        dashboardLink.href = "dashboardclient.html";
+                        dashboardLink.innerHTML =
+                            '<i class="bi bi-speedometer2 me-1"></i> Dashboard Client';
+                    } else {
+                        dashboardLink.href = "dashboardfreelancer.html";
+                        dashboardLink.innerHTML =
+                            '<i class="bi bi-speedometer2 me-1"></i> Dashboard Freelancer';
+                    }
+                }
+
+                localStorage.setItem("userRole", role);
+            }
+
+            // Setup Category Filter
+            function setupCategoryFilter() {
+                const categories = [
+                    ...new Set(projects.map((p) => p.category)),
+                ].sort();
+                categories.forEach((category) => {
+                    const option = document.createElement("option");
+                    option.value = category;
+                    option.textContent = category;
+                    categoryFilter.appendChild(option);
+                });
+            }
+
+            // Render Projects
+            function renderProjects(items) {
+                projectList.innerHTML = "";
+
+                if (items.length === 0) {
+                    emptyState.classList.remove("d-none");
+                    resultCount.textContent = "0 project ditemukan";
+                    return;
+                }
+
+                emptyState.classList.add("d-none");
+                resultCount.textContent = `${items.length} project ditemukan`;
+
+                items.forEach((p) => {
+                    const daysLeft = getDaysRemaining(p.deadline);
+                    const daysWarning =
+                        daysLeft <= 5
+                            ? {
+                                  class: "text-danger",
+                                  icon: "exclamation-circle",
+                              }
+                            : {
+                                  class: "text-secondary-custom",
+                                  icon: "calendar-event",
+                              };
+
+                    const col = document.createElement("div");
+                    col.className = "col-md-6 col-xl-4";
+                    
+                    // PERUBAHAN DI SINI: <button> diganti menjadi <a> dengan href menuju projectdetailfreelancer.html
+                    col.innerHTML = `
+                    <div class="card project-card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                <div style="flex: 1;">
+                                    <h5 class="fw-bold text-primary mb-1">${p.title}</h5>
+                                    <span class="category-badge">${p.category}</span>
+                                </div>
+                                <span class="badge ${p.status === "Open Bid" ? "text-bg-success" : "text-bg-warning"} badge-status flex-shrink-0">
+                                    ${p.status}
+                                </span>
+                            </div>
+
+                            <p class="text-secondary-custom small mb-3">${p.description}</p>
+
+                            <div class="small text-secondary-custom mb-2 d-flex align-items-center">
+                                <i class="bi bi-building me-2"></i>
+                                <span>${p.client}</span>
+                            </div>
+                            <div class="small text-secondary-custom mb-3 d-flex align-items-center">
+                                <i class="bi bi-${daysWarning.icon} me-2 ${daysWarning.class}"></i>
+                                <span class="${daysWarning.class}">Deadline: ${formatDate(p.deadline)} (${daysLeft} hari)</span>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="mb-2">
+                                    <div class="price-tag">Budget Maks: ${formatRupiah(p.budgetMax)}</div>
+                                </div>
+                                <small class="text-secondary-custom">
+                                    ${p.bidLowest ? `Bid terendah: <strong>${formatRupiah(p.bidLowest)}</strong>` : '<em class="text-warning-emphasis">Belum ada bid masuk</em>'}
+                                </small>
+                            </div>
+
+                            <hr class="my-3">
+
+                            <div class="d-flex justify-content-between align-items-center mt-auto gap-2">
+                                <div class="small">
+                                    <strong class="text-primary">${p.skillsNeeded.length}</strong> skills dibutuhkan
+                                </div>
+                                <a href="projectdetailfreelancer.html?id=${p.id}" class="btn btn-primary btn-sm fw-semibold">
+                                    Lihat Detail <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    projectList.appendChild(col);
+                });
+            }
+
+            // Apply Filters
+            function applyFilters() {
+                const keyword = searchInput.value.trim().toLowerCase();
+                const category = categoryFilter.value;
+                const maxBudget = budgetFilter.value
+                    ? Number(budgetFilter.value)
+                    : null;
+
+                const filtered = projects.filter((p) => {
+                    const hitKeyword =
+                        p.title.toLowerCase().includes(keyword) ||
+                        p.description.toLowerCase().includes(keyword) ||
+                        p.client.toLowerCase().includes(keyword) ||
+                        p.skillsNeeded.some((s) =>
+                            s.toLowerCase().includes(keyword),
+                        );
+
+                    const hitCategory = !category || p.category === category;
+                    const hitBudget = !maxBudget || p.budgetMax <= maxBudget;
+
+                    return hitKeyword && hitCategory && hitBudget;
+                });
+
+                renderProjects(filtered);
+            }
+
+            // Event Listeners
+            resetBtn.addEventListener("click", () => {
+                searchInput.value = "";
+                categoryFilter.value = "";
+                budgetFilter.value = "";
+                renderProjects(projects);
+            });
+
+            searchInput.addEventListener("input", applyFilters);
+            categoryFilter.addEventListener("change", applyFilters);
+            budgetFilter.addEventListener("change", applyFilters);
+
+            // Initialize
+            setupRoleNavigation();
+            setupCategoryFilter();
+            renderProjects(projects);
+        </script>
+    </body>
+</html>
