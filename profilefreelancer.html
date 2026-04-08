@@ -81,49 +81,56 @@
         .portfolio-card:hover {
             transform: scale(1.03);
         }
+
+        /* Hover style untuk link teks */
+        .hover-link {
+            transition: color 0.2s ease;
+        }
+        .hover-link:hover {
+            color: var(--primary) !important;
+            text-decoration: underline !important;
+        }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
-        <div class="container-lg">
-            <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center gap-2" href="#">
-                <img src="/assets/images/icon.svg" alt="Bid-Down Logo" height="30" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
-                Bid Down
-            </a>
+    <div class="container-lg">
+        <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center gap-2" href="#">
+            <img src="/assets/images/icon.svg" alt="Bid-Down Logo" height="30" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
+            Bid Down
+        </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFreelancer">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFreelancer">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse" id="navbarFreelancer">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold gap-3">
-                  <li class="nav-item">
-                        <a class="nav-link text-dark" href="dashboardfreelancer.html">Beranda</a>
-                    </li>  
-                  <li class="nav-item">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="explore.html">Eksplor Proyek</a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="dashboardfreelancer.html#bid-aktif">Bid Aktif Saya</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="dashboardfreelancer.html#proyek-berjalan">Proyek Berjalan</a>
-                    </li>
-                </ul>
-                <div class="d-flex ms-lg-4 mt-3 mt-lg-0 align-items-center gap-3">
-                    <a href="profilefreelancer.html" class="nav-link fw-medium text-secondary-custom">
-                        <i class="bi bi-person-circle me-1"></i> Andi Setiawan
-                    </a>
-                    <a href="login.html" class="btn btn-sm btn-outline-danger fw-bold">
-                        <i class="bi bi-box-arrow-right"></i> Logout
-                    </a>
-                </div>
+        <div class="collapse navbar-collapse" id="navbarFreelancer">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold gap-3">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="dashboardfreelancer.html">Beranda</a>
+                </li>  
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="explore.html">Eksplor Proyek</a>
+                </li> 
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="dashboardfreelancer.html#bid-aktif">Bid Aktif Saya</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="dashboardfreelancer.html#proyek-berjalan">Proyek Berjalan</a>
+                </li>
+            </ul>
+            <div class="d-flex ms-lg-4 mt-3 mt-lg-0 align-items-center gap-3">
+                <a href="profilefreelancer.html" class="nav-link fw-medium text-secondary-custom">
+                    <i class="bi bi-person-circle me-1"></i> Andi Setiawan
+                </a>
+                <a href="login.html" class="btn btn-sm btn-outline-danger fw-bold">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
             </div>
         </div>
-        </nav>
-
+    </div>
+</nav>
     <main class="container-lg py-5">
         
         <div class="mb-4">
@@ -156,7 +163,9 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary fw-bold">Undang ke Proyek</button>
+                        <a href="editprofilefreelancer.html" class="btn btn-outline-primary fw-bold">
+                            <i class="bi bi-pencil-square me-2"></i> Edit Profil
+                        </a>
                     </div>
 
                     <hr class="my-4 text-light">
@@ -199,35 +208,43 @@
                     <h4 class="fw-bold text-primary mb-4">Portofolio Pekerjaan</h4>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="portfolio-card shadow-sm">
-                                <img src="https://placehold.co/600x400/eeeeee/8b5e3c?text=Sistem+POS+Restoran" alt="Sistem POS Restoran" class="img-fluid w-100">
-                                <div class="p-3 bg-white border border-top-0 border-light rounded-bottom">
-                                    <h6 class="fw-bold text-primary mb-1">Sistem POS Restoran Berbasis Web</h6>
-                                    <small class="text-muted">Vue.js & Laravel</small>
+                            <a href="#" class="text-decoration-none text-dark" title="Menuju ke link portofolio / Github freelancer">
+                                <div class="portfolio-card shadow-sm">
+                                    <img src="https://placehold.co/600x400/eeeeee/8b5e3c?text=Sistem+POS+Restoran" alt="Sistem POS Restoran" class="img-fluid w-100">
+                                    <div class="p-3 bg-white border border-top-0 border-light rounded-bottom">
+                                        <h6 class="fw-bold text-primary mb-1">Sistem POS Restoran Berbasis Web</h6>
+                                        <small class="text-muted">Vue.js & Laravel</small>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col-md-6">
-                            <div class="portfolio-card shadow-sm">
-                                <img src="https://placehold.co/600x400/eeeeee/8b5e3c?text=Aplikasi+Kasir+Mobile" alt="Aplikasi Kasir Mobile" class="img-fluid w-100">
-                                <div class="p-3 bg-white border border-top-0 border-light rounded-bottom">
-                                    <h6 class="fw-bold text-primary mb-1">Aplikasi Kasir Toko Baju</h6>
-                                    <small class="text-muted">React Native</small>
+                            <a href="#" class="text-decoration-none text-dark" title="Menuju ke link portofolio / Github freelancer">
+                                <div class="portfolio-card shadow-sm">
+                                    <img src="https://placehold.co/600x400/eeeeee/8b5e3c?text=Aplikasi+Kasir+Mobile" alt="Aplikasi Kasir Mobile" class="img-fluid w-100">
+                                    <div class="p-3 bg-white border border-top-0 border-light rounded-bottom">
+                                        <h6 class="fw-bold text-primary mb-1">Aplikasi Kasir Toko Baju</h6>
+                                        <small class="text-muted">React Native</small>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col-md-6">
-                            <div class="portfolio-card shadow-sm">
-                                <img src="https://placehold.co/600x400/eeeeee/8b5e3c?text=E-Commerce+Dashboard" alt="Dashboard E-commerce" class="img-fluid w-100">
-                                <div class="p-3 bg-white border border-top-0 border-light rounded-bottom">
-                                    <h6 class="fw-bold text-primary mb-1">Dashboard Admin E-commerce</h6>
-                                    <small class="text-muted">Next.js & Tailwind CSS</small>
+                            <a href="#" class="text-decoration-none text-dark" title="Menuju ke link portofolio / Github freelancer">
+                                <div class="portfolio-card shadow-sm">
+                                    <img src="https://placehold.co/600x400/eeeeee/8b5e3c?text=E-Commerce+Dashboard" alt="Dashboard E-commerce" class="img-fluid w-100">
+                                    <div class="p-3 bg-white border border-top-0 border-light rounded-bottom">
+                                        <h6 class="fw-bold text-primary mb-1">Dashboard Admin E-commerce</h6>
+                                        <small class="text-muted">Next.js & Tailwind CSS</small>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                     <div class="text-center mt-4">
-                        <button class="btn btn-outline-secondary border-0 text-primary fw-semibold">Lihat Semua Portofolio <i class="bi bi-arrow-right ms-1"></i></button>
+                        <a href="#" class="btn btn-outline-secondary border-0 text-primary fw-semibold" title="Menuju ke link portofolio / Github freelancer">
+                            Lihat Semua Portofolio <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -239,8 +256,10 @@
                             <div class="d-flex align-items-center gap-3">
                                 <div class="review-avatar">PT</div>
                                 <div>
-                                    <h6 class="fw-bold text-dark mb-0">PT Jaya Abadi</h6>
-                                    <small class="text-secondary-custom">Proyek: <a href="#" class="text-primary text-decoration-none">Desain Ulang Website Perusahaan</a></small>
+                                    <h6 class="fw-bold mb-0">
+                                        <a href="profileclient.html" class="text-dark text-decoration-none hover-link">PT Jaya Abadi</a>
+                                    </h6>
+                                    <small class="text-secondary-custom">Proyek: <a href="projectdetailclient.html" class="text-primary text-decoration-none hover-link">Desain Ulang Website Perusahaan</a></small>
                                 </div>
                             </div>
                             <div class="text-star fs-6">
@@ -260,8 +279,10 @@
                             <div class="d-flex align-items-center gap-3">
                                 <div class="review-avatar">SM</div>
                                 <div>
-                                    <h6 class="fw-bold text-dark mb-0">Sinar Makmur, CV</h6>
-                                    <small class="text-secondary-custom">Proyek: <a href="#" class="text-primary text-decoration-none">Integrasi API Payment Gateway</a></small>
+                                    <h6 class="fw-bold mb-0">
+                                        <a href="profileclient.html" class="text-dark text-decoration-none hover-link">Sinar Makmur, CV</a>
+                                    </h6>
+                                    <small class="text-secondary-custom">Proyek: <a href="projectdetailclient.html" class="text-primary text-decoration-none hover-link">Integrasi API Payment Gateway</a></small>
                                 </div>
                             </div>
                             <div class="text-star fs-6">
