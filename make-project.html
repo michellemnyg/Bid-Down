@@ -5,81 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Posting Proyek Baru | Bid Down</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
 
     <style>
         :root {
+            /* Core Palette Refined */
             --primary: #8b5e3c;
+            --primary-hover: #724d31;
+            --primary-soft: rgba(139, 94, 60, 0.08);
             --secondary: #c8a27a;
-            --background: #f6f1eb;
-            --text: #5a3e2b;
-            --text-secondary: #8b6b55;
+            --background: #fbf9f6; 
+            --surface: #ffffff;
+            --text-main: #2d1f15;
+            --text-secondary: #7a5f4c;
+            --border-color: rgba(139, 94, 60, 0.12);
             --accent: #d94d4d;
         }
 
         body {
-            color: var(--text);
+            color: var(--text-main);
             background-color: var(--background);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .bg-primary { background-color: var(--primary) !important; }
-        .bg-secondary { background-color: var(--secondary) !important; }
+        /* Utilities */
         .text-primary { color: var(--primary) !important; }
+        .text-main { color: var(--text-main) !important; }
         .text-secondary-custom { color: var(--text-secondary) !important; }
-        
+
+        /* Buttons */
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            transition: all 0.2s ease-in-out;
+            font-weight: 600;
+        }
         .btn-primary {
             background-color: var(--primary);
             border-color: var(--primary);
             color: white;
+            box-shadow: 0 4px 12px rgba(139, 94, 60, 0.2);
         }
         .btn-primary:hover {
-            background-color: #724d31;
-            border-color: #724d31;
-        }
-        .btn-outline-primary {
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-        .btn-outline-primary:hover {
-            background-color: var(--primary);
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 94, 60, 0.3);
             color: white;
         }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(139, 94, 60, 0.25);
+        .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--text-main);
+            background-color: var(--surface);
+        }
+        .btn-outline-secondary:hover {
+            background-color: var(--background);
+            color: var(--text-main);
+            border-color: #d1d5db;
+            transform: translateY(-2px);
         }
 
+        /* Forms */
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            transition: all 0.2s;
+            background-color: var(--background);
+            font-size: 0.95rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-soft);
+            background-color: var(--surface);
+        }
+        .form-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        
+        /* Input Group Styling */
+        .input-group-text {
+            background-color: var(--primary-soft);
+            border-color: var(--border-color);
+            color: var(--primary);
+            font-weight: 600;
+            border-radius: 12px 0 0 12px;
+        }
+        .input-group .form-control {
+            border-radius: 0 12px 12px 0;
+        }
+
+        /* Switches */
+        .form-check-input {
+            cursor: pointer;
+            border-color: var(--border-color);
+        }
         .form-check-input:checked {
             background-color: var(--primary);
             border-color: var(--primary);
         }
+        .form-check-label {
+            cursor: pointer;
+        }
 
+        /* Navbar */
+        .navbar {
+            background-color: var(--surface) !important;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.02) !important;
+        }
+
+        /* Cards */
         .section-card {
-            border: 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background-color: var(--surface);
+            border: 1px solid var(--border-color) !important;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02) !important;
             margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .section-card .card-header {
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+        }
+        
+        .hover-link {
+            transition: color 0.2s ease;
+        }
+        .hover-link:hover {
+            color: var(--primary) !important;
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+    <nav class="navbar navbar-expand-lg py-3">
         <div class="container-lg">
             <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center gap-2" href="dashboardclient.html">
-                <img src="/assets/images/icon.svg" alt="Bid-Down Logo" height="30" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
+                <img src="/assets/images/icon.svg" alt="Bid-Down Logo" height="32" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
                 Bid Down
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarClient">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarClient">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarClient">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold gap-3">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-medium gap-3">
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="dashboardclient.html">Beranda</a>
                     </li>
@@ -88,8 +170,12 @@
                     </li>
                 </ul>
                 <div class="d-flex ms-lg-4 mt-3 mt-lg-0 align-items-center gap-3">
-                    <a href="profileclient.html" class="nav-link fw-medium"><i class="bi bi-person-circle me-1"></i> PT Jaya Abadi</a>
-                    <a href="login.html" class="btn btn-sm btn-outline-danger fw-bold"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                    <a href="profileclient.html" class="nav-link fw-semibold text-dark hover-link">
+                        <i class="bi bi-person-circle text-primary me-1"></i> PT Jaya Abadi
+                    </a>
+                    <a href="login.html" class="btn btn-sm btn-outline-danger fw-semibold px-3">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </a>
                 </div>
             </div>
         </div>
@@ -99,29 +185,29 @@
         
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
             <div>
-                <h2 class="fw-bold text-primary mb-1"><i class="bi bi-plus-circle me-2"></i>Posting Proyek Baru</h2>
+                <h2 class="fw-bold mb-1"><i class="bi bi-plus-circle text-primary me-2"></i>Posting Proyek Baru</h2>
                 <p class="text-secondary-custom mb-0">Isi detail pekerjaan dengan jelas agar freelancer dapat memberikan penawaran terbaik.</p>
             </div>
-            <a href="dashboardclient.html" class="btn btn-outline-secondary fw-semibold px-4">
-                <i class="bi bi-arrow-left me-1"></i> Kembali
+            <a href="dashboardclient.html" class="btn btn-outline-secondary shadow-sm">
+                <i class="bi bi-arrow-left me-1"></i> Batal
             </a>
         </div>
 
-        <form action="#" method="POST">
+        <form action="dashboardclient.html">
             
             <div class="card section-card">
-                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
-                    <h5 class="fw-bold text-primary mb-0">1. Informasi Dasar Proyek</h5>
+                <div class="card-header">
+                    <h5 class="fw-bold text-main mb-0">1. Informasi Dasar Proyek</h5>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body p-4 p-md-5">
                     <div class="mb-4">
-                        <label for="projectTitle" class="form-label fw-semibold text-dark">Judul Proyek <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-lg" id="projectTitle" placeholder="Contoh: Pembuatan Website E-Commerce Toko Baju" required>
+                        <label for="projectTitle" class="form-label">Judul Proyek <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="projectTitle" placeholder="Contoh: Pembuatan Website E-Commerce Toko Baju" required>
                     </div>
 
                     <div class="mb-4">
-                        <label for="projectCategory" class="form-label fw-semibold text-dark">Kategori Proyek <span class="text-danger">*</span></label>
-                        <select class="form-select form-select-lg" id="projectCategory" required>
+                        <label for="projectCategory" class="form-label">Kategori Proyek <span class="text-danger">*</span></label>
+                        <select class="form-select" id="projectCategory" required>
                             <option value="" selected disabled>Pilih Kategori...</option>
                             <option value="web-dev">Web Development</option>
                             <option value="mobile-dev">Mobile App Development</option>
@@ -133,24 +219,24 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="projectDesc" class="form-label fw-semibold text-dark">Deskripsi & Spesifikasi Pekerjaan <span class="text-danger">*</span></label>
+                    <div class="mb-2">
+                        <label for="projectDesc" class="form-label">Deskripsi & Spesifikasi Pekerjaan <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="projectDesc" rows="6" placeholder="Jelaskan secara detail apa yang Anda butuhkan, fitur yang diinginkan, dan ekspektasi hasil akhir..." required></textarea>
                     </div>
                 </div>
             </div>
 
             <div class="card section-card">
-                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
-                    <h5 class="fw-bold text-primary mb-0">2. Pengaturan Bidding (Penawaran)</h5>
+                <div class="card-header">
+                    <h5 class="fw-bold text-main mb-0">2. Pengaturan Bidding (Penawaran)</h5>
                 </div>
-                <div class="card-body p-4">
-                    <div class="row g-4">
+                <div class="card-body p-4 p-md-5">
+                    <div class="row g-4 mb-4">
                         <div class="col-md-6">
-                            <label for="maxPrice" class="form-label fw-semibold text-dark">Harga Maksimal (Modal Dasar) <span class="text-danger">*</span></label>
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-light">Rp</span>
-                                <input type="number" class="form-control" id="maxPrice" placeholder="5000000" min="0" required>
+                            <label for="maxPrice" class="form-label">Harga Maksimal (Modal Dasar) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" class="form-control" id="maxPrice" placeholder="5.000.000" min="0" required>
                             </div>
                             <div class="form-text text-secondary-custom mt-2">
                                 <i class="bi bi-info-circle me-1"></i> Freelancer tidak bisa menawar lebih tinggi dari harga ini. Semakin rendah mereka menawar, semakin baik untuk Anda.
@@ -158,34 +244,34 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="bidDeadline" class="form-label fw-semibold text-dark">Batas Waktu Penerimaan Bid <span class="text-danger">*</span></label>
-                            <input type="datetime-local" class="form-control form-control-lg" id="bidDeadline" required>
+                            <label for="bidDeadline" class="form-label">Batas Waktu Penerimaan Bid <span class="text-danger">*</span></label>
+                            <input type="datetime-local" class="form-control" id="bidDeadline" required>
                         </div>
                     </div>
 
-                    <hr class="my-4">
-
-                    <div class="mb-4">
-                        <div class="form-check form-switch fs-5 mb-2">
-                            <input class="form-check-input" type="checkbox" role="switch" id="blindReview" checked>
-                            <label class="form-check-label fw-semibold text-dark ms-2" for="blindReview">Aktifkan Blind Review</label>
+                    <div class="p-4 bg-background rounded-3 border border-light">
+                        <div class="mb-4">
+                            <div class="form-check form-switch fs-5 mb-1 d-flex align-items-center gap-2">
+                                <input class="form-check-input mt-0" type="checkbox" role="switch" id="blindReview" checked>
+                                <label class="form-check-label fw-bold text-main ms-2" for="blindReview" style="font-size: 1rem;">Aktifkan Blind Review</label>
+                            </div>
+                            <p class="text-secondary-custom small ms-5 ps-1 mb-0">Sembunyikan nama freelancer saat proses bid berlangsung agar Anda dapat menilai secara objektif berdasarkan harga & portofolio, bukan nama atau gender.</p>
                         </div>
-                        <p class="text-secondary-custom small ms-5 mb-0">Sembunyikan nama freelancer saat proses bid berlangsung agar Anda dapat menilai secara objektif berdasarkan harga & portofolio, bukan nama atau gender.</p>
-                    </div>
 
-                    <div class="mb-3">
-                        <div class="form-check form-switch fs-5 mb-2">
-                            <input class="form-check-input" type="checkbox" role="switch" id="autoStop">
-                            <label class="form-check-label fw-semibold text-dark ms-2" for="autoStop">Aktifkan Auto-Stop (24 Jam)</label>
+                        <div>
+                            <div class="form-check form-switch fs-5 mb-1 d-flex align-items-center gap-2">
+                                <input class="form-check-input mt-0" type="checkbox" role="switch" id="autoStop">
+                                <label class="form-check-label fw-bold text-main ms-2" for="autoStop" style="font-size: 1rem;">Aktifkan Auto-Stop (24 Jam)</label>
+                            </div>
+                            <p class="text-secondary-custom small ms-5 ps-1 mb-0">Bidding akan tertutup secara otomatis 24 jam setelah proyek dipublikasikan, terlepas dari batas waktu yang diatur di atas.</p>
                         </div>
-                        <p class="text-secondary-custom small ms-5 mb-0">Bidding akan tertutup secara otomatis 24 jam setelah proyek dipublikasikan, terlepas dari batas waktu yang diatur di atas.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end gap-3 mt-4 mb-5">
-                <a href="dashboardclient.html" class="btn btn-light border fw-semibold px-4 py-2">Batal</a>
-                <button type="submit" class="btn btn-primary fw-bold px-5 py-2 fs-5 shadow-sm">
+            <div class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-4 mb-5">
+                <a href="dashboardclient.html" class="btn btn-outline-secondary px-4 py-2 text-center">Batal</a>
+                <button type="submit" class="btn btn-primary px-5 py-2 fs-6 shadow-sm">
                     <i class="bi bi-rocket-takeoff me-2"></i> Terbitkan Proyek
                 </button>
             </div>
@@ -193,22 +279,13 @@
         </form>
     </main>
 
-    <footer class="bg-primary text-white py-4 mt-auto">
+    <footer class="bg-white border-top border-light py-4 mt-auto">
         <div class="container-lg text-center">
-            <p class="mb-0 opacity-75 small">
-                &copy; 2026 Bid-Down. Platform Reverse Bidding untuk Freelancer Indonesia. Semua hak cipta dilindungi.
+            <p class="mb-0 text-secondary-custom small fw-medium">
+                &copy; 2026 Bid-Down. Platform Reverse Bidding untuk Freelancer Indonesia.
             </p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Opsional: Membatasi agar tanggal deadline tidak bisa memilih tanggal kemarin
-        document.addEventListener('DOMContentLoaded', function() {
-            const now = new Date();
-            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            document.getElementById('bidDeadline').min = now.toISOString().slice(0,16);
-        });
-    </script>
 </body>
 </html>

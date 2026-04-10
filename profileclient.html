@@ -5,102 +5,209 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profil Klien - PT Jaya Abadi | Bid-Down</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
 
     <style>
         :root {
+            /* Core Palette Refined */
             --primary: #8b5e3c;
+            --primary-hover: #724d31;
+            --primary-soft: rgba(139, 94, 60, 0.08);
             --secondary: #c8a27a;
-            --background: #f6f1eb;
-            --text: #5a3e2b;
-            --text-secondary: #8b6b55;
+            --background: #fbf9f6; 
+            --surface: #ffffff;
+            --text-main: #2d1f15;
+            --text-secondary: #7a5f4c;
+            --border-color: rgba(139, 94, 60, 0.12);
+            --accent: #d94d4d;
             --star: #f5b301;
         }
 
         body {
-            color: var(--text);
+            color: var(--text-main);
             background-color: var(--background);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .bg-primary { background-color: var(--primary) !important; }
-        .bg-secondary { background-color: var(--secondary) !important; }
+        /* Utilities Overrides */
         .text-primary { color: var(--primary) !important; }
+        .bg-primary { background-color: var(--primary) !important; }
+        .text-main { color: var(--text-main) !important; }
         .text-secondary-custom { color: var(--text-secondary) !important; }
         .text-star { color: var(--star) !important; }
         
+        /* Buttons */
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.25rem;
+            transition: all 0.2s ease-in-out;
+            font-weight: 600;
+        }
         .btn-primary {
             background-color: var(--primary);
             border-color: var(--primary);
             color: white;
+            box-shadow: 0 4px 12px rgba(139, 94, 60, 0.2);
         }
         .btn-primary:hover {
-            background-color: #724d31;
-            border-color: #724d31;
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 94, 60, 0.3);
+            color: white;
         }
         .btn-outline-primary {
             color: var(--primary);
-            border-color: var(--primary);
+            border-color: var(--border-color);
+            background-color: var(--surface);
         }
         .btn-outline-primary:hover {
-            background-color: var(--primary);
-            color: white;
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--text-main);
+            background-color: var(--surface);
+        }
+        .btn-outline-secondary:hover {
+            background-color: var(--background);
+            color: var(--text-main);
+            border-color: #d1d5db;
+            transform: translateY(-2px);
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--surface) !important;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.02) !important;
+        }
+
+        /* Cards */
+        .card, .section-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color) !important;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02) !important;
         }
 
         /* Avatar Bulat Besar untuk Profil */
         .profile-avatar {
             width: 100px;
             height: 100px;
-            border-radius: 50%;
-            background-color: var(--secondary);
+            border-radius: 20px; /* Modern squircle instead of full circle */
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 36px;
-            font-weight: bold;
+            font-weight: 700;
+            box-shadow: 0 8px 16px rgba(139, 94, 60, 0.2);
+            flex-shrink: 0;
         }
 
         /* Avatar Kecil untuk Ulasan */
         .review-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #e0d5c1;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background-color: var(--primary-soft);
             color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 1px solid rgba(139, 94, 60, 0.1);
+        }
+
+        /* Project Cards in Profile */
+        .project-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border-top: 4px solid var(--primary) !important;
+        }
+        .project-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(139, 94, 60, 0.08) !important;
+            border-color: rgba(139, 94, 60, 0.2) !important;
+        }
+
+        /* Modern Soft Badges */
+        .badge-soft-secondary {
+            background-color: var(--background);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+        .badge-soft-success {
+            background-color: #e6f4ea;
+            color: #1e8e3e;
+            border: 1px solid #ceead6;
+        }
+
+        /* Links */
+        .hover-link {
+            color: var(--text-main) !important;
+            transition: color 0.2s ease;
+        }
+        .hover-link:hover {
+            color: var(--primary) !important;
+            text-decoration: underline !important;
+        }
+
+        .review-item {
+            transition: background-color 0.2s ease;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-left: -1.5rem;
+            margin-right: -1.5rem;
+        }
+        .review-item:hover {
+            background-color: var(--background);
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+    <nav class="navbar navbar-expand-lg py-3">
         <div class="container-lg">
             <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center gap-2" href="#">
-                <img src="/assets/images/icon.svg" alt="Bid-Down Logo" height="30" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
+                <img src="/assets/images/icon.svg" alt="Bid-Down Logo" height="32" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
                 Bid Down
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarClient">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarClient">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarClient">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold gap-3">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-medium gap-3">
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="dashboardclient.html">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="#proyek-aktif">Proyek Saya</a>
+                        <a class="nav-link text-dark" href="dashboardclient.html#proyek-aktif">Proyek Saya</a>
                     </li>
                 </ul>
                 <div class="d-flex ms-lg-4 mt-3 mt-lg-0 align-items-center gap-3">
-                    <a href="profileclient.html" class="nav-link fw-medium"><i class="bi bi-person-circle me-1"></i> PT Jaya Abadi</a>
-                    <a href="login.html" class="btn btn-sm btn-outline-danger fw-bold"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                    <a href="profileclient.html" class="nav-link fw-semibold text-primary hover-link">
+                        <i class="bi bi-person-circle me-1"></i> PT Jaya Abadi
+                    </a>
+                    <a href="login.html" class="btn btn-sm btn-outline-danger fw-semibold px-3">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </a>
                 </div>
             </div>
         </div>
@@ -109,41 +216,42 @@
     <main class="container-lg py-5">
         
         <div class="mb-4">
-            <button onclick="history.back()" class="btn btn-outline-secondary shadow-sm bg-white text-dark border-0">
+            <button onclick="history.back()" class="btn btn-outline-secondary shadow-sm bg-white text-dark border-0 fw-semibold px-4">
                 <i class="bi bi-arrow-left me-2"></i> Kembali
             </button>
         </div>
 
-        <div class="card border-0 shadow-sm p-4 mb-5">
+        <div class="card section-card p-4 p-md-5 mb-5">
             <div class="row align-items-center gap-4 gap-md-0">
                 
                 <div class="col-md-7 d-flex align-items-center gap-4">
-                    <div class="profile-avatar shadow-sm">
+                    <div class="profile-avatar">
                         PT
                     </div>
                     <div>
-                        <h2 class="fw-bold text-primary mb-1 d-flex align-items-center gap-2">
-                            PT Jaya Abadi 
-                            <span class="badge bg-success fs-6 rounded-pill px-3 py-2 fw-normal" style="font-size: 0.8rem !important;">
-                                <i class="bi bi-patch-check-fill me-1"></i> Terverifikasi
+                        <div class="d-flex align-items-center gap-3 mb-1">
+                            <h2 class="fw-bold text-main mb-0">PT Jaya Abadi</h2>
+                            <span class="badge badge-soft-success rounded-pill px-3 py-1 fw-semibold d-flex align-items-center gap-1">
+                                <i class="bi bi-patch-check-fill"></i> Terverifikasi
                             </span>
-                        </h2>
-                        <p class="text-secondary-custom mb-2">
-                            <i class="bi bi-geo-alt-fill me-1"></i> Jakarta Selatan, Indonesia &nbsp; | &nbsp; 
-                            <i class="bi bi-calendar3 me-1"></i> Bergabung sejak 2023
+                        </div>
+                        <p class="text-secondary-custom mb-0 mt-2 d-flex flex-wrap gap-3">
+                            <span><i class="bi bi-geo-alt me-1"></i> Jakarta Selatan, Indonesia</span>
+                            <span class="d-none d-sm-inline text-muted">|</span>
+                            <span><i class="bi bi-calendar3 me-1"></i> Bergabung sejak 2023</span>
                         </p>
                     </div>
                 </div>
 
-                <div class="col-md-5 border-start border-2 border-light ps-md-4">
+                <div class="col-md-5 border-start border-2 border-light ps-md-4 mt-4 mt-md-0">
                     <div class="row text-center text-md-start">
-                        <div class="col-6 mb-3 mb-md-0">
-                            <p class="text-secondary-custom mb-1 fs-6">Tingkat Mempekerjakan (Hire Rate)</p>
+                        <div class="col-6 mb-3 mb-md-0 border-end border-light">
+                            <p class="text-secondary-custom mb-1 fs-6">Tingkat Hire</p>
                             <h3 class="fw-bold text-primary mb-0">85%</h3>
                         </div>
-                        <div class="col-6">
-                            <p class="text-secondary-custom mb-1 fs-6">Total Proyek Selesai</p>
-                            <h3 class="fw-bold text-primary mb-0">24 <span class="fs-6 text-secondary-custom fw-normal">Proyek</span></h3>
+                        <div class="col-6 ps-md-4">
+                            <p class="text-secondary-custom mb-1 fs-6">Proyek Selesai</p>
+                            <h3 class="fw-bold text-primary mb-0">24 <span class="fs-6 text-secondary-custom fw-medium">Proyek</span></h3>
                         </div>
                     </div>
                 </div>
@@ -152,33 +260,51 @@
         </div>
 
         <section class="mb-5">
-            <h4 class="fw-bold text-primary mb-4"><i class="bi bi-briefcase me-2"></i> Proyek Aktif</h4>
+            <div class="d-flex align-items-center gap-2 mb-4">
+                <i class="bi bi-briefcase text-primary fs-4"></i>
+                <h4 class="fw-bold text-main mb-0">Proyek Aktif Klien Ini</h4>
+            </div>
+            
             <div class="row g-4">
                 
                 <div class="col-md-6 col-lg-4">
-                    <div class="card border-0 shadow-sm h-100 p-3 border-top border-4 border-primary">
-                        <div class="card-body p-0 d-flex flex-column">
-                            <h5 class="fw-bold text-primary mb-2">Pembuatan Landing Page Perusahaan</h5>
-                            <span class="badge bg-secondary align-self-start mb-3">Web Development</span>
-                            <p class="fs-5 fw-bold text-success mb-2">Max: Rp 3.000.000</p>
-                            <p class="text-secondary-custom small mb-4 flex-grow-1">
-                                <i class="bi bi-clock"></i> Sisa Waktu Bid: 2 Hari
-                            </p>
-                            <a href="projectdetailclient.html" class="btn btn-outline-primary w-100 fw-semibold">Lihat Detail</a>
+                    <div class="card project-card h-100 p-4">
+                        <div class="d-flex flex-column h-100">
+                            <div class="mb-3">
+                                <span class="badge badge-soft-secondary px-2 py-1 mb-2 rounded">Web Development</span>
+                                <h5 class="fw-bold text-main mb-1 line-clamp-2">Pembuatan Landing Page Perusahaan</h5>
+                            </div>
+                            <div class="p-3 bg-light rounded-3 border mb-4 mt-auto">
+                                <span class="small text-secondary-custom d-block mb-1">Budget Maksimal</span>
+                                <span class="fw-bold text-success fs-5">Rp 3.000.000</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <span class="text-secondary-custom small fw-medium">
+                                    <i class="bi bi-clock me-1"></i> Sisa 2 Hari
+                                </span>
+                                <a href="projectdetailclient.html" class="btn btn-outline-primary btn-sm fw-semibold px-3">Lihat Detail</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-4">
-                    <div class="card border-0 shadow-sm h-100 p-3 border-top border-4 border-primary">
-                        <div class="card-body p-0 d-flex flex-column">
-                            <h5 class="fw-bold text-primary mb-2">Desain UI/UX Aplikasi Mobile</h5>
-                            <span class="badge bg-secondary align-self-start mb-3">UI/UX Design</span>
-                            <p class="fs-5 fw-bold text-success mb-2">Max: Rp 8.000.000</p>
-                            <p class="text-secondary-custom small mb-4 flex-grow-1">
-                                <i class="bi bi-clock"></i> Sisa Waktu Bid: 5 Hari
-                            </p>
-                            <a href="projectdetailclient.html" class="btn btn-outline-primary w-100 fw-semibold">Lihat Detail</a>
+                    <div class="card project-card h-100 p-4">
+                        <div class="d-flex flex-column h-100">
+                            <div class="mb-3">
+                                <span class="badge badge-soft-secondary px-2 py-1 mb-2 rounded">UI/UX Design</span>
+                                <h5 class="fw-bold text-main mb-1 line-clamp-2">Desain UI/UX Aplikasi Mobile</h5>
+                            </div>
+                            <div class="p-3 bg-light rounded-3 border mb-4 mt-auto">
+                                <span class="small text-secondary-custom d-block mb-1">Budget Maksimal</span>
+                                <span class="fw-bold text-success fs-5">Rp 8.000.000</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <span class="text-secondary-custom small fw-medium">
+                                    <i class="bi bi-clock me-1"></i> Sisa 5 Hari
+                                </span>
+                                <a href="projectdetailclient.html" class="btn btn-outline-primary btn-sm fw-semibold px-3">Lihat Detail</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -187,20 +313,25 @@
         </section>
 
         <section>
-            <h4 class="fw-bold text-primary mb-4"><i class="bi bi-star-fill me-2 text-star"></i> Ulasan Freelancer (4.8/5.0)</h4>
+            <div class="d-flex align-items-center gap-2 mb-4">
+                <i class="bi bi-star-fill text-star fs-4"></i>
+                <h4 class="fw-bold text-main mb-0">Ulasan Freelancer <span class="text-secondary-custom fw-medium fs-5">(4.8/5.0)</span></h4>
+            </div>
             
-            <div class="card border-0 shadow-sm p-4">
+            <div class="card section-card p-4 p-md-5">
                 
-                <div class="border-bottom border-light pb-4 mb-4">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="review-item border-bottom border-light mb-2">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="d-flex align-items-center gap-3">
                             <div class="review-avatar">AS</div>
                             <div>
-                                <h6 class="fw-bold text-primary mb-0">Agus Setiawan</h6>
-                                <small class="text-secondary-custom">Proyek: Desain Logo Perusahaan Baru</small>
+                                <h6 class="fw-bold text-main mb-0">
+                                    <a href="profilefreelancer.html" class="text-decoration-none hover-link">Agus Setiawan</a>
+                                </h6>
+                                <small class="text-secondary-custom">Proyek: <a href="projectdetailclient.html" class="text-primary text-decoration-none hover-link">Desain Logo Perusahaan Baru</a></small>
                             </div>
                         </div>
-                        <div class="text-star fs-6">
+                        <div class="text-star fs-6 d-flex gap-1">
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
@@ -208,32 +339,37 @@
                             <i class="bi bi-star-fill"></i>
                         </div>
                     </div>
-                    <p class="mb-1 text-dark mt-3">"Klien yang sangat luar biasa. Briefing proyek sangat jelas, komunikasi lancar tanpa hambatan, dan yang paling penting pencairan dana escrow sangat cepat begitu pekerjaan disetujui. Sangat direkomendasikan!"</p>
-                    <small class="text-muted">Ditulis pada 05 Sep 2024</small>
+                    <p class="mb-2 text-main" style="line-height: 1.6;">"Klien yang sangat luar biasa. Briefing proyek sangat jelas, komunikasi lancar tanpa hambatan, dan yang paling penting pencairan dana escrow sangat cepat begitu pekerjaan disetujui. Sangat direkomendasikan!"</p>
+                    <small class="text-secondary-custom fw-medium">Ditulis pada 05 Sep 2024</small>
                 </div>
 
-                <div class="border-bottom border-light pb-4 mb-4">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="review-item mb-2">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="d-flex align-items-center gap-3">
                             <div class="review-avatar">MD</div>
                             <div>
-                                <h6 class="fw-bold text-primary mb-0">Maya Dwi</h6>
-                                <small class="text-secondary-custom">Proyek: Video Company Profile 3 Menit</small>
+                                <h6 class="fw-bold text-main mb-0">
+                                    <a href="profilefreelancer.html" class="text-decoration-none hover-link">Maya Dwi</a>
+                                </h6>
+                                <small class="text-secondary-custom">Proyek: <a href="projectdetailclient.html" class="text-primary text-decoration-none hover-link">Video Company Profile 3 Menit</a></small>
                             </div>
                         </div>
-                        <div class="text-star fs-6">
+                        <div class="text-star fs-6 d-flex gap-1">
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i> </div>
+                            <i class="bi bi-star-half"></i>
+                        </div>
                     </div>
-                    <p class="mb-1 text-dark mt-3">"Pekerjaan berjalan lancar. Klien meminta sedikit revisi tambahan di akhir, tapi masih dalam batas wajar sesuai kesepakatan awal. Overall pengalaman kerja yang menyenangkan."</p>
-                    <small class="text-muted">Ditulis pada 20 Agu 2024</small>
+                    <p class="mb-2 text-main" style="line-height: 1.6;">"Pekerjaan berjalan lancar. Klien meminta sedikit revisi tambahan di akhir, tapi masih dalam batas wajar sesuai kesepakatan awal. Overall pengalaman kerja yang menyenangkan."</p>
+                    <small class="text-secondary-custom fw-medium">Ditulis pada 20 Agu 2024</small>
                 </div>
 
-                <div class="text-center mt-2">
-                    <button class="btn btn-outline-secondary border-0 text-primary fw-semibold">Muat Ulasan Lainnya <i class="bi bi-chevron-down ms-1"></i></button>
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-secondary bg-background border-0 text-primary fw-semibold px-4 py-2">
+                        Muat Ulasan Lainnya <i class="bi bi-chevron-down ms-1"></i>
+                    </button>
                 </div>
 
             </div>
@@ -241,14 +377,13 @@
 
     </main>
 
-    <footer class="bg-primary text-white py-4 mt-5">
+    <footer class="bg-white border-top border-light py-4 mt-auto">
         <div class="container-lg text-center">
-            <p class="mb-0 opacity-75 small">
-                &copy; 2024 Bid-Down. Platform Reverse Bidding untuk Freelancer Indonesia. Semua hak cipta dilindungi.
+            <p class="mb-0 text-secondary-custom small fw-medium">
+                &copy; 2026 Bid-Down. Platform Reverse Bidding untuk Freelancer Indonesia.
             </p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
