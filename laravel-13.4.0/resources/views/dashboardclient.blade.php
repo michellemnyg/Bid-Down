@@ -1,0 +1,437 @@
+﻿<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Klien | Bid Down</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+
+    <style>
+        :root {
+            /* Core Palette Refined */
+            --primary: #8b5e3c;
+            --primary-hover: #724d31;
+            --primary-soft: rgba(139, 94, 60, 0.08);
+            --secondary: #c8a27a;
+            --background: #fbf9f6; /* Sedikit dicerahkan agar lebih modern */
+            --surface: #ffffff;
+            --text-main: #2d1f15; /* Lebih gelap untuk kontras baca yang nyaman */
+            --text-secondary: #7a5f4c;
+            --border-color: rgba(139, 94, 60, 0.12);
+            --accent: #d94d4d;
+        }
+
+        body {
+            color: var(--text-main);
+            background-color: var(--background);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Utilities Overrides */
+        .text-primary { color: var(--primary) !important; }
+        .bg-primary { background-color: var(--primary) !important; }
+        .text-secondary-custom { color: var(--text-secondary) !important; }
+        
+        /* Buttons */
+        .btn {
+            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(139, 94, 60, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 94, 60, 0.3);
+        }
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--border-color);
+            background-color: transparent;
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--surface) !important;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.02) !important;
+        }
+        .navbar-brand img {
+            filter: drop-shadow(0 2px 4px rgba(139, 94, 60, 0.2));
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color) !important;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03) !important;
+        }
+        
+        /* Stat Cards Refined */
+        .stat-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+            background-color: var(--primary);
+            border-radius: 4px 0 0 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(139, 94, 60, 0.08) !important;
+            border-color: rgba(139, 94, 60, 0.2) !important;
+        }
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Modern Stat Icons */
+        .stat-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+        }
+        .stat-icon-folder { background: linear-gradient(135deg, #c8a27a, #a68159); color: white; }
+        .stat-icon-activity { background: linear-gradient(135deg, #8b5e3c, #5c3c24); color: white; }
+        .stat-icon-wallet { background: linear-gradient(135deg, #4b8b60, #2d5a3c); color: white; }
+
+        /* Modern Tables */
+        .table-custom {
+            margin-bottom: 0;
+        }
+        .table-custom thead th {
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+            border: none;
+            padding: 1rem 1.25rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .table-custom tbody td {
+            padding: 1.25rem;
+            vertical-align: middle;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+        .table-custom tbody tr:hover td {
+            background-color: rgba(139, 94, 60, 0.02);
+        }
+        .table-custom tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Modern Soft Badges */
+        .badge-soft-success {
+            background-color: #e6f4ea;
+            color: #1e8e3e;
+            border: 1px solid #ceead6;
+        }
+        .badge-soft-warning {
+            background-color: #fef7e0;
+            color: #b06000;
+            border: 1px solid #fce8b2;
+        }
+        .badge-soft-secondary {
+            background-color: #f1f3f4;
+            color: #5f6368;
+            border: 1px solid #e8eaed;
+        }
+
+        /* Links */
+        .hover-link {
+            color: var(--text-main) !important;
+            transition: color 0.2s ease;
+        }
+        .hover-link:hover {
+            color: var(--primary) !important;
+        }
+        
+        /* Avatar Kecil di Tabel */
+        .avatar-sm {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    @include('partials.flash')
+
+    <nav class="navbar navbar-expand-lg py-3">
+        <div class="container-lg">
+            <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center gap-2" href="#">
+                <img src="{{ asset('assets/images/icon.svg') }}" alt="Bid-Down Logo" height="32" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
+                Bid Down
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarClient">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarClient">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-medium gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ url('/dashboardclient') }}">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="#proyek-aktif">Proyek Saya</a>
+                    </li>
+                </ul>
+                <div class="d-flex ms-lg-4 mt-3 mt-lg-0 align-items-center gap-3">
+                    <a href="{{ url('/profileclient') }}" class="nav-link fw-semibold text-dark hover-link">
+                        <i class="bi bi-person-circle text-primary me-1"></i> PT Jaya Abadi
+                    </a>
+                    <a href="{{ url('/login') }}" class="btn btn-sm btn-outline-danger fw-semibold px-3">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-lg py-5">
+        
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-4">
+            <div>
+                <h2 class="fw-bold mb-2">Selamat datang, <span class="text-primary">PT Jaya Abadi!</span></h2>
+                <p class="text-secondary-custom mb-0 fs-6">Pantau proyek aktifmu dan temukan freelancer terbaik hari ini.</p>
+            </div>
+            <a href="{{ url('/make-project') }}" class="btn btn-primary fw-semibold shadow-sm px-4 py-2 d-inline-flex align-items-center">
+                <i class="bi bi-plus-lg me-2"></i> Posting Proyek Baru
+            </a>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card stat-card p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-icon-folder">
+                            <i class="bi bi-folder2-open"></i>
+                        </div>
+                        <div>
+                            <p class="text-secondary-custom small text-uppercase tracking-wide fw-semibold mb-1">Total Proyek</p>
+                            <h3 class="fw-bold mb-0">{{ isset($projects) ? $projects->count() : 12 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-icon-activity">
+                            <i class="bi bi-broadcast"></i>
+                        </div>
+                        <div>
+                            <p class="text-secondary-custom small text-uppercase tracking-wide fw-semibold mb-1">Proyek Aktif</p>
+                            <h3 class="fw-bold mb-0">{{ isset($projects) ? $projects->where('status', 'open')->count() : 3 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-icon-wallet">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <div>
+                            <p class="text-secondary-custom small text-uppercase tracking-wide fw-semibold mb-1">Total Pengeluaran</p>
+                            <h3 class="fw-bold mb-0">Rp 45.5M</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="proyek-aktif" class="mb-5">
+            <div class="d-flex align-items-center gap-2 mb-4">
+                <i class="bi bi-activity text-primary fs-4"></i>
+                <h4 class="fw-bold mb-0">Proyek Aktif Saya</h4>
+            </div>
+            <div class="card overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Judul Proyek</th>
+                                <th>Tanggal Posting</th>
+                                <th>Modal Maksimal</th>
+                                <th class="text-center">
+                                    <span class="bg-white text-primary px-2 py-1 rounded shadow-sm border"><i class="bi bi-fire text-danger me-1"></i> Bid Terendah Saat Ini</span>
+                                </th>
+                                <th>Status</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        @isset($projects)
+                            @forelse ($projects->where('status', 'open') as $project)
+                                <tr>
+                                    <td class="fw-semibold">
+                                        <a href="{{ route('projectdetailclient', $project) }}" class="text-decoration-none hover-link">{{ $project->title }}</a>
+                                    </td>
+                                    <td>{{ $project->created_at->format('d M Y') }}</td>
+                                    <td><span class="badge badge-soft-primary rounded-pill px-3 py-2">{{ $project->bids_count }} Bid</span></td>
+                                    <td class="fw-bold text-main">Rp {{ number_format($project->max_price, 0, ',', '.') }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('projectdetailclient', $project) }}" class="btn btn-sm btn-outline-primary fw-medium px-3">Lihat Detail</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center text-secondary-custom py-4">Belum ada proyek aktif dari database.</td>
+                                </tr>
+                            @endforelse
+                        @endisset
+                            <tr>
+                                <td class="fw-semibold">
+                                    <a href="{{ url('/projectdetailclient') }}" class="text-decoration-none hover-link">Pembuatan Landing Page Perusahaan</a>
+                                </td>
+                                <td class="text-secondary-custom small">12 Okt 2024</td>
+                                <td class="fw-medium">Rp 3.000.000</td>
+                                <td class="text-center fw-bold text-success fs-6">Rp 2.100.000</td>
+                                <td><span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Open Bid</span></td>
+                                <td class="text-center">
+                                    <a href="{{ url('/projectdetailclient') }}" class="btn btn-sm btn-outline-primary fw-medium px-3">Lihat Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semibold">
+                                    <a href="{{ url('/projectdetailclient') }}" class="text-decoration-none hover-link">Desain UI/UX Aplikasi Mobile</a>
+                                </td>
+                                <td class="text-secondary-custom small">14 Okt 2024</td>
+                                <td class="fw-medium">Rp 8.000.000</td>
+                                <td class="text-center fw-bold text-success fs-6">Rp 6.500.000</td>
+                                <td><span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Open Bid</span></td>
+                                <td class="text-center">
+                                    <a href="{{ url('/projectdetailclient') }}" class="btn btn-sm btn-outline-primary fw-medium px-3">Lihat Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semibold">
+                                    <a href="{{ url('/projectdetailclient') }}" class="text-decoration-none hover-link">Setup Database MySQL & API</a>
+                                </td>
+                                <td class="text-secondary-custom small">10 Okt 2024</td>
+                                <td class="fw-medium">Rp 5.000.000</td>
+                                <td class="text-center fw-medium text-secondary-custom fst-italic">Belum ada bid</td>
+                                <td><span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold">Menunggu Bid</span></td>
+                                <td class="text-center">
+                                    <a href="{{ url('/projectdetailclient') }}" class="btn btn-sm btn-outline-primary fw-medium px-3">Lihat Detail</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="riwayat-proyek">
+            <div class="d-flex align-items-center gap-2 mb-4">
+                <i class="bi bi-clock-history text-primary fs-4"></i>
+                <h4 class="fw-bold mb-0">Riwayat Proyek Selesai</h4>
+            </div>
+            <div class="card overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Judul Proyek</th>
+                                <th>Tanggal Selesai</th>
+                                <th>Freelancer Pemenang</th>
+                                <th>Harga Disepakati</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-semibold">
+                                    <a href="{{ url('/projectdetailclient') }}" class="text-decoration-none hover-link">Desain Logo Perusahaan Baru</a>
+                                </td>
+                                <td class="text-secondary-custom small">01 Sep 2024</td>
+                                <td>
+                                    <a href="{{ url('/profilefreelancer') }}" class="d-flex align-items-center gap-2 text-decoration-none hover-link">
+                                        <div class="avatar-sm shadow-sm">AS</div>
+                                        <span class="fw-medium">Agus Setiawan</span>
+                                    </a>
+                                </td>
+                                <td class="fw-medium text-dark">Rp 800.000</td>
+                                <td><span class="badge badge-soft-secondary rounded-pill px-3 py-2 fw-semibold">Selesai</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semibold">
+                                    <a href="{{ url('/projectdetailclient') }}" class="text-decoration-none hover-link">Video Company Profile 3 Menit</a>
+                                </td>
+                                <td class="text-secondary-custom small">15 Agu 2024</td>
+                                <td>
+                                    <a href="{{ url('/profilefreelancer') }}" class="d-flex align-items-center gap-2 text-decoration-none hover-link">
+                                        <div class="avatar-sm shadow-sm">MD</div>
+                                        <span class="fw-medium">Maya Dwi</span>
+                                    </a>
+                                </td>
+                                <td class="fw-medium text-dark">Rp 4.200.000</td>
+                                <td><span class="badge badge-soft-secondary rounded-pill px-3 py-2 fw-semibold">Selesai</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-top border-light py-4 mt-5">
+        <div class="container-lg text-center">
+            <p class="mb-0 text-secondary-custom small fw-medium">
+                &copy; 2026 Bid-Down. Platform Reverse Bidding untuk Freelancer Indonesia.
+            </p>
+        </div>
+    </footer>
+
+    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
+
+

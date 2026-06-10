@@ -1,0 +1,467 @@
+﻿<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Proyek & Bidding - Tampilan Freelancer | Bid Down</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+
+    <style>
+        :root {
+            /* Core Palette Refined */
+            --primary: #8b5e3c;
+            --primary-hover: #724d31;
+            --primary-soft: rgba(139, 94, 60, 0.08);
+            --secondary: #c8a27a;
+            --background: #fbf9f6; 
+            --surface: #ffffff;
+            --text-main: #2d1f15;
+            --text-secondary: #7a5f4c;
+            --border-color: rgba(139, 94, 60, 0.12);
+            --accent: #d94d4d;
+            --success-custom: #1e8e3e;
+            --success-soft: #e6f4ea;
+        }
+
+        body {
+            color: var(--text-main);
+            background-color: var(--background);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Utilities */
+        .text-primary { color: var(--primary) !important; }
+        .text-main { color: var(--text-main) !important; }
+        .text-secondary-custom { color: var(--text-secondary) !important; }
+        
+        /* Buttons */
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.25rem;
+            transition: all 0.2s ease-in-out;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(139, 94, 60, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 94, 60, 0.3);
+            color: white;
+        }
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--border-color);
+            background-color: var(--surface);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--text-main);
+            background-color: var(--surface);
+        }
+        .btn-outline-secondary:hover {
+            background-color: var(--background);
+            color: var(--text-main);
+            border-color: #d1d5db;
+            transform: translateY(-2px);
+        }
+
+        /* Forms */
+        .form-control {
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            background-color: var(--surface);
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-soft);
+        }
+        
+        .input-group-text {
+            background-color: var(--background);
+            border-color: var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--surface) !important;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.02) !important;
+        }
+
+        /* Cards */
+        .section-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color) !important;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02) !important;
+        }
+
+        /* Badges */
+        .badge-soft-secondary {
+            background-color: var(--background);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+        .badge-soft-success {
+            background-color: var(--success-soft);
+            color: var(--success-custom);
+            border: 1px solid #ceead6;
+        }
+        .badge-soft-primary {
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            border: 1px solid rgba(139, 94, 60, 0.2);
+        }
+
+        /* Hover Links */
+        .hover-link {
+            color: var(--text-main) !important;
+            transition: color 0.2s ease;
+        }
+        .hover-link:hover {
+            color: var(--primary) !important;
+            text-decoration: underline !important;
+        }
+
+        /* Bidding Highlight Boxes */
+        .timer-box {
+            background: linear-gradient(180deg, var(--surface) 0%, var(--background) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+        }
+        .digital-clock {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .bidding-form-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-left: 6px solid var(--primary);
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(139, 94, 60, 0.05);
+        }
+
+        /* Modern Table */
+        .table-custom {
+            margin-bottom: 0;
+        }
+        .table-custom thead th {
+            background-color: var(--background);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+            border: none;
+            padding: 1rem 1.25rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .table-custom tbody td {
+            padding: 1.25rem;
+            vertical-align: middle;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .table-custom tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Highlight Ranks */
+        .rank-1 td {
+            background-color: var(--success-soft) !important;
+            border-bottom: 1px solid #ceead6;
+        }
+        .my-bid-row td {
+            background-color: var(--primary-soft) !important;
+            border-bottom: 1px solid rgba(139, 94, 60, 0.1);
+        }
+
+        .avatar-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .avatar-dark {
+            background-color: #f1f3f4;
+            color: #5f6368;
+            border: 1px solid #e8eaed;
+        }
+        .avatar-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(139, 94, 60, 0.3);
+        }
+    </style>
+</head>
+<body>
+    @include('partials.flash')
+
+    <nav class="navbar navbar-expand-lg py-3">
+        <div class="container-lg">
+            <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center gap-2" href="#">
+                <img src="{{ asset('assets/images/icon.svg') }}" alt="Bid-Down Logo" height="32" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 24 24\' fill=\'%238b5e3c\'%3E%3Cpath d=\'M13 10V3L4 14h7v7l9-11h-7z\'/%3E%3C/svg%3E';">
+                Bid Down
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFreelancer">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarFreelancer">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-medium gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ url('/dashboardfreelancer') }}">Beranda</a>
+                    </li>  
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ url('/explore') }}">Eksplor Proyek</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ url('/dashboardfreelancer') }}#bid-aktif">Bid Aktif Saya</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ url('/dashboardfreelancer') }}#proyek-berjalan">Proyek Berjalan</a>
+                    </li>
+                </ul>
+                <div class="d-flex ms-lg-4 mt-3 mt-lg-0 align-items-center gap-3">
+                    <a href="{{ url('/profilefreelancer') }}" class="nav-link fw-semibold text-primary hover-link">
+                        <i class="bi bi-person-circle me-1"></i> Andi Setiawan
+                    </a>
+                    <a href="{{ url('/login') }}" class="btn btn-sm btn-outline-danger fw-semibold px-3">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-lg py-5">
+        
+        <div class="mb-4">
+            <button onclick="history.back()" class="btn btn-outline-secondary shadow-sm fw-semibold px-4">
+                <i class="bi bi-arrow-left me-2"></i> Kembali
+            </button>
+        </div>
+
+        <div class="row g-4 mb-5">
+            
+            <div class="col-lg-8">
+                <div class="card section-card p-4 p-md-5 h-100">
+                    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+                        <h2 class="fw-bold text-main mb-0">{{ $project->title ?? 'Pembuatan Landing Page Perusahaan' }}</h2>
+                        <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                            <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
+                        </span>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-3 text-secondary-custom mb-4 align-items-center border-bottom border-light pb-4">
+                        <span>
+                            Diterbitkan oleh: <a href="{{ url('/profileclient') }}" class="text-primary fw-semibold text-decoration-none hover-link"><i class="bi bi-building me-1"></i> {{ $project->client->name ?? 'PT Jaya Abadi' }}</a>
+                        </span>
+                        <span class="d-none d-sm-inline">|</span>
+                        <span><i class="bi bi-calendar-date me-1"></i> {{ isset($project) ? $project->created_at->format('d M Y') : '12 Okt 2024' }}</span>
+                    </div>
+
+                    <h5 class="fw-bold text-main mb-3">Deskripsi Proyek</h5>
+                    <p class="text-main" style="line-height: 1.7;">
+                        {{ $project->description ?? 'Kami mencari Web Developer yang berpengalaman untuk membuat sebuah Landing Page modern dan responsif untuk peluncuran produk baru kami. Website harus dibuat menggunakan framework HTML/CSS/JS modern (Bootstrap 5 atau Tailwind CSS) dan dipastikan memiliki skor load speed yang baik.' }}
+                    </p>
+                    <p class="text-main" style="line-height: 1.7;">
+                        <strong>Persyaratan Khusus:</strong><br>
+                        <span class="d-block mb-1">- Desain harus mengikuti brand guidelines perusahaan (akan diberikan kepada pemenang).</span>
+                        <span class="d-block mb-1">- Terdapat form kontak yang terintegrasi (minimal kirim ke email).</span>
+                        <span class="d-block mb-1">- Waktu pengerjaan maksimal 7 hari setelah pemenang dipilih.</span>
+                    </p>
+                    
+                    <h6 class="fw-bold text-main mt-4 mb-3">Kategori & Keahlian Dibutuhkan:</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge badge-soft-secondary px-3 py-2">{{ $project->category ?? 'Web Development' }}</span>
+                        <span class="badge badge-soft-secondary px-3 py-2">HTML/CSS</span>
+                        <span class="badge badge-soft-secondary px-3 py-2">Bootstrap 5</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="timer-box p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-center">
+                    
+                    <h6 class="text-secondary-custom fw-semibold text-uppercase tracking-wide mb-2"><i class="bi bi-alarm me-1"></i> Sisa Waktu Bidding</h6>
+                    <h2 class="fw-bold text-accent mb-4 digital-clock display-5">02:15:30</h2>
+
+                    <hr class="border-secondary opacity-25 my-4">
+
+                    <div class="mb-4">
+                        <p class="text-secondary-custom fw-medium mb-1 fs-6">Modal Dasar (Maksimal)</p>
+                        <h4 class="fw-bold text-main mb-0">Rp {{ isset($project) ? number_format($project->max_price, 0, ',', '.') : '3.000.000' }}</h4>
+                    </div>
+
+                    <div class="p-3 bg-surface rounded-3 shadow-sm border border-light">
+                        <p class="text-secondary-custom fw-medium mb-1 fs-6">Bid Terendah Saat Ini</p>
+                        <h3 class="fw-bold text-success mb-0">{{ isset($lowestBid) && $lowestBid ? 'Rp ' . number_format($lowestBid->amount, 0, ',', '.') : 'Belum ada' }}</h3>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <section id="biddingarea">
+            
+            <div class="bidding-form-card p-4 p-md-5 mb-5">
+                <div class="row align-items-center g-4">
+                    <div class="col-md-6">
+                        <h4 class="fw-bold text-main mb-2"><i class="bi bi-tag-fill text-primary me-2"></i> Ajukan Penawaran Baru</h4>
+                        <p class="text-secondary-custom mb-0" style="line-height: 1.6;">Masukkan angka yang lebih rendah dari bid terendah saat ini untuk merebut posisi memimpin (peringkat #1).</p>
+                    </div>
+                    <div class="col-md-6">
+                        <form action="{{ route('bids.store', $project ?? 1) }}" method="POST">
+                            @csrf
+                            <div class="input-group input-group-lg mb-2 shadow-sm">
+                                <span class="input-group-text border-end-0">Rp</span>
+                                <input type="number" class="form-control border-start-0 ps-0" name="amount" placeholder="Masukkan nominal bid..." aria-label="Nominal Bid" required>
+                                <button class="btn btn-primary fw-bold px-4" type="submit">Kirim Bid</button>
+                            </div>
+                            <small class="text-accent fw-medium d-block mt-2">
+                                <i class="bi bi-exclamation-circle me-1"></i> Bid saat ini terendah adalah {{ isset($lowestBid) && $lowestBid ? 'Rp ' . number_format($lowestBid->amount, 0, ',', '.') : 'belum ada' }}.
+                            </small>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4">
+                <h4 class="fw-bold text-main mb-2 mb-sm-0"><i class="bi bi-list-ol text-primary me-2"></i> Leaderboard Bidding</h4>
+                <span class="badge badge-soft-primary px-3 py-2 rounded-pill"><i class="bi bi-broadcast me-1"></i> Live Update Aktif</span>
+            </div>
+
+            <div class="card section-card overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-custom align-middle">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 15%;">Peringkat</th>
+                                <th style="width: 40%;">Nama Freelancer</th>
+                                <th style="width: 25%;">Nominal Penawaran</th>
+                                <th style="width: 20%;">Waktu Bid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @isset($project)
+                                @foreach ($project->bids->sortBy('amount')->values() as $index => $bid)
+                                    <tr>
+                                        <td class="text-center fw-bold">#{{ $index + 1 }}</td>
+                                        <td>
+                                            <span class="fw-bold text-main d-block">
+                                                {{ $project->blind_review ? 'Anonymous Freelancer' : $bid->freelancer->name }}
+                                            </span>
+                                        </td>
+                                        <td><h5 class="fw-bold text-success mb-0">Rp {{ number_format($bid->amount, 0, ',', '.') }}</h5></td>
+                                        <td class="text-secondary-custom small fw-medium">{{ $bid->created_at->diffForHumans() }}</td>
+                                    </tr>
+                                @endforeach
+                            @endisset
+                            <tr class="rank-1">
+                                <td class="text-center">
+                                    <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm border border-success" style="width: 40px; height: 40px;">
+                                        <h5 class="fw-bold text-success mb-0">1</h5>
+                                    </div>
+                                    <span class="d-block mt-1 small text-success fw-bold"><i class="bi bi-trophy-fill me-1"></i>Leader</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-sm avatar-dark"><i class="bi bi-incognito"></i></div>
+                                        <div>
+                                            <span class="fw-bold text-main d-block">Anonymous Freelancer</span>
+                                            <span class="text-secondary-custom small">Identitas disamarkan klien</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><h5 class="fw-bold text-success mb-0">Rp 2.100.000</h5></td>
+                                <td class="text-secondary-custom small fw-medium">10 Menit yang lalu</td>
+                            </tr>
+                            
+                            <tr class="my-bid-row">
+                                <td class="text-center">
+                                    <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm border border-primary" style="width: 40px; height: 40px;">
+                                        <h5 class="fw-bold text-primary mb-0">2</h5>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-sm avatar-primary">AS</div>
+                                        <div>
+                                            <span class="fw-bold text-primary d-block">Andi Setiawan (Anda)</span>
+                                            <span class="badge bg-primary mt-1">Posisi Anda Saat Ini</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><h5 class="fw-bold text-primary mb-0">Rp 2.300.000</h5></td>
+                                <td class="text-secondary-custom small fw-medium">1 Jam yang lalu</td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-center">
+                                    <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 40px; height: 40px;">
+                                        <h5 class="fw-bold text-secondary mb-0">3</h5>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-sm avatar-dark"><i class="bi bi-incognito"></i></div>
+                                        <div>
+                                            <span class="fw-bold text-main d-block">Anonymous Freelancer</span>
+                                            <span class="text-secondary-custom small">Identitas disamarkan klien</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><h5 class="fw-bold text-main mb-0">Rp 2.500.000</h5></td>
+                                <td class="text-secondary-custom small fw-medium">3 Jam yang lalu</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-top border-light py-4 mt-auto">
+        <div class="container-lg text-center">
+            <p class="mb-0 text-secondary-custom small fw-medium">
+                &copy; 2026 Bid-Down. Platform Reverse Bidding untuk Freelancer Indonesia.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
+
+
