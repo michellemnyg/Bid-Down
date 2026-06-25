@@ -1148,6 +1148,49 @@ body{
         return false;
     }
     </script>
+    
+    @if(session('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                customClass: { popup: 'swal-modern', confirmButton: 'btn btn-primary fw-bold' },
+                buttonsStyling: false
+            });
+        });
+    </script>
+    @endif
+
+    @if(session('error'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: '{{ session('error') }}',
+                customClass: { popup: 'swal-modern', confirmButton: 'btn btn-primary fw-bold' },
+                buttonsStyling: false
+            });
+        });
+    </script>
+    @endif
+    
+    @if($errors->any())
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan',
+                text: '{{ $errors->first() }}',
+                customClass: { popup: 'swal-modern', confirmButton: 'btn btn-primary fw-bold' },
+                buttonsStyling: false
+            });
+        });
+    </script>
+    @endif
+
     @yield('scripts')
 </body>
 </html>

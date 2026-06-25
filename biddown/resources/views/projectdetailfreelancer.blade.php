@@ -363,7 +363,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('projects.review', $project->id) }}" method="POST">
+                        <form action="{{ route('projects.review', $project->id) }}" method="POST" onsubmit="return confirmAction(event, 'Kirim ulasan ini?', 'Ya, Kirim Ulasan')">
                             @csrf
                             <div class="text-center mb-4">
                                 <div class="avatar-sm bg-light text-secondary mx-auto mb-2" style="width: 60px; height: 60px; font-size: 24px;"><i class="bi bi-building"></i></div>
@@ -372,14 +372,14 @@
 
                             <div class="mb-3 text-center">
                                 <label class="form-label fw-semibold d-block">Rating Anda</label>
-                                <div class="fs-2 text-star" style="cursor: pointer;">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
+                                <div class="fs-2 text-star" style="cursor: pointer;" id="starRatingFreelancer">
+                                    <i class="bi bi-star-fill" data-rating="1"></i>
+                                    <i class="bi bi-star-fill" data-rating="2"></i>
+                                    <i class="bi bi-star-fill" data-rating="3"></i>
+                                    <i class="bi bi-star-fill" data-rating="4"></i>
+                                    <i class="bi bi-star-fill" data-rating="5"></i>
                                 </div>
-                                <input type="hidden" name="rating" value="5">
+                                <input type="hidden" name="rating" id="ratingInputFreelancer" value="5">
                             </div>
 
                             <div class="mb-4">
@@ -399,6 +399,30 @@
 
 @section('scripts')
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const stars = document.querySelectorAll("#starRatingFreelancer i");
+        const ratingInput = document.getElementById("ratingInputFreelancer");
+        
+        if (stars.length > 0) {
+            stars.forEach(star => {
+                star.addEventListener("click", function() {
+                    const rating = this.getAttribute("data-rating");
+                    ratingInput.value = rating;
+                    
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute("data-rating")) <= parseInt(rating)) {
+                            s.classList.remove("bi-star");
+                            s.classList.add("bi-star-fill");
+                        } else {
+                            s.classList.remove("bi-star-fill");
+                            s.classList.add("bi-star");
+                        }
+                    });
+                });
+            });
+        }
+    });
+
     document.addEventListener("DOMContentLoaded", function() {
         const countdownEl = document.getElementById("liveCountdown");
         if (countdownEl) {
