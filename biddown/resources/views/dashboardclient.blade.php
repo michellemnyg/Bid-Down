@@ -184,7 +184,7 @@
                             @if($project->status === 'closed')
                                 <span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold">Terkontrak</span>
                             @elseif($project->status === 'completed')
-                                <span class="badge badge-soft-info rounded-pill px-3 py-2 fw-semibold">Selesai (Menunggu Ulasan)</span>
+                                <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fw-semibold">Selesai (Menunggu Ulasan)</span>
                             @else
                                 <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Diulas</span>
                             @endif

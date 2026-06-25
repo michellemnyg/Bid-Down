@@ -110,7 +110,7 @@
                                     <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
                                 </span>
                             @elseif($project->status === 'completed')
-                                <span class="badge badge-soft-info rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
                                     <i class="bi bi-check-circle-fill"></i> SELESAI (MENUNGGU ULASAN)
                                 </span>
                             @elseif($project->status === 'reviewed')
