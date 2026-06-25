@@ -139,7 +139,8 @@ class ProjectController extends Controller
             ->exists();
 
         if ($exists) {
-            return back()->with('error', 'Anda sudah memberikan ulasan.');
+            $project->update(['status' => 'reviewed']);
+            return back()->with('success', 'Ulasan Anda sebelumnya telah disinkronkan dan proyek resmi ditutup.');
         }
 
         $request->validate([
@@ -164,7 +165,7 @@ class ProjectController extends Controller
 
     public function leaveReview(Request $request, Project $project)
     {
-        if ($project->status !== 'completed') {
+        if ($project->status !== 'completed' && $project->status !== 'reviewed') {
             return back()->with('error', 'Proyek belum selesai.');
         }
 
