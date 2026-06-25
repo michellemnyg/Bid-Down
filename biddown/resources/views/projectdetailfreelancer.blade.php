@@ -97,6 +97,14 @@
                                 <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
                                     <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
                                 </span>
+                            @elseif($project->status === 'completed')
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-check-circle-fill"></i> SELESAI
+                                </span>
+                            @elseif($project->status === 'reviewed')
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill"></i> PROYEK DITUTUP
+                                </span>
                             @else
                                 <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
                                     <i class="bi bi-lock-fill"></i> BIDDING DITUTUP
@@ -317,7 +325,7 @@
                         </div>
 
                         <div class="text-md-end text-center p-4 bg-white rounded-4 shadow-sm" style="min-width: 300px;">
-                            @if($project->status === 'completed')
+                            @if($project->status === 'completed' || $project->status === 'reviewed')
                                 @php
                                     $hasReviewed = \App\Models\Review::where('project_id', $project->id)->where('reviewer_id', Auth::id())->exists();
                                 @endphp

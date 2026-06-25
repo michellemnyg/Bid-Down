@@ -192,16 +192,20 @@
                         <td class="fw-bold text-dark">Rp {{ number_format($project->winnerBid->amount, 0, ',', '.') }}</td>
                         <td>
                             @if($project->status === 'closed')
-                                <span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold">Menunggu Konfirmasi Klien</span>
-                            @else
+                                <span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold">Pengerjaan</span>
+                            @elseif($project->status === 'completed')
                                 <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Selesai</span>
+                            @else
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Diulas</span>
                             @endif
                         </td>
                         <td class="text-center">
                             @if($project->status === 'closed')
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $project->client->phone) }}" target="_blank" class="btn btn-sm btn-success fw-medium px-3"><i class="bi bi-whatsapp me-1"></i> Hubungi Klien</a>
+                            @elseif($project->status === 'completed')
+                                <a href="{{ route('projectdetailfreelancer', $project->id) }}" class="btn btn-sm btn-outline-primary fw-medium px-3"><i class="bi bi-star me-1"></i> Ulas Balik</a>
                             @else
-                                <a href="#" class="btn btn-sm btn-outline-primary fw-medium px-3"><i class="bi bi-star me-1"></i> Beri Review</a>
+                                <a href="{{ route('projectdetailfreelancer', $project->id) }}" class="btn btn-sm btn-outline-secondary fw-medium px-3"><i class="bi bi-eye me-1"></i> Detail</a>
                             @endif
                         </td>
                     </tr>

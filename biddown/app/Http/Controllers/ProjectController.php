@@ -119,12 +119,35 @@ class ProjectController extends Controller
             return back()->with('error', 'Akses ditolak.');
         }
 
+        $project->update(['status' => 'completed']);
+
+        return back()->with('success', 'Pengerjaan proyek diselesaikan. Silakan berikan ulasan Anda.');
+    }
+
+    public function leaveClientReview(Request $request, Project $project)
+    {
+        if ($project->status !== 'completed') {
+            return back()->with('error', 'Proyek belum ditandai selesai.');
+        }
+
+        if ($project->client_id !== Auth::id()) {
+            return back()->with('error', 'Akses ditolak.');
+        }
+
+        $exists = Review::where('project_id', $project->id)
+            ->where('reviewer_id', Auth::id())
+            ->exists();
+
+        if ($exists) {
+            return back()->with('error', 'Anda sudah memberikan ulasan.');
+        }
+
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'review' => 'required|string',
         ]);
 
-        $project->update(['status' => 'completed']);
+        $project->update(['status' => 'reviewed']);
 
         if ($project->winnerBid) {
             Review::create([
@@ -136,7 +159,7 @@ class ProjectController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Proyek diselesaikan dan ulasan berhasil dikirim.');
+        return back()->with('success', 'Ulasan berhasil dikirim dan proyek resmi ditutup.');
     }
 
     public function leaveReview(Request $request, Project $project)

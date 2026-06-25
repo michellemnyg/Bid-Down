@@ -110,8 +110,12 @@
                                     <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
                                 </span>
                             @elseif($project->status === 'completed')
-                                <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                    <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
+                                <span class="badge badge-soft-info rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-check-circle-fill"></i> SELESAI (MENUNGGU ULASAN)
+                                </span>
+                            @elseif($project->status === 'reviewed')
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill"></i> PROYEK DITUTUP
                                 </span>
                             @else
                                 <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
@@ -282,16 +286,25 @@
 
                         <div class="text-md-end text-center p-4 bg-white rounded-4 shadow-sm" style="min-width: 300px;">
                             @if($project->status === 'closed')
-                                <h6 class="fw-bold text-main mb-3">Selesaikan Proyek?</h6>
-                                <p class="small text-secondary-custom mb-3">Jika pekerjaan sudah selesai dan diserahkan sepenuhnya, tandai selesai untuk memberi ulasan.</p>
+                                <h6 class="fw-bold text-main mb-3">Pekerjaan Selesai?</h6>
+                                <p class="small text-secondary-custom mb-3">Konfirmasi jika freelancer telah menyerahkan hasil pekerjaan secara lengkap.</p>
+                                <form action="{{ route('projects.complete', $project->id) }}" method="POST" onsubmit="return confirmAction(event, 'Konfirmasi bahwa pengerjaan proyek ini telah selesai?', 'Ya, Selesai')">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success fw-bold w-100 shadow-sm">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Tandai Selesai
+                                    </button>
+                                </form>
+                            @elseif($project->status === 'completed')
+                                <h6 class="fw-bold text-main mb-3">Proyek Selesai!</h6>
+                                <p class="small text-secondary-custom mb-3">Silakan berikan ulasan atas kinerja freelancer untuk menutup proyek.</p>
                                 <button type="button" class="btn btn-primary fw-bold w-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                                    <i class="bi bi-check-circle-fill me-1"></i> Tandai Selesai & Ulas
+                                    <i class="bi bi-star-fill me-1"></i> Beri Ulasan
                                 </button>
                             @else
                                 <div class="text-center">
                                     <i class="bi bi-star-fill text-star fs-1 mb-2"></i>
-                                    <h6 class="fw-bold text-success mb-1">Proyek Selesai</h6>
-                                    <p class="small text-secondary-custom mb-0">Anda sudah menyelesaikan proyek ini.</p>
+                                    <h6 class="fw-bold text-success mb-1">Proyek Ditutup</h6>
+                                    <p class="small text-secondary-custom mb-0">Proyek selesai dan telah diulas.</p>
                                 </div>
                             @endif
                         </div>
@@ -309,7 +322,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('projects.complete', $project->id) }}" method="POST">
+                        <form action="{{ route('projects.client-review', $project->id) }}" method="POST">
                             @csrf
                             <div class="text-center mb-4">
                                 <div class="avatar-sm avatar-primary mx-auto mb-2" style="width: 60px; height: 60px; font-size: 24px;">{{ strtoupper(substr($project->winnerBid->freelancer->name, 0, 2)) }}</div>
@@ -333,7 +346,7 @@
                                 <textarea class="form-control" id="reviewText" name="review" rows="4" placeholder="Bagaimana hasil kerja freelancer? Apakah sesuai ekspektasi Anda?" required></textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary fw-bold w-100 py-2">Kirim Ulasan & Selesaikan Proyek</button>
+                            <button type="submit" class="btn btn-primary fw-bold w-100 py-2">Kirim Ulasan</button>
                         </form>
                     </div>
                 </div>

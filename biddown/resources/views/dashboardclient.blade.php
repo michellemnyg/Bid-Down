@@ -183,8 +183,10 @@
                         <td>
                             @if($project->status === 'closed')
                                 <span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold">Terkontrak</span>
+                            @elseif($project->status === 'completed')
+                                <span class="badge badge-soft-info rounded-pill px-3 py-2 fw-semibold">Selesai (Menunggu Ulasan)</span>
                             @else
-                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Selesai</span>
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Diulas</span>
                             @endif
                         </td>
                         <td class="text-center">
@@ -193,8 +195,10 @@
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-success fw-medium px-3"><i class="bi bi-check-circle me-1"></i> Selesai</button>
                             </form>
+                            @elseif($project->status === 'completed')
+                            <a href="{{ route('projectdetailclient', $project->id) }}" class="btn btn-sm btn-outline-primary fw-medium px-3"><i class="bi bi-star me-1"></i> Ulas</a>
                             @else
-                            <a href="#" class="btn btn-sm btn-outline-primary fw-medium px-3"><i class="bi bi-star me-1"></i> Review</a>
+                            <a href="{{ route('projectdetailclient', $project->id) }}" class="btn btn-sm btn-outline-secondary fw-medium px-3"><i class="bi bi-eye me-1"></i> Detail</a>
                             @endif
                         </td>
                     </tr>

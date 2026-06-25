@@ -37,6 +37,7 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::patch('/projects/{project}/close', [ProjectController::class, 'close'])->name('projects.close');
     Route::patch('/projects/{project}/choose-winner/{bid}', [ProjectController::class, 'chooseWinner'])->name('projects.choose-winner');
     Route::post('/projects/{project}/complete', [ProjectController::class, 'markCompleted'])->name('projects.complete');
+    Route::post('/projects/{project}/client-review', [ProjectController::class, 'leaveClientReview'])->name('projects.client-review');
     
     Route::get('/projectdetailclient/{project?}', [PageController::class, 'projectDetailClient'])->name('projectdetailclient');
 });
