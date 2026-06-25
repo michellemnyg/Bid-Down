@@ -27,10 +27,10 @@ class PageController extends Controller
             ->get();
 
         $activeProjects = $allProjects->where('status', 'open');
-        $historyProjects = $allProjects->whereIn('status', ['closed', 'completed']);
+        $historyProjects = $allProjects->whereIn('status', ['closed', 'completed', 'reviewed']);
         
         $totalProjects = $allProjects->count();
-        $completedProjectsCount = $allProjects->where('status', 'completed')->count();
+        $completedProjectsCount = $allProjects->whereIn('status', ['completed', 'reviewed'])->count();
         $totalSpend = $historyProjects->sum(fn ($p) => $p->winnerBid ? $p->winnerBid->amount : 0);
 
         return view('dashboardclient', [
@@ -50,11 +50,11 @@ class PageController extends Controller
         $myBids = $freelancer->bids()->with('project.client', 'project.lowestBid')->latest()->get();
         
         $activeBids = $myBids->filter(fn ($b) => $b->project && $b->project->status === 'open');
-        $contractedBids = $myBids->filter(fn ($b) => $b->project && in_array($b->project->status, ['closed', 'completed']) && $b->project->winner_bid_id === $b->id);
+        $contractedBids = $myBids->filter(fn ($b) => $b->project && in_array($b->project->status, ['closed', 'completed', 'reviewed']) && $b->project->winner_bid_id === $b->id);
         
-        $totalEarnings = $contractedBids->filter(fn ($b) => $b->project->status === 'completed')->sum('amount');
+        $totalEarnings = $contractedBids->filter(fn ($b) => in_array($b->project->status, ['completed', 'reviewed']))->sum('amount');
         $successRate = $myBids->count() > 0 ? round(($contractedBids->count() / $myBids->count()) * 100) : 0;
-        $completedProjectsCount = $contractedBids->filter(fn ($b) => $b->project->status === 'completed')->count();
+        $completedProjectsCount = $contractedBids->filter(fn ($b) => in_array($b->project->status, ['completed', 'reviewed']))->count();
 
         return view('dashboardfreelancer', [
             'freelancer' => $freelancer,
