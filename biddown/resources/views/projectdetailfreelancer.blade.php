@@ -89,17 +89,16 @@
                         </div>
                         <h2 class="fw-bold text-main mb-2">{{ $project->title }}</h2>
                         <div class="d-flex align-items-center gap-2">
+                            @php
+                                $hasReviewed = \App\Models\Review::where('project_id', $project->id)->where('reviewer_id', Auth::id())->exists();
+                            @endphp
                             @if($isBiddingOpen)
                                 <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
                                     <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
                                 </span>
-                            @elseif($project->status === 'completed')
+                            @elseif($project->status === 'completed' || ($project->status === 'reviewed' && !$hasReviewed))
                                 <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                    <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
-                                </span>
-                            @elseif($project->status === 'completed')
-                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                    <i class="bi bi-check-circle-fill"></i> SELESAI
+                                    <i class="bi bi-check-circle-fill"></i> SELESAI (MENUNGGU ULASAN)
                                 </span>
                             @elseif($project->status === 'reviewed')
                                 <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
@@ -326,9 +325,6 @@
 
                         <div class="text-md-end text-center p-4 bg-white rounded-4 shadow-sm" style="min-width: 300px;">
                             @if($project->status === 'completed' || $project->status === 'reviewed')
-                                @php
-                                    $hasReviewed = \App\Models\Review::where('project_id', $project->id)->where('reviewer_id', Auth::id())->exists();
-                                @endphp
                                 <h6 class="fw-bold text-main mb-3">Proyek Selesai</h6>
                                 @if(!$hasReviewed)
                                     <p class="small text-secondary-custom mb-3">Klien telah menandai proyek ini selesai. Silakan berikan ulasan balik untuk klien.</p>
