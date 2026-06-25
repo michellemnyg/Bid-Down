@@ -26,8 +26,8 @@ class PageController extends Controller
             ->latest()
             ->get();
 
-        $activeProjects = $allProjects->where('status', 'open');
-        $historyProjects = $allProjects->whereIn('status', ['closed', 'completed', 'reviewed']);
+        $activeProjects = $allProjects->where('status', 'open')->sortBy('bid_deadline');
+        $historyProjects = $allProjects->whereIn('status', ['closed', 'completed', 'reviewed'])->sortByDesc('updated_at');
         
         $totalProjects = $allProjects->count();
         $completedProjectsCount = $allProjects->whereIn('status', ['completed', 'reviewed'])->count();
@@ -49,8 +49,8 @@ class PageController extends Controller
 
         $myBids = $freelancer->bids()->with('project.client', 'project.lowestBid')->latest()->get();
         
-        $activeBids = $myBids->filter(fn ($b) => $b->project && $b->project->status === 'open');
-        $contractedBids = $myBids->filter(fn ($b) => $b->project && in_array($b->project->status, ['closed', 'completed', 'reviewed']) && $b->project->winner_bid_id === $b->id);
+        $activeBids = $myBids->filter(fn ($b) => $b->project && $b->project->status === 'open')->sortBy(fn($b) => $b->project->bid_deadline);
+        $contractedBids = $myBids->filter(fn ($b) => $b->project && in_array($b->project->status, ['closed', 'completed', 'reviewed']) && $b->project->winner_bid_id === $b->id)->sortByDesc(fn($b) => $b->project->updated_at);
         
         $totalEarnings = $contractedBids->filter(fn ($b) => in_array($b->project->status, ['completed', 'reviewed']))->sum('amount');
         $successRate = $myBids->count() > 0 ? round(($contractedBids->count() / $myBids->count()) * 100) : 0;
