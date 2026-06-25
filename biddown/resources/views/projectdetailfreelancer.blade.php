@@ -39,13 +39,6 @@
         letter-spacing: 1px;
         text-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
-    .bidding-form-card {
-        background-color: var(--surface);
-        border: 1px solid var(--border-color);
-        border-left: 6px solid var(--primary);
-        border-radius: 16px;
-        box-shadow: 0 12px 32px rgba(139, 94, 60, 0.05);
-    }
     .rank-1 td {
         background-color: #e6f4ea !important;
         border-bottom: 1px solid #ceead6;
@@ -93,21 +86,23 @@
             
             <div class="col-lg-8">
                 <div class="card section-card p-4 p-md-5 h-100">
-                    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
-                        <h2 class="fw-bold text-main mb-0">{{ $project->title ?? 'Pembuatan Landing Page Perusahaan' }}</h2>
-                        @if($projectStatus === 'open')
-                            <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
-                            </span>
-                        @elseif($projectStatus === 'closed')
-                            <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                <i class="bi bi-lock-fill"></i> BIDDING DITUTUP
-                            </span>
-                        @else
-                            <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
-                            </span>
-                        @endif
+                    <div class="mb-3">
+                        <h2 class="fw-bold text-main mb-2">{{ $project->title ?? 'Pembuatan Landing Page Perusahaan' }}</h2>
+                        <div class="d-flex align-items-center gap-2">
+                            @if($projectStatus === 'open')
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
+                                </span>
+                            @elseif($projectStatus === 'closed')
+                                <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-lock-fill"></i> BIDDING DITUTUP
+                                </span>
+                            @else
+                                <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="d-flex flex-wrap gap-3 text-secondary-custom mb-4 align-items-center border-bottom border-light pb-4">
@@ -181,25 +176,90 @@
             
             @if($projectStatus === 'open')
             <div class="bidding-form-card p-4 p-md-5 mb-5">
+
                 <div class="row align-items-center g-4">
-                    <div class="col-md-6">
-                        <h4 class="fw-bold text-main mb-2"><i class="bi bi-tag-fill text-primary me-2"></i> Ajukan Penawaran Baru</h4>
-                        <p class="text-secondary-custom mb-0" style="line-height: 1.6;">Masukkan angka yang lebih rendah dari bid terendah saat ini untuk merebut posisi memimpin (peringkat #1).</p>
-                    </div>
-                    <div class="col-md-6">
-                        <form action="#" method="POST" onsubmit="return confirmAction(event, 'Yakin ingin mengirim penawaran (bid) sebesar Rp ' + this.amount.value + '?', 'Ya, Kirim Bid')">
-                            @csrf
-                            <div class="input-group input-group-lg mb-2 shadow-sm">
-                                <span class="input-group-text border-end-0">Rp</span>
-                                <input type="number" class="form-control border-start-0 ps-0" name="amount" placeholder="Masukkan nominal bid..." aria-label="Nominal Bid" required>
-                                <button class="btn btn-primary fw-bold px-4" type="submit">Kirim Bid</button>
+
+                    <div class="col-lg-5">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="bid-icon-box">
+                                <i class="bi bi-cash-stack"></i>
                             </div>
-                            <small class="text-accent fw-medium d-block mt-2">
-                                <i class="bi bi-exclamation-circle me-1"></i> Bid saat ini terendah adalah {{ isset($lowestBid) && $lowestBid ? 'Rp ' . number_format($lowestBid->amount, 0, ',', '.') : 'belum ada' }}.
-                            </small>
-                        </form>
+
+                            <div>
+                                <h4 class="fw-bold text-main mb-1">
+                                    Ajukan Penawaran
+                                </h4>
+
+                                <p class="text-secondary-custom mb-0">
+                                    Masukkan nominal penawaran Anda untuk bersaing dengan freelancer lain.
+                                </p>
+                            </div>
+
+                        </div>
+
                     </div>
+
+                    <div class="col-lg-7">
+
+                        <form
+                            action="#"
+                            method="POST"
+                            onsubmit="return confirmAction(
+                                event,
+                                'Yakin ingin mengirim penawaran (bid) sebesar Rp ' + this.amount.value + '?',
+                                'Ya, Kirim Bid'
+                            )">
+
+                            @csrf
+
+                            <div class="input-group bid-input-group">
+
+                                <span class="input-group-text">
+                                    Rp
+                                </span>
+
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    name="amount"
+                                    placeholder="Masukkan nominal bid..."
+                                    required>
+
+                                <button
+                                    class="btn btn-primary bid-submit-btn"
+                                    type="submit">
+
+                                    <i class="bi bi-send-fill me-2"></i>
+                                    Kirim Bid
+
+                                </button>
+
+                            </div>
+
+                            <small class="bid-hint d-block mt-3">
+
+                                <i class="bi bi-info-circle me-1"></i>
+
+                                @if(isset($lowestBid) && $lowestBid)
+                                    Masukkan nominal lebih rendah dari
+                                    <strong>
+                                        Rp {{ number_format($lowestBid->amount, 0, ',', '.') }}
+                                    </strong>
+                                    untuk mengambil posisi teratas leaderboard.
+                                @else
+                                    Belum ada penawaran. Anda berkesempatan menjadi bidder pertama.
+                                @endif
+
+                            </small>
+
+                        </form>
+
+                    </div>
+
                 </div>
+
             </div>
             @endif
 

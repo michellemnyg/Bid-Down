@@ -202,6 +202,146 @@ body{
         0 8px 20px rgba(139,94,60,.10);
 }
 
+/* ==========================
+   BID FORM
+========================== */
+
+.bidding-form-card{
+    position:relative;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139,94,60,.08),
+            rgba(255,255,255,.98)
+        );
+
+    border:1px solid rgba(139,94,60,.10);
+
+    border-radius:28px;
+
+    box-shadow:
+        0 15px 40px rgba(139,94,60,.08);
+}
+
+.bidding-form-card::before{
+    content:'';
+
+    position:absolute;
+
+    top:-120px;
+    right:-120px;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            rgba(139,94,60,.10),
+            transparent 70%
+        );
+
+    pointer-events:none;
+}
+
+.bid-icon-box{
+    width:60px;
+    height:60px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b5e3c,
+            #c8a27a
+        );
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:1.5rem;
+
+    box-shadow:
+        0 12px 25px rgba(139,94,60,.25);
+}
+
+.bid-lowest-box{
+    background:white;
+
+    border:1px solid #ece7e2;
+
+    border-radius:16px;
+
+    padding:.9rem 1rem;
+
+    margin-top:.8rem;
+
+    display:flex;
+    align-items:center;
+    gap:.75rem;
+}
+
+.bid-lowest-box i{
+    color:#f5b301;
+    font-size:1.1rem;
+}
+
+.bid-input-group{
+    background:white;
+
+    border-radius:18px;
+
+    padding:.4rem;
+
+    border:1px solid #ece7e2;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.04);
+}
+
+.bid-input-group .input-group-text{
+    background:transparent;
+    border:none;
+
+    font-size:1.15rem;
+    font-weight:700;
+
+    color:var(--primary);
+}
+
+.bid-input-group .form-control{
+    border:none !important;
+    box-shadow:none !important;
+
+    font-size:1.05rem;
+    font-weight:600;
+
+    background:transparent;
+}
+
+.bid-submit-btn{
+    border-radius:14px !important;
+
+    min-width:160px;
+
+    font-weight:700;
+
+    padding:.9rem 1.5rem;
+}
+
+.bid-hint{
+    color:#8b5e3c;
+    font-weight:500;
+    font-size:.9rem;
+}
+
 /* ====================================
    PROFILE
 ==================================== */

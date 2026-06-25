@@ -102,21 +102,23 @@
             
             <div class="col-lg-8">
                 <div class="card section-card p-4 p-md-5 h-100">
-                    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
-                        <h2 class="fw-bold text-main mb-0">{{ $project->title ?? 'Pembuatan Landing Page Perusahaan' }}</h2>
-                        @if($projectStatus === 'open')
-                            <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
-                            </span>
-                        @elseif($projectStatus === 'closed')
-                            <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                <i class="bi bi-lock-fill"></i> BIDDING DITUTUP
-                            </span>
-                        @else
-                            <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
-                            </span>
-                        @endif
+                    <div class="mb-3">
+                        <h2 class="fw-bold text-main mb-2">{{ $project->title ?? 'Pembuatan Landing Page Perusahaan' }}</h2>
+                        <div class="d-flex align-items-center gap-2">
+                            @if($projectStatus === 'open')
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
+                                </span>
+                            @elseif($projectStatus === 'closed')
+                                <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-lock-fill"></i> BIDDING DITUTUP
+                                </span>
+                            @else
+                                <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="d-flex flex-wrap gap-3 text-secondary-custom mb-4 align-items-center border-bottom border-light pb-4">
