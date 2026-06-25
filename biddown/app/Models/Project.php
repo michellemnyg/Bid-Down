@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 #[Fillable([
     'client_id',
@@ -64,5 +65,19 @@ class Project extends Model
         }
 
         return $this->bid_deadline === null || $this->bid_deadline->isFuture();
+    }
+
+    protected function budgetMax(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->max_price,
+        );
+    }
+
+    protected function deadline(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->bid_deadline,
+        );
     }
 }

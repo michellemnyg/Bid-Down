@@ -2,17 +2,30 @@
 
 @section('title', 'Eksplorasi Proyek | Bid Down')
 
-@section('user-name', 'Andi Setiawan')
-@section('user-avatar', 'AS')
-@section('profile-link', url('/profilefreelancer'))
+@section('profile-link', Auth::check() && Auth::user()->isClient() ? route('profileclient') : route('profilefreelancer'))
 
 @section('nav-links')
+@if(Auth::check() && Auth::user()->role === 'client')
+<li class="nav-item">
+    <a class="nav-link nav-link-custom" href="{{ route('dashboardclient') }}"><i class="bi bi-grid me-1"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link nav-link-custom" href="{{ route('dashboardclient') }}#proyek-aktif"><i class="bi bi-briefcase me-1"></i> Proyek Saya</a>
+</li>
+@else
 <li class="nav-item">
     <a class="nav-link nav-link-custom" href="{{ url('/dashboardfreelancer') }}"><i class="bi bi-grid me-1"></i> Dashboard</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link nav-link-custom active" href="{{ url('/explore') }}"><i class="bi bi-search me-1"></i> Eksplor Proyek</a>
+    <a class="nav-link nav-link-custom active" href="{{ url('/explore') }}"><i class="bi bi-compass me-1"></i> Eksplor Proyek</a>
 </li>
+<li class="nav-item">
+    <a class="nav-link nav-link-custom" href="{{ url('/dashboardfreelancer') }}#bid-aktif"><i class="bi bi-graph-down-arrow me-1"></i> Bid Aktif Saya</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link nav-link-custom" href="{{ url('/dashboardfreelancer') }}#proyek-berjalan"><i class="bi bi-check2-all me-1"></i> Proyek Terkontrak</a>
+</li>
+@endif
 @endsection
 
 @section('styles')
@@ -62,43 +75,37 @@
             <h5 class="fw-bold mb-4 d-flex align-items-center gap-2 text-main">
                 <i class="bi bi-funnel text-primary fs-4"></i> Filter Project
             </h5>
+            <form action="{{ route('explore') }}" method="GET">
             <div class="row g-3 align-items-end">
                 <div class="col-md-6 col-lg-4">
                     <label for="searchInput" class="form-label">Kata Kunci</label>
                     <div class="input-group">
                         <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-search"></i></span>
-                        <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Cari: website, UI/UX, API..."/>
+                        <input type="text" name="search" value="{{ request('search') }}" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Cari: website, UI/UX, API..."/>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
+                <div class="col-md-6 col-lg-4">
                     <label for="categoryFilter" class="form-label">Kategori</label>
-                    <select id="categoryFilter" class="form-select">
+                    <select name="category" id="categoryFilter" class="form-select">
                         <option value="">Semua Kategori</option>
-                        <option value="Web Development">Web Development</option>
-                        <option value="UI/UX Design">UI/UX Design</option>
-                        <option value="Backend Development">Backend Development</option>
-                        <option value="Content Writing">Content Writing</option>
-                        <option value="Video Editing">Video Editing</option>
-                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Web Development" {{ request('category') == 'Web Development' ? 'selected' : '' }}>Web Development</option>
+                        <option value="UI/UX Design" {{ request('category') == 'UI/UX Design' ? 'selected' : '' }}>UI/UX Design</option>
+                        <option value="Backend Development" {{ request('category') == 'Backend Development' ? 'selected' : '' }}>Backend Development</option>
+                        <option value="Content Writing" {{ request('category') == 'Content Writing' ? 'selected' : '' }}>Content Writing</option>
+                        <option value="Video Editing" {{ request('category') == 'Video Editing' ? 'selected' : '' }}>Video Editing</option>
+                        <option value="Graphic Design" {{ request('category') == 'Graphic Design' ? 'selected' : '' }}>Graphic Design</option>
                     </select>
                 </div>
-                <div class="col-md-6 col-lg-3">
-                    <label for="budgetFilter" class="form-label">Budget Maksimal</label>
-                    <select id="budgetFilter" class="form-select">
-                        <option value="">Semua Range</option>
-                        <option value="1000000">Sampai Rp 1.000.000</option>
-                        <option value="3000000">Sampai Rp 3.000.000</option>
-                        <option value="5000000">Sampai Rp 5.000.000</option>
-                        <option value="10000000">Sampai Rp 10.000.000</option>
-                        <option value="20000000">Sampai Rp 20.000.000</option>
-                    </select>
-                </div>
-                <div class="col-md-6 col-lg-2 d-grid">
-                    <button type="button" class="btn btn-outline-primary fw-semibold py-2">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                <div class="col-md-12 col-lg-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary fw-semibold py-2 flex-grow-1">
+                        Cari
                     </button>
+                    <a href="{{ route('explore') }}" class="btn btn-outline-primary fw-semibold py-2">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </a>
                 </div>
             </div>
+            </form>
         </section>
 
         <section class="pt-2">
@@ -112,8 +119,7 @@
             </div>
             
             <div class="row g-4">
-                @isset($projects)
-                    @foreach ($projects as $project)
+                    @forelse ($projects as $project)
                         <div class="col-md-6 col-xl-4">
                             <div class="card project-card">
                                 <div class="card-body p-4 d-flex flex-column h-100">
@@ -123,9 +129,13 @@
                                         <p class="text-secondary-custom small mb-0">{{ Str::limit($project->description, 120) }}</p>
                                     </div>
                                     <div class="mt-auto pt-3">
+                                        <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-3">
+                                            <i class="bi bi-clock"></i>
+                                            <span class="fw-medium">Tenggat: {{ \Carbon\Carbon::parse($project->deadline)->format('d M Y') }}</span>
+                                        </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <span class="small text-secondary-custom">Budget Maks:</span>
-                                            <span class="fw-bold text-main">Rp {{ number_format($project->max_price, 0, ',', '.') }}</span>
+                                            <span class="fw-bold text-main">Rp {{ number_format($project->budget_max, 0, ',', '.') }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-3">
                                             <span class="small text-secondary-custom">Bid Terendah:</span>
@@ -135,7 +145,7 @@
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="badge badge-soft-success px-3 py-2 rounded-pill">Open Bid</span>
-                                            <a href="{{ route('projectdetailfreelancer', $project) }}" class="btn btn-primary fw-medium px-4">
+                                            <a href="{{ Auth::check() && Auth::user()->isClient() ? route('projectdetailclient', $project) : route('projectdetailfreelancer', $project) }}" class="btn btn-primary fw-medium px-4">
                                                 Lihat <i class="bi bi-arrow-right ms-1"></i>
                                             </a>
                                         </div>
@@ -143,236 +153,13 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                @endisset
+                    @empty
+                        <div class="col-12 text-center py-5">
+                            <h5 class="text-muted">Tidak ada proyek yang sesuai dengan pencarian Anda.</h5>
+                        </div>
+                    @endforelse
                 
-                <div class="col-md-6 col-xl-4">
-                    <div class="card project-card">
-                        <div class="card-body p-4 d-flex flex-column h-100">
-                            <div class="mb-3">
-                                <span class="badge badge-soft-secondary px-2 py-1 mb-2 rounded">Web Development</span>
-                                <h5 class="fw-bold text-main line-clamp-2 mb-1">Pembuatan Landing Page Produk SaaS</h5>
-                            </div>
-                            <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Membuat landing page responsif dengan conversion optimization + integrasi formulir lead capture.</p>
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-2">
-                                    <i class="bi bi-building"></i>
-                                    <span class="fw-medium">PT Solusi Digital</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2 small mb-3">
-                                    <i class="bi bi-calendar-event text-secondary-custom"></i>
-                                    <span class="text-secondary-custom fw-medium">Selesai: 20 Apr 2026 (10 hr)</span>
-                                </div>
-                                <div class="p-3 bg-light rounded-3 border mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="small text-secondary-custom">Budget Maks:</span>
-                                        <span class="fw-bold text-main">Rp 3.000.000</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="small text-secondary-custom">Bid Terendah:</span>
-                                        <span class="fw-bold text-success">Rp 2.100.000</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge badge-soft-success px-3 py-2 rounded-pill">Open Bid</span>
-                                    <a href="{{ url('/projectdetailfreelancer') }}" class="btn btn-primary fw-medium px-4">
-                                        Lihat <i class="bi bi-arrow-right ms-1"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 col-xl-4">
-                    <div class="card project-card">
-                        <div class="card-body p-4 d-flex flex-column h-100">
-                            <div class="mb-3">
-                                <span class="badge badge-soft-secondary px-2 py-1 mb-2 rounded">UI/UX Design</span>
-                                <h5 class="fw-bold text-main line-clamp-2 mb-1">Desain UI/UX Aplikasi E-Commerce Mobile</h5>
-                            </div>
-                            <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Desain lengkap 18 screen aplikasi mobile e-commerce dengan prototype interaktif di Figma.</p>
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-2">
-                                    <i class="bi bi-building"></i>
-                                    <span class="fw-medium">CV BelanjaMaju</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2 small mb-3">
-                                    <i class="bi bi-calendar-event text-secondary-custom"></i>
-                                    <span class="text-secondary-custom fw-medium">Selesai: 30 Apr 2026 (20 hr)</span>
-                                </div>
-                                <div class="p-3 bg-light rounded-3 border mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="small text-secondary-custom">Budget Maks:</span>
-                                        <span class="fw-bold text-main">Rp 8.000.000</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="small text-secondary-custom">Bid Terendah:</span>
-                                        <span class="fw-bold text-success">Rp 6.500.000</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge badge-soft-success px-3 py-2 rounded-pill">Open Bid</span>
-                                    <a href="{{ url('/projectdetailfreelancer') }}" class="btn btn-primary fw-medium px-4">
-                                        Lihat <i class="bi bi-arrow-right ms-1"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-xl-4">
-                    <div class="card project-card">
-                        <div class="card-body p-4 d-flex flex-column h-100">
-                            <div class="mb-3">
-                                <span class="badge badge-soft-secondary px-2 py-1 mb-2 rounded">Backend Development</span>
-                                <h5 class="fw-bold text-main line-clamp-2 mb-1">Setup API Node.js dan Database MySQL</h5>
-                            </div>
-                            <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Membuat REST API Node.js dengan autentikasi JWT, manajemen produk, dan sistem pembayaran.</p>
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-2">
-                                    <i class="bi bi-building"></i>
-                                    <span class="fw-medium">PT Jaya Abadi</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2 small mb-3">
-                                    <i class="bi bi-exclamation-circle-fill text-danger"></i>
-                                    <span class="text-danger fw-medium">Selesai: 15 Apr 2026 (5 hr)</span>
-                                </div>
-                                <div class="p-3 bg-light rounded-3 border mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="small text-secondary-custom">Budget Maks:</span>
-                                        <span class="fw-bold text-main">Rp 5.000.000</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="small text-secondary-custom">Bid Terendah:</span>
-                                        <span class="small fst-italic text-secondary-custom">Belum ada bid</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge badge-soft-warning px-3 py-2 rounded-pill">Menunggu Bid</span>
-                                    <a href="{{ url('/projectdetailfreelancer') }}" class="btn btn-primary fw-medium px-4">
-                                        Lihat <i class="bi bi-arrow-right ms-1"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-xl-4">
-                    <div class="card project-card">
-                        <div class="card-body p-4 d-flex flex-column h-100">
-                            <div class="mb-3">
-                                <span class="badge badge-soft-secondary px-2 py-1 mb-2 rounded">Content Writing</span>
-                                <h5 class="fw-bold text-main line-clamp-2 mb-1">Artikel SEO 20 Topik Bisnis Digital</h5>
-                            </div>
-                            <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Menulis artikel blog SEO-friendly, masing-masing 1200-1500 kata, dengan keyword research mendalam.</p>
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-2">
-                                    <i class="bi bi-building"></i>
-                                    <span class="fw-medium">Media Tumbuh</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2 small mb-3">
-                                    <i class="bi bi-calendar-event text-secondary-custom"></i>
-                                    <span class="text-secondary-custom fw-medium">Selesai: 25 Apr 2026 (15 hr)</span>
-                                </div>
-                                <div class="p-3 bg-light rounded-3 border mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="small text-secondary-custom">Budget Maks:</span>
-                                        <span class="fw-bold text-main">Rp 2.000.000</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="small text-secondary-custom">Bid Terendah:</span>
-                                        <span class="fw-bold text-success">Rp 1.500.000</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge badge-soft-success px-3 py-2 rounded-pill">Open Bid</span>
-                                    <a href="{{ url('/projectdetailfreelancer') }}" class="btn btn-primary fw-medium px-4">
-                                        Lihat <i class="bi bi-arrow-right ms-1"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-xl-4">
-                    <div class="card project-card">
-                        <div class="card-body p-4 d-flex flex-column h-100">
-                            <div class="mb-3">
-                                <span class="badge badge-soft-secondary px-2 py-1 mb-2 rounded">Video Editing</span>
-                                <h5 class="fw-bold text-main line-clamp-2 mb-1">Video Promosi 60 Detik untuk Social Media</h5>
-                            </div>
-                            <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Editing video vertikal (9:16) untuk Instagram Reels dan TikTok dengan color grading profesional.</p>
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-2">
-                                    <i class="bi bi-building"></i>
-                                    <span class="fw-medium">Brand Lokal Kita</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2 small mb-3">
-                                    <i class="bi bi-calendar-event text-secondary-custom"></i>
-                                    <span class="text-secondary-custom fw-medium">Selesai: 18 Apr 2026 (8 hr)</span>
-                                </div>
-                                <div class="p-3 bg-light rounded-3 border mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="small text-secondary-custom">Budget Maks:</span>
-                                        <span class="fw-bold text-main">Rp 4.000.000</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="small text-secondary-custom">Bid Terendah:</span>
-                                        <span class="fw-bold text-success">Rp 3.200.000</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge badge-soft-success px-3 py-2 rounded-pill">Open Bid</span>
-                                    <a href="{{ url('/projectdetailfreelancer') }}" class="btn btn-primary fw-medium px-4">
-                                        Lihat <i class="bi bi-arrow-right ms-1"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-xl-4">
-                    <div class="card project-card">
-                        <div class="card-body p-4 d-flex flex-column h-100">
-                            <div class="mb-3">
-                                <span class="badge badge-soft-secondary px-2 py-1 mb-2 rounded">Graphic Design</span>
-                                <h5 class="fw-bold text-main line-clamp-2 mb-1">Desain Logo dan Brand Identity Lengkap</h5>
-                            </div>
-                            <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Desain logo, style guide, dan visual identity untuk startup teknologi yang sedang berkembang.</p>
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-2">
-                                    <i class="bi bi-building"></i>
-                                    <span class="fw-medium">Startup Teknologi</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2 small mb-3">
-                                    <i class="bi bi-calendar-event text-secondary-custom"></i>
-                                    <span class="text-secondary-custom fw-medium">Selesai: 01 Mei 2026 (21 hr)</span>
-                                </div>
-                                <div class="p-3 bg-light rounded-3 border mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="small text-secondary-custom">Budget Maks:</span>
-                                        <span class="fw-bold text-main">Rp 2.500.000</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="small text-secondary-custom">Bid Terendah:</span>
-                                        <span class="fw-bold text-success">Rp 1.800.000</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge badge-soft-success px-3 py-2 rounded-pill">Open Bid</span>
-                                    <a href="{{ url('/projectdetailfreelancer') }}" class="btn btn-primary fw-medium px-4">
-                                        Lihat <i class="bi bi-arrow-right ms-1"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </section>

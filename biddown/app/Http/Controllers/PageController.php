@@ -11,39 +11,75 @@ class PageController extends Controller
     public function home()
     {
         return view('index', [
-            'latestProjects' => Project::query()->with('lowestBid')->latest()->take(3)->get(),
+            'latestProjects' => Project::query()->where('status', 'open')->with('lowestBid')->latest()->take(3)->get(),
         ]);
     }
 
     public function dashboardClient()
     {
-        $client = Auth::user()?->isClient()
-            ? Auth::user()
-            : User::query()->where('role', 'client')->first();
+        $client = Auth::user();
+
+        $allProjects = Project::query()
+            ->withCount('bids')
+            ->with('lowestBid', 'winnerBid')
+            ->where('client_id', $client->id)
+            ->latest()
+            ->get();
+
+        $activeProjects = $allProjects->where('status', 'open');
+        $historyProjects = $allProjects->whereIn('status', ['closed', 'completed']);
+        
+        $totalProjects = $allProjects->count();
+        $completedProjectsCount = $allProjects->where('status', 'completed')->count();
+        $totalSpend = $historyProjects->sum(fn ($p) => $p->winnerBid ? $p->winnerBid->amount : 0);
 
         return view('dashboardclient', [
-            'projects' => Project::query()
-                ->withCount('bids')
-                ->with('lowestBid')
-                ->when($client, fn ($query) => $query->where('client_id', $client->id))
-                ->latest()
-                ->get(),
             'client' => $client,
+            'activeProjects' => $activeProjects,
+            'historyProjects' => $historyProjects,
+            'totalProjects' => $totalProjects,
+            'completedProjectsCount' => $completedProjectsCount,
+            'totalSpend' => $totalSpend,
         ]);
     }
 
     public function dashboardFreelancer()
     {
+        $freelancer = Auth::user();
+
+        $myBids = $freelancer->bids()->with('project.client', 'project.lowestBid')->latest()->get();
+        
+        $activeBids = $myBids->filter(fn ($b) => $b->project && $b->project->status === 'open');
+        $contractedBids = $myBids->filter(fn ($b) => $b->project && in_array($b->project->status, ['closed', 'completed']) && $b->project->winner_bid_id === $b->id);
+        
+        $totalEarnings = $contractedBids->filter(fn ($b) => $b->project->status === 'completed')->sum('amount');
+        $successRate = $myBids->count() > 0 ? round(($contractedBids->count() / $myBids->count()) * 100) : 0;
+        $completedProjectsCount = $contractedBids->filter(fn ($b) => $b->project->status === 'completed')->count();
+
         return view('dashboardfreelancer', [
-            'projects' => Project::query()->with('client', 'lowestBid')->latest()->take(8)->get(),
-            'myBids' => Auth::user()?->bids()->with('project')->latest()->get() ?? collect(),
+            'freelancer' => $freelancer,
+            'activeBids' => $activeBids,
+            'contractedProjects' => $contractedBids->pluck('project'),
+            'totalEarnings' => $totalEarnings,
+            'successRate' => $successRate,
+            'completedProjectsCount' => $completedProjectsCount,
         ]);
     }
 
-    public function explore()
+    public function explore(\Illuminate\Http\Request $request)
     {
+        $query = Project::query()->with('client', 'lowestBid')->where('status', 'open');
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
         return view('explore', [
-            'projects' => Project::query()->with('client', 'lowestBid')->where('status', 'open')->latest()->get(),
+            'projects' => $query->latest()->get(),
         ]);
     }
 
@@ -52,67 +88,75 @@ class PageController extends Controller
         return view('make-project');
     }
 
-    public function editProject()
+    public function editProject(Project $project)
     {
-        return view('edit-project');
+        if ($project->client_id !== Auth::id()) abort(403);
+
+        return view('edit-project', [
+            'project' => $project->loadCount('bids'),
+        ]);
     }
 
     public function projectDetailClient(?Project $project = null)
     {
-        $project ??= Project::query()->with('client', 'bids.freelancer')->firstOrFail();
+        if (!$project) abort(404);
 
         return view('projectdetailclient', [
             'project' => $project->load('client', 'bids.freelancer'),
+            'projectStatus' => $project->status,
         ]);
     }
 
     public function projectDetailFreelancer(?Project $project = null)
     {
-        $project ??= Project::query()->with('client', 'bids.freelancer')->firstOrFail();
+        if (!$project) abort(404);
 
         return view('projectdetailfreelancer', [
             'project' => $project->load('client', 'bids.freelancer'),
             'lowestBid' => $project->bids()->orderBy('amount')->first(),
+            'projectStatus' => $project->status,
         ]);
     }
 
-    public function profileClient()
+    public function profileClient($id = null)
     {
+        if ($id) {
+            $client = User::where('id', $id)->where('role', 'client')->firstOrFail();
+        } else {
+            if (Auth::user()->role !== 'client') abort(403);
+            $client = Auth::user();
+        }
+
         return view('profileclient', [
-            'client' => User::query()->where('role', 'client')->first(),
+            'client' => $client,
         ]);
     }
 
-    public function profileFreelancer()
+    public function profileFreelancer($id = null)
     {
-        $freelancer = Auth::user()?->isFreelancer()
-            ? Auth::user()
-            : User::query()->where('role', 'freelancer')->with('portfolios')->first();
+        if ($id) {
+            $freelancer = User::where('id', $id)->where('role', 'freelancer')->with('portfolios', 'bids.project')->firstOrFail();
+        } else {
+            if (Auth::user()->role !== 'freelancer') abort(403);
+            $freelancer = Auth::user()->load('portfolios', 'bids.project');
+        }
 
         return view('profilefreelancer', [
-            'freelancer' => $freelancer?->load('portfolios', 'bids.project'),
+            'freelancer' => $freelancer,
         ]);
     }
 
     public function editProfileFreelancer()
     {
-        $freelancer = Auth::user()?->isFreelancer()
-            ? Auth::user()
-            : User::query()->where('role', 'freelancer')->first();
-
         return view('editprofilefreelancer', [
-            'freelancer' => $freelancer?->load('portfolios'),
+            'freelancer' => Auth::user()->load('portfolios'),
         ]);
     }
 
     public function editProfileClient()
     {
-        $client = Auth::user()?->isClient()
-            ? Auth::user()
-            : User::query()->where('role', 'client')->first();
-
         return view('editprofileclient', [
-            'client' => $client,
+            'client' => Auth::user(),
         ]);
     }
 }

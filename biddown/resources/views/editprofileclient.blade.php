@@ -83,7 +83,7 @@
             </a>
         </div>
 
-        <form action="{{ route('profileclient.update') }}" method="POST" onsubmit="return confirmAction(event, 'Simpan perubahan profil Anda?', 'Ya, Simpan')">
+        <form action="{{ route('profileclient.update') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirmAction(event, 'Simpan perubahan profil Anda?', 'Ya, Simpan')">
             @csrf
             @method('PUT')
             
@@ -93,13 +93,17 @@
                         <h5 class="fw-bold mb-4">Logo Perusahaan / Profil</h5>
                         
                         <div class="avatar-upload-container mb-3">
-                            <div class="avatar-preview" id="imagePreview">
-                                {{ strtoupper(substr($client->name ?? 'PT', 0, 2)) }}
+                            <div class="avatar-preview overflow-hidden" id="imagePreview">
+                                @if($client->avatar_url)
+                                    <img src="{{ $client->avatar_url }}" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                                @else
+                                    {{ strtoupper(substr($client->name ?? 'PT', 0, 2)) }}
+                                @endif
                             </div>
                             <label for="profileUpload" class="avatar-edit-btn" title="Ubah Logo">
                                 <i class="bi bi-camera-fill"></i>
                             </label>
-                            <input type="file" id="profileUpload" class="d-none" accept="image/png, image/jpeg, image/jpg">
+                            <input type="file" id="profileUpload" name="avatar" class="d-none" accept="image/png, image/jpeg, image/jpg">
                         </div>
                         
                         <p class="small text-secondary-custom mb-0 mt-3">
@@ -117,6 +121,18 @@
                                 <label for="fullName" class="form-label fw-semibold">Nama Perusahaan / Klien <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="fullName" name="name" value="{{ old('name', $client->name ?? 'PT Jaya Abadi') }}" required>
                             </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label fw-semibold">Alamat Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $client->email ?? '') }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label fw-semibold">Nomor WhatsApp <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $client->phone ?? '') }}" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="bio" class="form-label fw-semibold">Bio / Tentang Perusahaan</label>
+                                <textarea class="form-control" id="bio" name="bio" rows="4">{{ old('bio', $client->bio ?? '') }}</textarea>
+                            </div>
                             <div class="col-12">
                                 <label for="location" class="form-label fw-semibold">Lokasi Kantor <span class="text-danger">*</span></label>
                                 <div class="input-group">
@@ -125,10 +141,10 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label for="website" class="form-label fw-semibold">Website Perusahaan</label>
+                                <label for="website" class="form-label fw-semibold">Website Perusahaan (Opsional)</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-globe"></i></span>
-                                    <input type="url" class="form-control border-start-0 ps-0" id="website" name="website" value="{{ old('website', $client->website ?? '') }}" placeholder="https://contoh.com">
+                                    <input type="url" class="form-control border-start-0 ps-0" id="website" name="portfolio_url" value="{{ old('portfolio_url', $client->portfolio_url ?? '') }}" placeholder="https://contoh.com">
                                 </div>
                             </div>
                         </div>

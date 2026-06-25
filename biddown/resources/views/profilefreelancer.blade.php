@@ -2,23 +2,28 @@
 
 @section('title', 'Profil Freelancer - Andi Setiawan | Bid Down')
 
-@section('user-name', 'Andi Setiawan')
-@section('user-avatar', 'AS')
-@section('profile-link', url('/profilefreelancer'))
-
 @section('nav-links')
+@if(Auth::check() && Auth::user()->role === 'client')
 <li class="nav-item">
-    <a class="nav-link nav-link-custom active" href="{{ url('/dashboardfreelancer') }}"><i class="bi bi-grid me-1"></i> Dashboard</a>
+    <a class="nav-link nav-link-custom" href="{{ route('dashboardclient') }}"><i class="bi bi-grid me-1"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link nav-link-custom" href="{{ route('dashboardclient') }}#proyek-aktif"><i class="bi bi-briefcase me-1"></i> Proyek Saya</a>
+</li>
+@else
+<li class="nav-item">
+    <a class="nav-link nav-link-custom" href="{{ url('/dashboardfreelancer') }}"><i class="bi bi-grid me-1"></i> Dashboard</a>
 </li>
 <li class="nav-item">
     <a class="nav-link nav-link-custom" href="{{ url('/explore') }}"><i class="bi bi-compass me-1"></i> Eksplor Proyek</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link nav-link-custom" href="#bid-aktif"><i class="bi bi-graph-down-arrow me-1"></i> Bid Aktif Saya</a>
+    <a class="nav-link nav-link-custom" href="{{ url('/dashboardfreelancer') }}#bid-aktif"><i class="bi bi-graph-down-arrow me-1"></i> Bid Aktif Saya</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link nav-link-custom" href="#proyek-berjalan"><i class="bi bi-check2-all me-1"></i> Proyek Terkontrak</a>
+    <a class="nav-link nav-link-custom" href="{{ url('/dashboardfreelancer') }}#proyek-berjalan"><i class="bi bi-check2-all me-1"></i> Proyek Terkontrak</a>
 </li>
+@endif
 @endsection
 
 @section('styles')
@@ -152,31 +157,36 @@
 
             <div class="d-flex align-items-center gap-4">
 
-                <img
-                    src="https://placehold.co/300x300/c8a27a/ffffff?text=AS"
-                    class="profile-avatar-xl"
-                    alt="Andi Setiawan">
+                <div class="profile-avatar-xl overflow-hidden d-flex align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); font-size: 36px; font-weight: 700;">
+                    @if($freelancer->avatar_url)
+                        <img src="{{ $freelancer->avatar_url }}" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                    @else
+                        {{ strtoupper(substr($freelancer->name, 0, 2)) }}
+                    @endif
+                </div>
 
                 <div>
 
                     <h2 class="fw-bold mb-1">
-                        Andi Setiawan
+                        {{ $freelancer->name }}
                     </h2>
 
                     <div class="text-primary fw-semibold mb-3">
-                        Full Stack Web & Mobile Developer
+                        {{ $freelancer->job_title ?? 'Freelancer' }}
                     </div>
 
                     <div class="profile-meta">
 
+                        @if($freelancer->location)
                         <div class="mb-2">
                             <i class="bi bi-geo-alt me-2"></i>
-                            Yogyakarta, Indonesia
+                            {{ $freelancer->location }}
                         </div>
+                        @endif
 
                         <div>
                             <i class="bi bi-calendar3 me-2"></i>
-                            Bergabung sejak 2022
+                            Bergabung sejak {{ $freelancer->created_at->format('Y') }}
                         </div>
 
                     </div>
@@ -187,6 +197,13 @@
 
         </div>
 
+        @php
+            $freelancerCompletedProjects = App\Models\Project::where('status', 'completed')->whereHas('winnerBid', function($q) use ($freelancer) {
+                $q->where('freelancer_id', $freelancer->id);
+            })->count();
+            $freelancerAvgRating = App\Models\Review::where('reviewee_id', $freelancer->id)->avg('rating');
+            $freelancerAvgRating = $freelancerAvgRating ? number_format($freelancerAvgRating, 1) : '0.0';
+        @endphp
         <div class="col-lg-3 mt-4 mt-lg-0">
 
             <div class="d-flex justify-content-center gap-5">
@@ -198,7 +215,7 @@
                     </div>
 
                     <h3 class="fw-bold text-primary mb-0">
-                        4.9
+                        {{ $freelancerAvgRating }}
                     </h3>
 
                 </div>
@@ -210,7 +227,7 @@
                     </div>
 
                     <h3 class="fw-bold text-primary mb-0">
-                        34
+                        {{ $freelancerCompletedProjects }}
                     </h3>
 
                 </div>
@@ -223,16 +240,18 @@
 
             <div class="d-grid gap-2">
 
-                <a href="{{ url('/editprofilefreelancer') }}"
+                @if(Auth::id() === $freelancer->id)
+                <a href="{{ route('editprofilefreelancer') }}"
                    class="btn btn-primary">
 
                     <i class="bi bi-pencil-square me-2"></i>
                     Edit Profil
 
                 </a>
+                @endif
 
-                 @if(!empty($freelancer->website))
-                    <a href="{{ $freelancer->website }}"
+                 @if(!empty($freelancer->portfolio_url))
+                    <a href="{{ $freelancer->portfolio_url }}"
                        target="_blank"
                        class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-globe me-1"></i>
@@ -266,10 +285,8 @@
                     </h5>
                 </div>
 
-                <p class="text-secondary-custom mb-0" style="line-height:1.9;">
-                    Halo! Saya Andi, seorang Full-Stack Developer dengan pengalaman lebih dari 4 tahun dalam membangun aplikasi web dan mobile yang cepat, scalable, dan mudah digunakan.
-
-                    Saya berpengalaman menggunakan React.js, Next.js, Laravel, Vue.js, Node.js, PostgreSQL, dan berbagai teknologi modern lainnya untuk membantu bisnis berkembang secara digital.
+                <p class="text-secondary-custom mb-0" style="line-height:1.9; white-space: pre-line;">
+                    {{ $freelancer->bio ?? 'Belum ada deskripsi.' }}
                 </p>
 
             </div>
@@ -287,57 +304,17 @@
                 <div class="d-flex flex-wrap gap-2">
 
                     <div class="d-flex flex-wrap gap-2">
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        React.js
-                    </span>
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        Next.js
-                    </span>
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        Laravel
-                    </span>
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        Vue.js
-                    </span>
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        Node.js
-                    </span>
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        REST API
-                    </span>
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        PostgreSQL
-                    </span>
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        MySQL
-                    </span>
-
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        Docker
-                    </span>
-                    
-                    <span class="skill-chip">
-                        <i class="bi bi-check2-circle me-2"></i>
-                        Docker
-                    </span>
-                </div>
+                        @if($freelancer->skills)
+                            @foreach(explode(',', $freelancer->skills) as $skill)
+                            <span class="skill-chip">
+                                <i class="bi bi-check2-circle me-2"></i>
+                                {{ trim($skill) }}
+                            </span>
+                            @endforeach
+                        @else
+                            <span class="text-secondary-custom">Belum ada keahlian yang ditambahkan.</span>
+                        @endif
+                    </div>
                 </div>
 
             </div>
@@ -360,59 +337,45 @@
             </div>
 
             <div class="row g-4">
-
+                @if($freelancer->portfolio_url)
                 <div class="col-md-6">
-
-                    <a href="#" class="text-decoration-none hover-link">
-                        <div class="portfolio-card card">
-
-                            <img
-                                src="https://placehold.co/600x400/fbf9f6/8b5e3c?text=POS"
-                                class="w-100">
-
+                    <a href="{{ $freelancer->portfolio_url }}" class="text-decoration-none hover-link" target="_blank">
+                        <div class="portfolio-card card border shadow-sm">
                             <div class="p-4">
-
                                 <h6 class="fw-bold mb-1 text-main">
-                                    Sistem POS Restoran
+                                    <i class="bi bi-link-45deg me-1"></i> Website / Link Portofolio Utama
                                 </h6>
-
-                                <small class="text-secondary-custom">
-                                    Vue.js & Laravel
+                                <small class="text-primary d-block mt-2 text-break">
+                                    {{ $freelancer->portfolio_url }}
                                 </small>
-
                             </div>
-
                         </div>
                     </a>
-
                 </div>
+                @endif
 
+                @foreach($freelancer->portfolios as $portfolio)
                 <div class="col-md-6">
-
-                    <a href="#" class="text-decoration-none hover-link">
-                        <div class="portfolio-card card">
-
-                            <img
-                                src="https://placehold.co/600x400/fbf9f6/8b5e3c?text=Kasir+Mobile"
-                                class="w-100">
-
+                    <a href="{{ $portfolio->url }}" class="text-decoration-none hover-link" target="_blank">
+                        <div class="portfolio-card card border shadow-sm">
                             <div class="p-4">
-
                                 <h6 class="fw-bold mb-1 text-main">
-                                    Aplikasi Kasir Mobile
+                                    {{ $portfolio->title }}
                                 </h6>
-
                                 <small class="text-secondary-custom">
-                                    React Native
+                                    {{ $portfolio->technology }}
                                 </small>
-
                             </div>
-
                         </div>
                     </a>
-
                 </div>
+                @endforeach
 
+                @if(!$freelancer->portfolio_url && count($freelancer->portfolios) == 0)
+                <div class="col-12 text-center text-muted py-4">
+                    Belum ada portofolio yang dicantumkan.
+                </div>
+                @endif
             </div>
 
         </div>
@@ -424,97 +387,50 @@
                 <i class="bi bi-chat-square-text text-primary fs-4"></i>
                 <h4 class="fw-bold text-main mb-0">
                     Ulasan Klien
+                    @if($freelancerAvgRating > 0)
                     <span class="text-secondary-custom fw-medium fs-5">
-                        (4.9/5.0)
+                        ({{ $freelancerAvgRating }}/5.0)
                     </span>
+                    @endif
                 </h4>
             </div>
 
-            <div class="review-item border-bottom border-light mb-4 pb-4">
-
-                <div class="d-flex justify-content-between align-items-start mb-3">
-
-                    <div class="d-flex align-items-center gap-3">
-
-                        <div class="review-avatar">
-                            PT
+            @php
+                $reviews = App\Models\Review::where('reviewee_id', $freelancer->id)->latest()->get();
+            @endphp
+            @if(count($reviews) > 0)
+                @foreach($reviews as $review)
+                <div class="review-item border-bottom border-light mb-4 pb-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="review-avatar flex-shrink-0">
+                            {{ strtoupper(substr($review->reviewer->name, 0, 2)) }}
                         </div>
-
                         <div>
-
-                            <h6 class="fw-bold text-main mb-0">
-                                <a href="{{ url('/profileclient') }}" class="text-decoration-none hover-link text-main">PT Jaya Abadi</a>
-                            </h6>
-
-                            <small class="text-secondary-custom">
-                                Proyek: <a href="{{ url('/projectdetailfreelancer') }}" class="text-primary text-decoration-none hover-link">Desain Ulang Website Perusahaan</a>
-                            </small>
-
+                            <div class="d-flex align-items-center flex-wrap gap-2 mb-1">
+                                <h6 class="fw-bold text-main mb-0">{{ $review->reviewer->name }}</h6>
+                                <span class="text-secondary-custom small">&bull; {{ $review->created_at->diffForHumans() }}</span>
+                            </div>
+                            <div class="text-star small mb-2">
+                                @for($i = 0; $i < $review->rating; $i++)
+                                    <i class="bi bi-star-fill"></i>
+                                @endfor
+                                @for($i = $review->rating; $i < 5; $i++)
+                                    <i class="bi bi-star"></i>
+                                @endfor
+                            </div>
+                            <p class="text-main mb-0">{{ $review->message }}</p>
+                            <div class="mt-2 text-secondary-custom small">
+                                <i class="bi bi-diagram-3 me-1"></i> Proyek: <span class="fw-medium">{{ $review->project->title }}</span>
+                            </div>
                         </div>
-
                     </div>
-
-                    <div class="text-star fs-6 d-flex gap-1">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                    </div>
-
                 </div>
-
-                <p class="mb-2 text-main" style="line-height: 1.6;">
-                    "Andi bekerja sangat cepat dan hasilnya melebihi ekspektasi.
-                    Dokumentasi lengkap dan komunikasi sangat baik."
-                </p>
-
-                <small class="text-secondary-custom fw-medium">Ditulis pada 12 Mar 2024</small>
-
-            </div>
-
-            <div class="review-item mb-2">
-
-                <div class="d-flex justify-content-between align-items-start mb-3">
-
-                    <div class="d-flex align-items-center gap-3">
-
-                        <div class="review-avatar">
-                            SM
-                        </div>
-
-                        <div>
-
-                            <h6 class="fw-bold text-main mb-0">
-                                <a href="{{ url('/profileclient') }}" class="text-decoration-none hover-link text-main">Sinar Makmur CV</a>
-                            </h6>
-
-                            <small class="text-secondary-custom">
-                                Proyek: <a href="{{ url('/projectdetailfreelancer') }}" class="text-primary text-decoration-none hover-link">Integrasi API Payment Gateway</a>
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    <div class="text-star fs-6 d-flex gap-1">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-half"></i>
-                    </div>
-
+                @endforeach
+            @else
+                <div class="text-center text-muted py-4">
+                    Belum ada ulasan.
                 </div>
-
-                <p class="mb-2 text-main" style="line-height: 1.6;">
-                    "Pekerjaan sesuai brief, API berjalan baik,
-                    dan komunikasi selama proyek sangat jelas."
-                </p>
-
-                <small class="text-secondary-custom fw-medium">Ditulis pada 05 Feb 2024</small>
-
-            </div>
+            @endif
 
         </div>
 

@@ -2,9 +2,7 @@
 
 @section('title', 'Dashboard Freelancer | Bid Down')
 
-@section('user-name', 'Andi Setiawan')
-@section('user-avatar', 'AS')
-@section('profile-link', url('/profilefreelancer'))
+@section('profile-link', route('profilefreelancer'))
 
 @section('nav-links')
 <li class="nav-item">
@@ -24,7 +22,7 @@
 @section('content')
 <div class="hero-dashboard">
     <div>
-        <h2 class="fw-bold mb-2">Selamat datang, <span class="text-primary">Andi!</span></h2>
+        <h2 class="fw-bold mb-2">Selamat datang, <span class="text-primary">{{ explode(' ', $freelancer->name)[0] }}!</span></h2>
         <p class="text-secondary-custom mb-0 fs-6">Pantau posisi bid kamu dan selesaikan proyek yang sedang berjalan.</p>
     </div>
     <a href="{{ url('/explore') }}" class="btn btn-primary fw-semibold shadow-sm px-4 py-2 d-inline-flex align-items-center">
@@ -41,7 +39,7 @@
                 </div>
                 <div>
                     <p class="text-secondary-custom small text-uppercase tracking-wide fw-semibold mb-1">Total Bid Diikuti</p>
-                    <h3 class="fw-bold mb-0">28</h3>
+                    <h3 class="fw-bold mb-0">{{ $freelancer->bids()->count() }}</h3>
                 </div>
             </div>
         </div>
@@ -54,7 +52,7 @@
                 </div>
                 <div>
                     <p class="text-secondary-custom small text-uppercase tracking-wide fw-semibold mb-1">Proyek Dimenangkan</p>
-                    <h3 class="fw-bold mb-0">8</h3>
+                    <h3 class="fw-bold mb-0">{{ $completedProjectsCount }}</h3>
                 </div>
             </div>
         </div>
@@ -67,7 +65,7 @@
                 </div>
                 <div>
                     <p class="text-secondary-custom small text-uppercase tracking-wide fw-semibold mb-1">Total Penghasilan</p>
-                    <h3 class="fw-bold mb-0">Rp 32.5M</h3>
+                    <h3 class="fw-bold mb-0">Rp {{ number_format($totalEarnings, 0, ',', '.') }}</h3>
                 </div>
             </div>
         </div>
@@ -95,52 +93,66 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse($activeBids as $bid)
+                    @php
+                        $isLowest = $bid->project->lowestBid && $bid->project->lowestBid->id === $bid->id;
+                    @endphp
+                    <tr class="{{ !$isLowest ? 'row-terkalahkan' : '' }}">
+                        <td>
+                            <div class="mb-1">
+                                <span class="badge badge-soft-secondary px-2 py-1 rounded">{{ $bid->project->category }}</span>
+                            </div>
+                            <a href="{{ route('projectdetailfreelancer', $bid->project->id) }}" class="fw-semibold text-decoration-none hover-link {{ !$isLowest ? 'text-danger' : '' }} d-block">{{ $bid->project->title }}</a>
+                            <div class="d-flex align-items-center gap-2 mt-1">
+                                <a href="#" class="text-secondary-custom small text-decoration-none hover-link"><i class="bi bi-building me-1"></i> {{ $bid->project->client->name }}</a>
+                                <span class="text-secondary-custom small">&bull;</span>
+                                <span class="text-secondary-custom small">Tgl Posting: {{ $bid->project->created_at->format('d M Y') }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            @php
+                                $deadline = \Carbon\Carbon::parse($bid->project->deadline);
+                                $isNear = $deadline->diffInDays(now()) <= 1;
+                            @endphp
+                            <span class="badge badge-soft-{{ $isNear ? 'danger' : 'warning' }} rounded-pill px-3 py-2 fw-semibold">
+                                <i class="bi bi-clock me-1"></i> {{ $deadline->diffForHumans() }}
+                            </span>
+                        </td>
+                        <td class="fw-bold {{ !$isLowest ? 'text-danger' : 'text-success' }}">Rp {{ number_format($bid->amount, 0, ',', '.') }}</td>
+                        <td class="text-center fw-bold text-success fs-6">
+                            @if($bid->project->lowestBid)
+                                Rp {{ number_format($bid->project->lowestBid->amount, 0, ',', '.') }}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            @if($isLowest)
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-trophy me-1"></i> Memimpin</span>
+                            @else
+                                <span class="badge badge-soft-danger rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-exclamation-triangle me-1"></i> Terkalahkan</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                @if($isLowest)
+                                    <a href="{{ route('projectdetailfreelancer', $bid->project->id) }}" class="btn btn-sm btn-outline-primary fw-medium px-3" title="Lihat Proyek"><i class="bi bi-eye"></i></a>
+                                @else
+                                    <a href="{{ route('projectdetailfreelancer', $bid->project->id) }}#biddingarea" class="btn btn-sm btn-outline-primary fw-medium px-3" title="Turunkan Harga"><i class="bi bi-arrow-down-circle"></i></a>
+                                @endif
+                                <form action="{{ route('bids.destroy', $bid->id) }}" method="POST" class="m-0" onsubmit="return confirmAction(event, 'Yakin ingin menarik (membatalkan) bid Anda pada proyek ini?', 'Ya, Tarik Bid')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger fw-medium px-2" title="Tarik Bid"><i class="bi bi-x-lg"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
                     <tr>
-                        <td>
-                            <a href="{{ url('/projectdetailfreelancer') }}" class="fw-semibold text-decoration-none hover-link d-block">Pembuatan Landing Page Perusahaan</a>
-                            <div class="d-flex align-items-center gap-2 mt-1">
-                                <a href="{{ url('/profileclient') }}" class="text-secondary-custom small text-decoration-none hover-link"><i class="bi bi-building me-1"></i> PT Jaya Abadi</a>
-                                <span class="text-secondary-custom small">&bull;</span>
-                                <span class="text-secondary-custom small">Tgl Posting: 12 Okt 2024</span>
-                            </div>
-                        </td>
-                        <td><span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-clock me-1"></i> 2 Hari 4 Jam</span></td>
-                        <td class="fw-bold text-success">Rp 2.100.000</td>
-                        <td class="text-center fw-bold text-success fs-6">Rp 2.100.000</td>
-                        <td><span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-trophy me-1"></i> Memimpin</span></td>
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
-                                <a href="{{ url('/projectdetailfreelancer') }}" class="btn btn-sm btn-outline-primary fw-medium px-3" title="Lihat Proyek"><i class="bi bi-eye"></i></a>
-                                <form action="#" method="POST" class="m-0" onsubmit="return confirmAction(event, 'Yakin ingin menarik (membatalkan) bid Anda pada proyek ini?', 'Ya, Tarik Bid')">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-danger fw-medium px-2" title="Tarik Bid"><i class="bi bi-x-lg"></i></button>
-                                </form>
-                            </div>
-                        </td>
+                        <td colspan="6" class="text-center text-muted py-4">Kamu belum mengajukan bid apapun.</td>
                     </tr>
-                    <tr class="row-terkalahkan">
-                        <td>
-                            <a href="{{ url('/projectdetailfreelancer') }}" class="fw-semibold text-decoration-none hover-link text-danger d-block">Desain UI/UX Aplikasi Mobile</a>
-                            <div class="d-flex align-items-center gap-2 mt-1">
-                                <a href="{{ url('/profileclient') }}" class="text-secondary-custom small text-decoration-none hover-link"><i class="bi bi-building me-1"></i> CV Maju Bersama</a>
-                                <span class="text-secondary-custom small">&bull;</span>
-                                <span class="text-secondary-custom small">Tgl Posting: 14 Okt 2024</span>
-                            </div>
-                        </td>
-                        <td><span class="badge badge-soft-danger rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-clock me-1"></i> 5 Jam 30 Mnt</span></td>
-                        <td class="fw-bold text-danger">Rp 7.000.000</td>
-                        <td class="text-center fw-bold text-success fs-6">Rp 6.500.000</td>
-                        <td><span class="badge badge-soft-danger rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-exclamation-triangle me-1"></i> Terkalahkan</span></td>
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
-                                <a href="{{ url('/projectdetailfreelancer') }}#biddingarea" class="btn btn-sm btn-outline-primary fw-medium px-3" title="Turunkan Harga"><i class="bi bi-arrow-down-circle"></i></a>
-                                <form action="#" method="POST" class="m-0" onsubmit="return confirmAction(event, 'Yakin ingin menarik (membatalkan) bid Anda pada proyek ini?', 'Ya, Tarik Bid')">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-danger fw-medium px-2" title="Tarik Bid"><i class="bi bi-x-lg"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -164,36 +176,40 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse($contractedProjects as $project)
                     <tr>
                         <td>
-                            <a href="{{ url('/projectdetailfreelancer') }}" class="fw-semibold text-decoration-none hover-link d-block">Desain Logo Perusahaan Baru</a>
+                            <div class="mb-1">
+                                <span class="badge badge-soft-secondary px-2 py-1 rounded">{{ $project->category }}</span>
+                            </div>
+                            <a href="{{ route('projectdetailfreelancer', $project->id) }}" class="fw-semibold text-decoration-none hover-link d-block">{{ $project->title }}</a>
                             <div class="d-flex align-items-center gap-2 mt-1">
-                                <a href="{{ url('/profileclient') }}" class="text-primary small text-decoration-none hover-link fw-medium"><i class="bi bi-building me-1"></i> PT Jaya Abadi</a>
+                                <a href="#" class="text-primary small text-decoration-none hover-link fw-medium"><i class="bi bi-building me-1"></i> {{ $project->client->name }}</a>
                                 <span class="text-secondary-custom small">&bull;</span>
-                                <span class="text-secondary-custom small">Tgl Deal: 20 Okt 2024</span>
+                                <span class="text-secondary-custom small">Tgl Deal: {{ $project->updated_at->format('d M Y') }}</span>
                             </div>
                         </td>
-                        <td class="fw-bold text-dark">Rp 800.000</td>
-                        <td><span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold">Menunggu Konfirmasi Klien</span></td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-success fw-medium px-3"><i class="bi bi-whatsapp me-1"></i> Hubungi Klien</a>
-                        </td>
-                    </tr>
-                    <tr>
+                        <td class="fw-bold text-dark">Rp {{ number_format($project->winnerBid->amount, 0, ',', '.') }}</td>
                         <td>
-                            <a href="{{ url('/projectdetailfreelancer') }}" class="fw-semibold text-decoration-none hover-link d-block">Video Company Profile 3 Menit</a>
-                            <div class="d-flex align-items-center gap-2 mt-1">
-                                <a href="{{ url('/profileclient') }}" class="text-primary small text-decoration-none hover-link fw-medium"><i class="bi bi-building me-1"></i> CV Maju Bersama</a>
-                                <span class="text-secondary-custom small">&bull;</span>
-                                <span class="text-secondary-custom small">Tgl Selesai: 01 Sep 2024</span>
-                            </div>
+                            @if($project->status === 'closed')
+                                <span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold">Menunggu Konfirmasi Klien</span>
+                            @else
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Selesai</span>
+                            @endif
                         </td>
-                        <td class="fw-bold text-dark">Rp 4.200.000</td>
-                        <td><span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Selesai</span></td>
                         <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-outline-primary fw-medium px-3"><i class="bi bi-star me-1"></i> Beri Review</a>
+                            @if($project->status === 'closed')
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $project->client->phone) }}" target="_blank" class="btn btn-sm btn-success fw-medium px-3"><i class="bi bi-whatsapp me-1"></i> Hubungi Klien</a>
+                            @else
+                                <a href="#" class="btn btn-sm btn-outline-primary fw-medium px-3"><i class="bi bi-star me-1"></i> Beri Review</a>
+                            @endif
                         </td>
                     </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">Belum ada proyek terkontrak.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('role')->default('freelancer')->after('email');
-            $table->string('phone')->nullable()->after('password');
+            $table->string('phone')->unique()->after('password');
             $table->string('job_title')->nullable()->after('phone');
             $table->string('location')->nullable()->after('job_title');
             $table->string('skills')->nullable()->after('location');

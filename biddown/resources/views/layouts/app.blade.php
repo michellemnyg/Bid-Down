@@ -1039,15 +1039,32 @@ body{
                     
                     <li class="nav-item ms-lg-3 mt-3 mt-lg-0 dropdown">
                         <a class="profile-dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="profile-avatar">@yield('user-avatar', 'U')</div>
-                            <span class="fw-semibold">@yield('user-name', 'Nama User')</span>
+                            <div class="profile-avatar">
+                                @auth
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                @else
+                                    G
+                                @endauth
+                            </div>
+                            <span class="fw-semibold">
+                                @auth
+                                    {{ Auth::user()->name }}
+                                @else
+                                    Guest
+                                @endauth
+                            </span>
                             <i class="bi bi-chevron-down small text-secondary"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                            <li><a class="dropdown-item dropdown-item-custom" href="@yield('profile-link', '#')"><i class="bi bi-person me-2"></i> Profil Saya</a></li>
+                            <li>
+                                <a class="dropdown-item dropdown-item-custom" href="@auth {{ Auth::user()->isClient() ? route('profileclient') : route('profilefreelancer') }} @else # @endauth">
+                                    <i class="bi bi-person me-2"></i> Profil Saya
+                                </a>
+                            </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <form action="{{ url('/login') }}" method="GET" class="m-0" onsubmit="return confirmAction(event, 'Apakah Anda yakin ingin keluar?', 'Ya, Keluar')">
+                                <form action="{{ route('logout') }}" method="POST" class="m-0" onsubmit="return confirmAction(event, 'Apakah Anda yakin ingin keluar?', 'Ya, Keluar')">
+                                    @csrf
                                     <button type="submit" class="dropdown-item dropdown-item-custom text-danger w-100 text-start">
                                         <i class="bi bi-box-arrow-right me-2"></i> Keluar
                                     </button>

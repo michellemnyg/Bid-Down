@@ -62,7 +62,7 @@
             </div>
             <div class="mb-4">
                 <label for="client-phone" class="form-label">Nomor WhatsApp</label>
-                <input type="tel" class="form-control phone-format" id="client-phone" name="phone" value="{{ old('phone') }}" placeholder="0800-0000-0000" maxlength="16">
+                <input type="tel" class="form-control phone-format" id="client-phone" name="phone" value="{{ old('phone') }}" placeholder="0800-0000-0000" maxlength="16" required>
             </div>
             <div class="mb-3">
                 <label for="client-website" class="form-label">Link Website Perusahaan <span class="fw-normal text-secondary-custom">(Opsional)</span></label>
@@ -101,7 +101,7 @@
             </div>
             <div class="mb-3">
                 <label for="freelancer-phone" class="form-label">Nomor WhatsApp</label>
-                <input type="tel" class="form-control phone-format" id="freelancer-phone" name="phone" value="{{ old('phone') }}" placeholder="0800-0000-0000" maxlength="16">
+                <input type="tel" class="form-control phone-format" id="freelancer-phone" name="phone" value="{{ old('phone') }}" placeholder="0800-0000-0000" maxlength="16" required>
             </div>
             <div class="mb-3">
                 <label for="freelancer-skills" class="form-label">Kategori Keahlian Utama</label>

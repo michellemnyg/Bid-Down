@@ -42,7 +42,7 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
-            'phone' => ['nullable', 'string', 'max:30'],
+            'phone' => ['required', 'string', 'max:30'],
             'skills' => ['nullable', 'string', 'max:255'],
             'portfolio_url' => ['nullable', 'url', 'max:255'],
         ]);

@@ -14,10 +14,10 @@
     <a class="nav-link nav-link-custom" href="{{ url('/explore') }}"><i class="bi bi-compass me-1"></i> Eksplor Proyek</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link nav-link-custom" href="#bid-aktif"><i class="bi bi-graph-down-arrow me-1"></i> Bid Aktif Saya</a>
+    <a class="nav-link nav-link-custom" href="{{ url('/dashboardfreelancer') }}#bid-aktif"><i class="bi bi-graph-down-arrow me-1"></i> Bid Aktif Saya</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link nav-link-custom" href="#proyek-berjalan"><i class="bi bi-check2-all me-1"></i> Proyek Terkontrak</a>
+    <a class="nav-link nav-link-custom" href="{{ url('/dashboardfreelancer') }}#proyek-berjalan"><i class="bi bi-check2-all me-1"></i> Proyek Terkontrak</a>
 </li>
 @endsection
 
@@ -97,7 +97,7 @@
             </a>
         </div>
 
-        <form action="{{ route('profilefreelancer.update') }}" method="POST" onsubmit="return confirmAction(event, 'Simpan perubahan profil Anda?', 'Ya, Simpan')">
+        <form action="{{ route('profilefreelancer.update') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirmAction(event, 'Simpan perubahan profil Anda?', 'Ya, Simpan')">
             @csrf
             @method('PUT')
             
@@ -107,11 +107,15 @@
                         <h5 class="fw-bold mb-4">Foto Profil</h5>
                         
                         <div class="avatar-upload-container mb-3">
-                            <img src="https://placehold.co/300x300/c8a27a/ffffff?text=AS" alt="Preview Profil" class="avatar-preview" id="imagePreview">
+                            @if($freelancer->avatar_url)
+                                <img src="{{ $freelancer->avatar_url }}" alt="Preview Profil" class="avatar-preview" id="imagePreview">
+                            @else
+                                <img src="https://placehold.co/300x300/c8a27a/ffffff?text={{ strtoupper(substr($freelancer->name ?? 'AS', 0, 2)) }}" alt="Preview Profil" class="avatar-preview" id="imagePreview">
+                            @endif
                             <label for="profileUpload" class="avatar-edit-btn" title="Ubah Foto">
                                 <i class="bi bi-camera-fill"></i>
                             </label>
-                            <input type="file" id="profileUpload" class="d-none" accept="image/png, image/jpeg, image/jpg">
+                            <input type="file" id="profileUpload" name="avatar" class="d-none" accept="image/png, image/jpeg, image/jpg">
                         </div>
                         
                         <p class="small text-secondary-custom mb-0 mt-3">
@@ -133,6 +137,14 @@
                                 <label for="jobTitle" class="form-label fw-semibold">Gelar Profesi / Peran <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="jobTitle" name="job_title" value="{{ old('job_title', $freelancer->job_title ?? 'Web & App Developer') }}" placeholder="Contoh: UI/UX Designer" required>
                             </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $freelancer->email ?? '') }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label fw-semibold">No WhatsApp <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $freelancer->phone ?? '') }}" required>
+                            </div>
                             <div class="col-12">
                                 <label for="location" class="form-label fw-semibold">Lokasi <span class="text-danger">*</span></label>
                                 <div class="input-group">
@@ -141,10 +153,10 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label for="website" class="form-label fw-semibold">Website Portofolio</label>
+                                <label for="website" class="form-label fw-semibold">Link Portofolio Utama / Website</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-globe"></i></span>
-                                    <input type="url" class="form-control border-start-0 ps-0" id="website" name="website" value="{{ old('website', $freelancer->website ?? 'https://andisetiawan.com') }}" placeholder="https://contoh.com">
+                                    <input type="url" class="form-control border-start-0 ps-0" id="website" name="portfolio_url" value="{{ old('portfolio_url', $freelancer->portfolio_url ?? '') }}" placeholder="https://contoh.com/portofolio">
                                 </div>
                             </div>
                         </div>
@@ -173,73 +185,40 @@
 
             <div class="card section-card p-4 mt-2">
                 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                    <h5 class="fw-bold mb-0">Manajemen Portofolio</h5>
-                    <button type="button" class="btn btn-sm btn-outline-primary fw-semibold px-3">
+                    <h5 class="fw-bold mb-0">Manajemen Portofolio Pekerjaan</h5>
+                    <button type="button" class="btn btn-sm btn-outline-primary fw-semibold px-3" onclick="addPortfolio()">
                         <i class="bi bi-plus-lg me-1"></i> Tambah Item
                     </button>
                 </div>
 
-                <div class="portfolio-item">
-                    <div class="row align-items-center g-4">
-                        <div class="col-md-3">
-                            <div class="position-relative">
-                                <img src="https://placehold.co/600x400/f1f3f4/8b5e3c?text=Sistem+POS+Restoran" alt="Thumb" class="img-fluid rounded border w-100 object-fit-cover" style="height: 120px;">
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="mb-3">
+                <div id="portfolioContainer">
+                    @foreach($freelancer->portfolios as $index => $portfolio)
+                    <div class="portfolio-item border rounded p-3 mb-3">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-3">
                                 <label class="form-label small fw-semibold">Judul Portofolio</label>
-                                <input type="text" class="form-control form-control-sm" value="Sistem POS Restoran Berbasis Web">
+                                <input type="text" class="form-control form-control-sm" name="portfolios[{{$index}}][title]" value="{{ $portfolio->title }}" required>
                             </div>
-                            <div class="row g-3">
-                                <div class="col-sm-6">
-                                    <label class="form-label small fw-semibold">Teknologi / Deskripsi</label>
-                                    <input type="text" class="form-control form-control-sm" value="Vue.js & Laravel">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label small fw-semibold">Link Proyek / Github</label>
-                                    <input type="url" class="form-control form-control-sm" name="portfolio_url" value="{{ old('portfolio_url', $freelancer->portfolio_url ?? 'https://github.com/andisetiawan/pos-restoran') }}">
-                                </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-semibold">Teknologi / Deskripsi</label>
+                                <input type="text" class="form-control form-control-sm" name="portfolios[{{$index}}][technology]" value="{{ $portfolio->technology }}" required>
                             </div>
-                        </div>
-                        <div class="col-md-2 d-flex flex-md-column flex-row gap-2 justify-content-center">
-                            <button type="button" class="btn btn-outline-secondary btn-sm flex-fill"><i class="bi bi-image me-1 d-none d-md-inline"></i>Ganti Gambar</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm flex-fill"><i class="bi bi-trash"></i> Hapus</button>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold">Link Proyek</label>
+                                <input type="url" class="form-control form-control-sm" name="portfolios[{{$index}}][url]" value="{{ $portfolio->url }}" required>
+                            </div>
+                            <div class="col-md-2 text-end mt-4">
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="this.closest('.portfolio-item').remove()">
+                                    <i class="bi bi-trash"></i> Hapus
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
-
-                <div class="portfolio-item">
-                    <div class="row align-items-center g-4">
-                        <div class="col-md-3">
-                            <div class="position-relative">
-                                <img src="https://placehold.co/600x400/f1f3f4/8b5e3c?text=Aplikasi+Kasir+Mobile" alt="Thumb" class="img-fluid rounded border w-100 object-fit-cover" style="height: 120px;">
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="mb-3">
-                                <label class="form-label small fw-semibold">Judul Portofolio</label>
-                                <input type="text" class="form-control form-control-sm" value="Aplikasi Kasir Toko Baju">
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-sm-6">
-                                    <label class="form-label small fw-semibold">Teknologi / Deskripsi</label>
-                                    <input type="text" class="form-control form-control-sm" value="React Native">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label small fw-semibold">Link Proyek / Github</label>
-                                    <input type="url" class="form-control form-control-sm" placeholder="https://...">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 d-flex flex-md-column flex-row gap-2 justify-content-center">
-                            <button type="button" class="btn btn-outline-secondary btn-sm flex-fill"><i class="bi bi-image me-1 d-none d-md-inline"></i>Ganti Gambar</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm flex-fill"><i class="bi bi-trash"></i> Hapus</button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+
 
             <div class="d-flex justify-content-end gap-3 mb-5 mt-4">
                 <a href="{{ url('/profilefreelancer') }}" class="btn btn-outline-secondary fw-semibold px-4 py-2 bg-white">Batal</a>
@@ -264,6 +243,36 @@
             reader.readAsDataURL(event.target.files[0]);
         }
     });
+
+    let portfolioCount = {{ count($freelancer->portfolios) }};
+    function addPortfolio() {
+        const container = document.getElementById('portfolioContainer');
+        const html = `
+            <div class="portfolio-item border rounded p-3 mb-3">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold">Judul Portofolio</label>
+                        <input type="text" class="form-control form-control-sm" name="portfolios[${portfolioCount}][title]" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold">Teknologi / Deskripsi</label>
+                        <input type="text" class="form-control form-control-sm" name="portfolios[${portfolioCount}][technology]" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold">Link Proyek</label>
+                        <input type="url" class="form-control form-control-sm" name="portfolios[${portfolioCount}][url]" required>
+                    </div>
+                    <div class="col-md-2 text-end mt-4">
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="this.closest('.portfolio-item').remove()">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        portfolioCount++;
+    }
 </script>
 @endsection
 

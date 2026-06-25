@@ -42,4 +42,25 @@ class BidController extends Controller
 
         return redirect()->route('dashboardfreelancer')->with('success', 'Bid berhasil dikirim.');
     }
+
+    public function destroy(Bid $bid)
+    {
+        $freelancer = Auth::user();
+
+        if (! $freelancer || ! $freelancer->isFreelancer()) {
+            return redirect()->route('login')->with('error', 'Silakan masuk sebagai freelancer.');
+        }
+
+        if ($bid->freelancer_id !== $freelancer->id) {
+            return back()->with('error', 'Anda tidak berhak menarik bid ini.');
+        }
+
+        if (! $bid->project->isOpen()) {
+            return back()->with('error', 'Proyek sudah ditutup, tidak bisa menarik bid.');
+        }
+
+        $bid->delete();
+
+        return back()->with('success', 'Bid berhasil ditarik.');
+    }
 }

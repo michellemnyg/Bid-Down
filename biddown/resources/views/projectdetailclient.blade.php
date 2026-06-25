@@ -2,9 +2,7 @@
 
 @section('title', 'Detail Proyek - Pembuatan Landing Page | Bid Down')
 
-@section('user-name', 'PT Jaya Abadi')
-@section('user-avatar', 'PT')
-@section('profile-link', url('/profileclient'))
+@section('profile-link', route('profileclient'))
 
 @section('nav-links')
 <li class="nav-item">
@@ -85,15 +83,14 @@
 
 @section('content')
         @php
-            // Mock state for UI preview (open, closed, completed)
-            $projectStatus = request('status', $project->status ?? 'open');
+            $isBiddingOpen = $project->isOpen();
         @endphp
         
         <div class="d-flex justify-content-between align-items-center mb-4">
             <button onclick="history.back()" class="btn btn-outline-secondary shadow-sm fw-semibold px-4">
                 <i class="bi bi-arrow-left me-2"></i> Kembali
             </button>
-            <a href="{{ url('/edit-project') }}" class="btn btn-primary fw-semibold px-4 shadow-sm">
+            <a href="{{ route('edit-project', $project->id) }}" class="btn btn-primary fw-semibold px-4 shadow-sm">
                 <i class="bi bi-pencil me-2"></i> Edit Proyek
             </a>
         </div>
@@ -103,19 +100,22 @@
             <div class="col-lg-8">
                 <div class="card section-card p-4 p-md-5 h-100">
                     <div class="mb-3">
-                        <h2 class="fw-bold text-main mb-2">{{ $project->title ?? 'Pembuatan Landing Page Perusahaan' }}</h2>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <span class="badge badge-soft-secondary px-3 py-2">{{ $project->category }}</span>
+                        </div>
+                        <h2 class="fw-bold text-main mb-2">{{ $project->title }}</h2>
                         <div class="d-flex align-items-center gap-2">
-                            @if($projectStatus === 'open')
+                            @if($isBiddingOpen)
                                 <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
                                     <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
                                 </span>
-                            @elseif($projectStatus === 'closed')
-                                <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                                    <i class="bi bi-lock-fill"></i> BIDDING DITUTUP
-                                </span>
-                            @else
+                            @elseif($project->status === 'completed')
                                 <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
                                     <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
+                                </span>
+                            @else
+                                <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                    <i class="bi bi-lock-fill"></i> BIDDING DITUTUP
                                 </span>
                             @endif
                         </div>
@@ -123,29 +123,16 @@
 
                     <div class="d-flex flex-wrap gap-3 text-secondary-custom mb-4 align-items-center border-bottom border-light pb-4">
                         <span>
-                            Diterbitkan oleh: <a href="{{ url('/profileclient') }}" class="text-primary fw-semibold text-decoration-none hover-link"><i class="bi bi-building me-1"></i> {{ $project->client->name ?? 'PT Jaya Abadi' }} (Anda)</a>
+                            Diterbitkan oleh: <a href="{{ route('profileclient') }}" class="text-primary fw-semibold text-decoration-none hover-link"><i class="bi bi-building me-1"></i> {{ $project->client->name }} (Anda)</a>
                         </span>
                         <span class="d-none d-sm-inline">|</span>
-                        <span><i class="bi bi-calendar-date me-1"></i> {{ isset($project) ? $project->created_at->format('d M Y') : '12 Okt 2024' }}</span>
+                        <span><i class="bi bi-calendar-date me-1"></i> {{ $project->created_at->format('d M Y') }}</span>
                     </div>
 
                     <h5 class="fw-bold text-main mb-3">Deskripsi Proyek</h5>
-                    <p class="text-main" style="line-height: 1.7;">
-                        {{ $project->description ?? 'Kami mencari Web Developer yang berpengalaman untuk membuat sebuah Landing Page modern dan responsif untuk peluncuran produk baru kami. Website harus dibuat menggunakan framework HTML/CSS/JS modern (Bootstrap 5 atau Tailwind CSS) dan dipastikan memiliki skor load speed yang baik.' }}
+                    <p class="text-main" style="line-height: 1.7; white-space: pre-line;">
+                        {{ $project->description }}
                     </p>
-                    <p class="text-main" style="line-height: 1.7;">
-                        <strong>Persyaratan Khusus:</strong><br>
-                        <span class="d-block mb-1">- Desain harus mengikuti brand guidelines perusahaan (akan diberikan kepada pemenang).</span>
-                        <span class="d-block mb-1">- Terdapat form kontak yang terintegrasi (minimal kirim ke email).</span>
-                        <span class="d-block mb-1">- Waktu pengerjaan maksimal 7 hari setelah pemenang dipilih.</span>
-                    </p>
-                    
-                    <h6 class="fw-bold text-main mt-4 mb-3">Kategori & Keahlian Dibutuhkan:</h6>
-                    <div class="d-flex flex-wrap gap-2">
-                        <span class="badge badge-soft-secondary px-3 py-2">{{ $project->category ?? 'Web Development' }}</span>
-                        <span class="badge badge-soft-secondary px-3 py-2">HTML/CSS</span>
-                        <span class="badge badge-soft-secondary px-3 py-2">Bootstrap 5</span>
-                    </div>
                 </div>
             </div>
 
@@ -153,35 +140,45 @@
                 <div class="timer-box p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-center">
                     
                     <h6 class="text-secondary-custom fw-semibold text-uppercase tracking-wide mb-2">
-                        @if($projectStatus === 'open')
+                        @if($isBiddingOpen)
                             <i class="bi bi-alarm me-1"></i> Sisa Waktu Bidding
                         @else
                             <i class="bi bi-award me-1"></i> Status Pemenang
                         @endif
                     </h6>
                     
-                    @if($projectStatus === 'open')
-                        <h2 class="fw-bold text-danger mb-4 digital-clock display-5">02:15:30</h2>
+                    @if($isBiddingOpen)
+                        @php
+                            $deadline = \Carbon\Carbon::parse($project->deadline);
+                            $isNear = $deadline->diffInDays(now()) <= 1;
+                        @endphp
+                        <h2 id="liveCountdown" class="fw-bold {{ $isNear ? 'text-danger' : 'text-primary' }} mb-4 digital-clock display-5" data-deadline="{{ $deadline->toIso8601String() }}">{{ $deadline->diffForHumans() }}</h2>
                     @else
+                        @if($project->winnerBid)
                         <div class="d-flex align-items-center justify-content-center gap-3 mb-4 mt-2">
-                            <div class="avatar-sm avatar-primary">AS</div>
+                            <div class="avatar-sm avatar-primary">{{ strtoupper(substr($project->winnerBid->freelancer->name, 0, 2)) }}</div>
                             <div class="text-start">
-                                <h5 class="fw-bold text-main mb-0">Andi Setiawan</h5>
+                                <h5 class="fw-bold text-main mb-0">{{ $project->winnerBid->freelancer->name }}</h5>
                                 <span class="text-secondary-custom small">Terpilih sebagai pemenang</span>
                             </div>
                         </div>
+                        @else
+                        <div class="mb-4 mt-2">
+                            <span class="text-secondary-custom small">Tidak ada pemenang</span>
+                        </div>
+                        @endif
                     @endif
 
                     <hr class="border-secondary opacity-25 my-4">
 
                     <div class="mb-4">
                         <p class="text-secondary-custom fw-medium mb-1 fs-6">Modal Dasar (Maksimal)</p>
-                        <h4 class="fw-bold text-main mb-0">Rp {{ isset($project) ? number_format($project->max_price, 0, ',', '.') : '3.000.000' }}</h4>
+                        <h4 class="fw-bold text-main mb-0">Rp {{ number_format($project->budget_max, 0, ',', '.') }}</h4>
                     </div>
 
                     <div class="p-3 bg-surface rounded-3 shadow-sm border border-light">
                         <p class="text-secondary-custom fw-medium mb-1 fs-6">Bid Terendah Saat Ini</p>
-                        <h3 class="fw-bold text-success mb-0">{{ isset($project) && $project->bids->count() ? 'Rp ' . number_format($project->bids->min('amount'), 0, ',', '.') : 'Belum ada' }}</h3>
+                        <h3 class="fw-bold text-success mb-0">{{ $project->lowestBid ? 'Rp ' . number_format($project->lowestBid->amount, 0, ',', '.') : 'Belum ada' }}</h3>
                     </div>
 
                 </div>
@@ -192,7 +189,7 @@
             
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4">
                 <h4 class="fw-bold text-main mb-2 mb-sm-0"><i class="bi bi-list-ol text-primary me-2"></i> Leaderboard Bidding</h4>
-                @if($projectStatus === 'open')
+                @if($isBiddingOpen)
                     <span class="text-secondary-custom small fw-medium"><i class="bi bi-info-circle me-1"></i> Menampilkan 3 penawaran teratas.</span>
                 @else
                     <span class="text-secondary-custom small fw-medium"><i class="bi bi-lock-fill me-1"></i> Bidding telah dikunci.</span>
@@ -212,115 +209,58 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @isset($project)
-                                @foreach ($project->bids->sortBy('amount')->values() as $index => $bid)
-                                    <tr>
-                                        <td class="text-center fw-bold">#{{ $index + 1 }}</td>
-                                        <td>
-                                            <a href="{{ url('/profilefreelancer') }}" class="fw-bold text-primary text-decoration-none d-block hover-link">{{ $bid->freelancer->name }}</a>
-                                            <span class="text-secondary-custom small">{{ $bid->freelancer->job_title }}</span>
+                            @forelse ($project->bids->sortBy('amount')->values() as $index => $bid)
+                                    <tr class="{{ $index === 0 ? 'rank-1' : '' }}">
+                                        <td class="text-center">
+                                            @if($index === 0)
+                                                <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm border border-success" style="width: 40px; height: 40px;">
+                                                    <h5 class="fw-bold text-success mb-0">1</h5>
+                                                </div>
+                                                <span class="d-block mt-1 small text-success fw-bold"><i class="bi bi-trophy-fill me-1"></i>Leader</span>
+                                            @else
+                                                <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm border border-secondary" style="width: 40px; height: 40px;">
+                                                    <h5 class="fw-bold text-secondary mb-0">{{ $index + 1 }}</h5>
+                                                </div>
+                                            @endif
                                         </td>
-                                        <td><h5 class="fw-bold text-success mb-0">Rp {{ number_format($bid->amount, 0, ',', '.') }}</h5></td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="avatar-sm {{ $index === 0 ? 'avatar-primary' : 'avatar-dark' }}">
+                                                    {{ strtoupper(substr($bid->freelancer->name, 0, 2)) }}
+                                                </div>
+                                                <div>
+                                                    <a href="{{ route('profilefreelancer', ['id' => $bid->freelancer_id]) }}" class="fw-bold text-primary text-decoration-none d-block hover-link">{{ $bid->freelancer->name }}</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><h5 class="fw-bold {{ $index === 0 ? 'text-success' : 'text-main' }} mb-0">Rp {{ number_format($bid->amount, 0, ',', '.') }}</h5></td>
                                         <td class="text-secondary-custom small fw-medium">{{ $bid->created_at->diffForHumans() }}</td>
                                         <td class="text-center">
-                                            <button class="btn btn-outline-success-custom fw-bold w-100" disabled>Pilih Pemenang</button>
+                                            @if($isBiddingOpen)
+                                                <form action="{{ route('projects.choose-winner', ['project' => $project->id, 'bid' => $bid->id]) }}" method="POST" onsubmit="return confirmAction(event, 'Yakin memilih freelancer ini sebagai pemenang? Proyek akan langsung terkunci.', 'Ya, Pilih Pemenang')">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="btn {{ $index === 0 ? 'btn-success-custom shadow-sm' : 'btn-outline-success-custom' }} fw-bold w-100">Pilih Pemenang</button>
+                                                </form>
+                                            @elseif($project->winnerBid && $project->winnerBid->id === $bid->id)
+                                                <button class="btn btn-primary fw-bold shadow-sm w-100" disabled><i class="bi bi-check2 me-1"></i> Pemenang</button>
+                                            @else
+                                                <button class="btn btn-outline-secondary fw-bold w-100" disabled>Terkalahkan</button>
+                                            @endif
                                         </td>
                                     </tr>
-                                @endforeach
-                            @endisset
-                            <tr class="rank-1">
-                                <td class="text-center">
-                                    <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm border border-success" style="width: 40px; height: 40px;">
-                                        <h5 class="fw-bold text-success mb-0">1</h5>
-                                    </div>
-                                    <span class="d-block mt-1 small text-success fw-bold"><i class="bi bi-trophy-fill me-1"></i>Leader</span>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="avatar-sm avatar-primary">AS</div>
-                                        <div>
-                                            <a href="{{ url('/profilefreelancer') }}" class="fw-bold text-primary text-decoration-none d-block hover-link">Andi Setiawan</a>
-                                            <span class="text-star small"><i class="bi bi-star-fill"></i> 4.9 (34 Proyek)</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><h5 class="fw-bold text-success mb-0">Rp 2.100.000</h5></td>
-                                <td class="text-secondary-custom small fw-medium">10 Menit yang lalu</td>
-                                <td class="text-center">
-                                    @if($projectStatus === 'open')
-                                        <form action="#" method="POST" onsubmit="return confirmAction(event, 'Yakin memilih freelancer ini sebagai pemenang? Proyek akan langsung terkunci.', 'Ya, Pilih Pemenang')">
-                                            <button type="submit" class="btn btn-success-custom fw-bold shadow-sm w-100">Pilih Pemenang</button>
-                                        </form>
-                                    @elseif($projectStatus === 'closed')
-                                        <button class="btn btn-primary fw-bold shadow-sm w-100" disabled><i class="bi bi-check2 me-1"></i> Pemenang</button>
-                                    @else
-                                        <button class="btn btn-secondary fw-bold shadow-sm w-100" disabled>Selesai</button>
-                                    @endif
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <td class="text-center">
-                                    <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm border border-secondary" style="width: 40px; height: 40px;">
-                                        <h5 class="fw-bold text-secondary mb-0">2</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="avatar-sm avatar-dark"><i class="bi bi-incognito"></i></div>
-                                        <div>
-                                            <span class="fw-bold text-main d-block">Anonymous Freelancer</span>
-                                            <span class="text-secondary-custom small">Blind Review Aktif</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><h5 class="fw-bold text-main mb-0">Rp 2.300.000</h5></td>
-                                <td class="text-secondary-custom small fw-medium">1 Jam yang lalu</td>
-                                <td class="text-center">
-                                    @if($projectStatus === 'open')
-                                        <form action="#" method="POST" onsubmit="return confirmAction(event, 'Yakin memilih freelancer ini sebagai pemenang? Proyek akan langsung terkunci.', 'Ya, Pilih Pemenang')">
-                                            <button type="submit" class="btn btn-outline-success-custom fw-bold w-100">Pilih Pemenang</button>
-                                        </form>
-                                    @else
-                                        <button class="btn btn-outline-secondary fw-bold w-100" disabled>Terkunci</button>
-                                    @endif
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="text-center">
-                                    <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm border border-secondary" style="width: 40px; height: 40px;">
-                                        <h5 class="fw-bold text-secondary mb-0">3</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="avatar-sm" style="background-color: var(--secondary); color: white;">MD</div>
-                                        <div>
-                                            <a href="{{ url('/profilefreelancer') }}" class="fw-bold text-primary text-decoration-none d-block hover-link">Maya Dwi</a>
-                                            <span class="text-star small"><i class="bi bi-star-fill"></i> 4.5 (12 Proyek)</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><h5 class="fw-bold text-main mb-0">Rp 2.500.000</h5></td>
-                                <td class="text-secondary-custom small fw-medium">3 Jam yang lalu</td>
-                                <td class="text-center">
-                                    @if($projectStatus === 'open')
-                                        <form action="#" method="POST" onsubmit="return confirmAction(event, 'Yakin memilih freelancer ini sebagai pemenang? Proyek akan langsung terkunci.', 'Ya, Pilih Pemenang')">
-                                            <button type="submit" class="btn btn-outline-success-custom fw-bold w-100">Pilih Pemenang</button>
-                                        </form>
-                                    @else
-                                        <button class="btn btn-outline-secondary fw-bold w-100" disabled>Terkunci</button>
-                                    @endif
-                                </td>
-                            </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">Belum ada penawaran.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        @if($projectStatus !== 'open')
+        @if(!$isBiddingOpen && $project->winnerBid)
         <div class="row mt-5">
             <div class="col-12">
                 <div class="card section-card p-4 p-md-5 border-primary" style="border-width: 2px !important; background: linear-gradient(to right, rgba(139, 94, 60, 0.05), transparent);">
@@ -331,17 +271,17 @@
                             <p class="text-secondary-custom mb-0">Hubungi freelancer untuk berdiskusi lebih lanjut tentang proyek ini di luar platform.</p>
                             
                             <div class="d-flex flex-wrap gap-3 mt-4">
-                                <a href="https://wa.me/6281234567890" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm">
-                                    <i class="bi bi-whatsapp me-2"></i> +62 812-3456-7890
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $project->winnerBid->freelancer->phone) }}" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm">
+                                    <i class="bi bi-whatsapp me-2"></i> {{ $project->winnerBid->freelancer->phone }}
                                 </a>
-                                <a href="mailto:andi@example.com" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
-                                    <i class="bi bi-envelope me-2"></i> andi@example.com
+                                <a href="mailto:{{ $project->winnerBid->freelancer->email }}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
+                                    <i class="bi bi-envelope me-2"></i> {{ $project->winnerBid->freelancer->email }}
                                 </a>
                             </div>
                         </div>
 
                         <div class="text-md-end text-center p-4 bg-white rounded-4 shadow-sm" style="min-width: 300px;">
-                            @if($projectStatus === 'closed')
+                            @if($project->status === 'closed')
                                 <h6 class="fw-bold text-main mb-3">Selesaikan Proyek?</h6>
                                 <p class="small text-secondary-custom mb-3">Jika pekerjaan sudah selesai dan diserahkan sepenuhnya, tandai selesai untuk memberi ulasan.</p>
                                 <button type="button" class="btn btn-primary fw-bold w-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#reviewModal">
@@ -351,7 +291,7 @@
                                 <div class="text-center">
                                     <i class="bi bi-star-fill text-star fs-1 mb-2"></i>
                                     <h6 class="fw-bold text-success mb-1">Proyek Selesai</h6>
-                                    <p class="small text-secondary-custom mb-0">Anda sudah memberikan ulasan.</p>
+                                    <p class="small text-secondary-custom mb-0">Anda sudah menyelesaikan proyek ini.</p>
                                 </div>
                             @endif
                         </div>
@@ -370,11 +310,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="#" method="POST">
+                        <form action="{{ route('projects.complete', $project->id) }}" method="POST">
                             @csrf
                             <div class="text-center mb-4">
-                                <div class="avatar-sm avatar-primary mx-auto mb-2" style="width: 60px; height: 60px; font-size: 24px;">AS</div>
-                                <h6 class="fw-bold mb-0">Andi Setiawan</h6>
+                                <div class="avatar-sm avatar-primary mx-auto mb-2" style="width: 60px; height: 60px; font-size: 24px;">{{ strtoupper(substr($project->winnerBid->freelancer->name, 0, 2)) }}</div>
+                                <h6 class="fw-bold mb-0">{{ $project->winnerBid->freelancer->name }}</h6>
                             </div>
 
                             <div class="mb-3 text-center">
@@ -391,7 +331,7 @@
 
                             <div class="mb-4">
                                 <label for="reviewText" class="form-label fw-semibold">Ulasan Pekerjaan</label>
-                                <textarea class="form-control" id="reviewText" name="review" rows="4" placeholder="Bagaimana hasil kerja Andi? Apakah sesuai ekspektasi Anda?" required></textarea>
+                                <textarea class="form-control" id="reviewText" name="review" rows="4" placeholder="Bagaimana hasil kerja freelancer? Apakah sesuai ekspektasi Anda?" required></textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary fw-bold w-100 py-2">Kirim Ulasan & Selesaikan Proyek</button>
@@ -402,6 +342,42 @@
         </div>
         @endif
 
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const countdownEl = document.getElementById("liveCountdown");
+        if (countdownEl) {
+            const deadlineIso = countdownEl.getAttribute("data-deadline");
+            const deadlineTime = new Date(deadlineIso).getTime();
+
+            const timer = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = deadlineTime - now;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    countdownEl.innerHTML = "WAKTU HABIS";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                let display = "";
+                if (days > 0) display += days + "h ";
+                display += String(hours).padStart(2, '0') + ":" + 
+                           String(minutes).padStart(2, '0') + ":" + 
+                           String(seconds).padStart(2, '0');
+
+                countdownEl.innerHTML = display;
+            }, 1000);
+        }
+    });
+</script>
 @endsection
 
 

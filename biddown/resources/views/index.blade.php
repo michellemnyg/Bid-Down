@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="id">
 <head>
     <meta charset="UTF-8" />
@@ -227,8 +227,20 @@
                 </ul>
 
                 <div class="d-flex gap-3 ms-lg-4 mt-3 mt-lg-0">
-                    <a href="{{ url('/login') }}" class="btn btn-outline-primary px-4">Masuk</a>
-                    <a href="{{ url('/register') }}" class="btn btn-primary px-4">Daftar</a>
+                    @auth
+                        @if(Auth::user()->isClient())
+                            <a href="{{ route('dashboardclient') }}" class="btn btn-primary px-4">Dashboard</a>
+                        @else
+                            <a href="{{ route('dashboardfreelancer') }}" class="btn btn-primary px-4">Dashboard</a>
+                        @endif
+                        <form method="POST" action="{{ route('logout') }}" class="m-0">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger px-4">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-outline-primary px-4">Masuk</a>
+                        <a href="{{ route('register') }}" class="btn btn-primary px-4">Daftar</a>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -249,10 +261,10 @@
                     </p>
                     
                     <div class="d-flex gap-3 justify-content-center flex-column flex-sm-row">
-                        <a href="{{ url('/register') }}" class="btn btn-light btn-lg rounded-pill px-5 d-flex align-items-center justify-content-center gap-2">
+                        <a href="{{ route('explore') }}" class="btn btn-light btn-lg rounded-pill px-5 d-flex align-items-center justify-content-center gap-2">
                             <i class="bi bi-search fs-5"></i> Cari Proyek
                         </a>
-                        <a href="{{ url('/register') }}" class="btn btn-outline-light btn-lg rounded-pill px-5 d-flex align-items-center justify-content-center gap-2">
+                        <a href="{{ route('make-project') }}" class="btn btn-outline-light btn-lg rounded-pill px-5 d-flex align-items-center justify-content-center gap-2">
                             <i class="bi bi-rocket-takeoff fs-5"></i> Posting Proyek
                         </a>
                     </div>
@@ -322,74 +334,30 @@
 
             <div class="row g-4">
                 
+                @foreach($latestProjects as $project)
                 <div class="col-md-6 col-xl-4">
                     <div class="card project-card p-4 d-flex flex-column h-100">
                         <div class="mb-3">
-                            <span class="badge badge-soft-secondary rounded mb-2">Web Development</span>
+                            <span class="badge badge-soft-secondary rounded mb-2">{{ $project->category }}</span>
                             <h5 class="fw-bold text-main line-clamp-2 mb-1">
-                                <a href="{{ url('/register') }}" class="text-decoration-none text-main hover-link">Pembuatan Website E-Commerce Fashion</a>
+                                <a href="{{ Auth::check() && Auth::user()->isClient() ? route('projectdetailclient', $project->id) : route('projectdetailfreelancer', $project->id) }}" class="text-decoration-none text-main hover-link">{{ $project->title }}</a>
                             </h5>
                         </div>
-                        <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Buatkan website e-commerce dengan fitur lengkap untuk toko online fashion, termasuk integrasi payment gateway.</p>
+                        <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">{{ $project->description }}</p>
                         
                         <div class="mt-auto">
                             <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-3">
                                 <i class="bi bi-clock"></i>
-                                <span class="fw-medium">Sisa waktu: 2 Hari 5 Jam</span>
+                                <span class="fw-medium">Tenggat: {{ \Carbon\Carbon::parse($project->deadline)->format('d M Y') }}</span>
                             </div>
                             <div class="p-3 bg-light-custom rounded-3 border">
                                 <span class="small text-secondary-custom d-block mb-1">Budget Maksimal</span>
-                                <span class="fw-bold text-primary fs-5">Rp 15.000.000</span>
+                                <span class="fw-bold text-primary fs-5">Rp {{ number_format($project->budget_max, 0, ',', '.') }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-6 col-xl-4">
-                    <div class="card project-card p-4 d-flex flex-column h-100">
-                        <div class="mb-3">
-                            <span class="badge badge-soft-secondary rounded mb-2">Desain Grafis</span>
-                            <h5 class="fw-bold text-main line-clamp-2 mb-1">
-                                <a href="{{ url('/register') }}" class="text-decoration-none text-main hover-link">Desain Logo & Identitas Startup</a>
-                            </h5>
-                        </div>
-                        <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Desain 3 varian logo untuk startup teknologi. Konsep modern, minimalis, dan mudah diaplikasikan ke berbagai media.</p>
-                        
-                        <div class="mt-auto">
-                            <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-3">
-                                <i class="bi bi-clock"></i>
-                                <span class="fw-medium">Sisa waktu: 4 Hari 12 Jam</span>
-                            </div>
-                            <div class="p-3 bg-light-custom rounded-3 border">
-                                <span class="small text-secondary-custom d-block mb-1">Budget Maksimal</span>
-                                <span class="fw-bold text-primary fs-5">Rp 5.000.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-xl-4">
-                    <div class="card project-card p-4 d-flex flex-column h-100">
-                        <div class="mb-3">
-                            <span class="badge badge-soft-secondary rounded mb-2">Penulisan</span>
-                            <h5 class="fw-bold text-main line-clamp-2 mb-1">
-                                <a href="{{ url('/register') }}" class="text-decoration-none text-main hover-link">Penulisan 10 Artikel Blog SEO</a>
-                            </h5>
-                        </div>
-                        <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">Tulis 10 artikel blog dengan optimasi SEO untuk website agensi marketing kami. Tema seputar digital marketing.</p>
-                        
-                        <div class="mt-auto">
-                            <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-3">
-                                <i class="bi bi-clock"></i>
-                                <span class="fw-medium">Sisa waktu: 5 Hari 18 Jam</span>
-                            </div>
-                            <div class="p-3 bg-light-custom rounded-3 border">
-                                <span class="small text-secondary-custom d-block mb-1">Budget Maksimal</span>
-                                <span class="fw-bold text-primary fs-5">Rp 3.000.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
 
             </div>
         </div>
@@ -409,7 +377,7 @@
                 </div>
                 <div class="col-md-8 text-center text-md-end">
                     <a href="#how-works" class="text-secondary-custom text-decoration-none small me-4 hover-link fw-medium">Cara Kerja</a>
-                    <a href="{{ url('/explore') }}" class="text-secondary-custom text-decoration-none small me-4 hover-link fw-medium">Eksplor Proyek</a>
+                    <a href="{{ route('explore') }}" class="text-secondary-custom text-decoration-none small me-4 hover-link fw-medium">Eksplor Proyek</a>
                     <a href="#" class="text-secondary-custom text-decoration-none small me-4 hover-link fw-medium">Bantuan</a>
                     <a href="#" class="text-secondary-custom text-decoration-none small hover-link fw-medium">Kebijakan Privasi</a>
                 </div>
