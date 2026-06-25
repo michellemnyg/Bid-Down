@@ -196,17 +196,19 @@
                             @endphp
                             @if($project->status === 'closed')
                                 <span class="badge badge-soft-warning rounded-pill px-3 py-2 fw-semibold">Pengerjaan</span>
-                            @elseif($project->status === 'completed' || ($project->status === 'reviewed' && !$hasReviewed))
-                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Selesai (Menunggu Ulasan)</span>
+                            @elseif(!$hasReviewed && ($project->status === 'completed' || $project->status === 'reviewed'))
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Menunggu Ulasan Anda</span>
+                            @elseif($hasReviewed && $project->status === 'completed')
+                                <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fw-semibold">Menunggu Ulasan Klien</span>
                             @else
-                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Diulas</span>
+                                <span class="badge badge-soft-success rounded-pill px-3 py-2 fw-semibold">Selesai Sepenuhnya</span>
                             @endif
                         </td>
                         <td class="text-center">
                             @if($project->status === 'closed')
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $project->client->phone) }}" target="_blank" class="btn btn-sm btn-success fw-medium px-3"><i class="bi bi-whatsapp me-1"></i> Hubungi Klien</a>
-                            @elseif($project->status === 'completed' || ($project->status === 'reviewed' && !$hasReviewed))
-                                <a href="{{ route('projectdetailfreelancer', $project->id) }}" class="btn btn-sm btn-outline-primary fw-medium px-3"><i class="bi bi-star me-1"></i> Ulas Balik</a>
+                            @elseif(!$hasReviewed && ($project->status === 'completed' || $project->status === 'reviewed'))
+                                <a href="{{ route('projectdetailfreelancer', $project->id) }}" class="btn btn-sm btn-outline-primary fw-medium px-3"><i class="bi bi-star me-1"></i> Ulas Klien</a>
                             @else
                                 <a href="{{ route('projectdetailfreelancer', $project->id) }}" class="btn btn-sm btn-outline-secondary fw-medium px-3"><i class="bi bi-eye me-1"></i> Detail</a>
                             @endif
