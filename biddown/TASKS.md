@@ -41,12 +41,12 @@ This document outlines the core features of the "Bid Down" platform, divided int
   - [ ] Fetch project details for client/freelancer views.
 
 ## 4. Bidding System & Project Lifecycle
-- [ ] **Frontend (UI/UX)**
-  - [ ] Bid Submission UI: Modal/inline form on Freelancer Project Detail page.
-  - [ ] Bid List UI: List/table on Client Project Detail page to compare bids.
-  - [ ] **Bidding Lock & Timer**: Lock the bidding area when the countdown timer hits zero or a winner is selected. Change badge status and timer text accordingly (e.g., "Bidding Ditutup").
-  - [ ] **Exclusive Contact Section**: Show Client/Freelancer contact details (WhatsApp, Email) on the Project Detail page *only* after a winner is chosen, exclussively to the Client and the winner.
-  - [ ] **Two-Way Review System**: UI to submit and view reviews (Client <-> Freelancer) after the client marks the project as "Selesai".
+- [x] **Frontend (UI/UX)**
+  - [x] Bid Submission UI: Modal/inline form on Freelancer Project Detail page.
+  - [x] Bid List UI: List/table on Client Project Detail page to compare bids.
+  - [x] **Bidding Lock & Timer**: Lock the bidding area when the countdown timer hits zero or a winner is selected. Change badge status and timer text accordingly (e.g., "Bidding Ditutup").
+  - [x] **Exclusive Contact Section**: Show Client/Freelancer contact details (WhatsApp, Email) on the Project Detail page *only* after a winner is chosen, exclussively to the Client and the winner.
+  - [x] **Two-Way Review System**: UI to submit and view reviews (Client <-> Freelancer) after the client marks the project as "Selesai".
 - [ ] **Backend**
   - [ ] `BidController@store`: Validate and save bids.
   - [ ] Prevent duplicate bids, or bids on closed/expired projects.

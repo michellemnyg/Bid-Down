@@ -78,6 +78,11 @@
 @endsection
 
 @section('content')
+        @php
+            // Mock state for UI preview (open, closed, completed)
+            $projectStatus = request('status', $project->status ?? 'open');
+        @endphp
+        
         <div class="mb-4">
             <button onclick="history.back()" class="btn btn-outline-secondary shadow-sm fw-semibold px-4">
                 <i class="bi bi-arrow-left me-2"></i> Kembali
@@ -90,9 +95,19 @@
                 <div class="card section-card p-4 p-md-5 h-100">
                     <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
                         <h2 class="fw-bold text-main mb-0">{{ $project->title ?? 'Pembuatan Landing Page Perusahaan' }}</h2>
-                        <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
-                            <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
-                        </span>
+                        @if($projectStatus === 'open')
+                            <span class="badge badge-soft-success rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span> OPEN BID
+                            </span>
+                        @elseif($projectStatus === 'closed')
+                            <span class="badge badge-soft-primary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                <i class="bi bi-lock-fill"></i> BIDDING DITUTUP
+                            </span>
+                        @else
+                            <span class="badge badge-soft-secondary rounded-pill px-3 py-2 fs-6 d-flex align-items-center gap-1">
+                                <i class="bi bi-check-circle-fill"></i> PROYEK SELESAI
+                            </span>
+                        @endif
                     </div>
 
                     <div class="d-flex flex-wrap gap-3 text-secondary-custom mb-4 align-items-center border-bottom border-light pb-4">
@@ -126,8 +141,25 @@
             <div class="col-lg-4">
                 <div class="timer-box p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-center">
                     
-                    <h6 class="text-secondary-custom fw-semibold text-uppercase tracking-wide mb-2"><i class="bi bi-alarm me-1"></i> Sisa Waktu Bidding</h6>
-                    <h2 class="fw-bold text-accent mb-4 digital-clock display-5">02:15:30</h2>
+                    <h6 class="text-secondary-custom fw-semibold text-uppercase tracking-wide mb-2">
+                        @if($projectStatus === 'open')
+                            <i class="bi bi-alarm me-1"></i> Sisa Waktu Bidding
+                        @else
+                            <i class="bi bi-award me-1"></i> Status Pemenang
+                        @endif
+                    </h6>
+                    
+                    @if($projectStatus === 'open')
+                        <h2 class="fw-bold text-accent mb-4 digital-clock display-5">02:15:30</h2>
+                    @else
+                        <div class="d-flex align-items-center justify-content-center gap-3 mb-4 mt-2">
+                            <div class="avatar-sm avatar-primary">AS</div>
+                            <div class="text-start">
+                                <h5 class="fw-bold text-main mb-0">Andi Setiawan (Anda)</h5>
+                                <span class="text-success small fw-semibold">Anda terpilih sebagai pemenang!</span>
+                            </div>
+                        </div>
+                    @endif
 
                     <hr class="border-secondary opacity-25 my-4">
 
@@ -147,6 +179,7 @@
 
         <section id="biddingarea">
             
+            @if($projectStatus === 'open')
             <div class="bidding-form-card p-4 p-md-5 mb-5">
                 <div class="row align-items-center g-4">
                     <div class="col-md-6">
@@ -168,6 +201,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4">
                 <h4 class="fw-bold text-main mb-2 mb-sm-0"><i class="bi bi-list-ol text-primary me-2"></i> Leaderboard Bidding</h4>
@@ -262,6 +296,88 @@
                 </div>
             </div>
         </section>
+
+        @if($projectStatus !== 'open')
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card section-card p-4 p-md-5 border-success" style="border-width: 2px !important; background: linear-gradient(to right, rgba(30, 142, 62, 0.05), transparent);">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                        
+                        <div>
+                            <h4 class="fw-bold text-main mb-2"><i class="bi bi-person-lines-fill text-success me-2"></i> Kontak Klien</h4>
+                            <p class="text-secondary-custom mb-0">Hubungi klien untuk memulai pengerjaan proyek ini di luar platform.</p>
+                            
+                            <div class="d-flex flex-wrap gap-3 mt-4">
+                                <a href="https://wa.me/6280987654321" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm">
+                                    <i class="bi bi-whatsapp me-2"></i> +62 809-8765-4321
+                                </a>
+                                <a href="mailto:klien@perusahaan.com" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
+                                    <i class="bi bi-envelope me-2"></i> klien@perusahaan.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="text-md-end text-center p-4 bg-white rounded-4 shadow-sm" style="min-width: 300px;">
+                            @if($projectStatus === 'completed')
+                                <h6 class="fw-bold text-main mb-3">Proyek Selesai</h6>
+                                <p class="small text-secondary-custom mb-3">Klien telah menandai proyek ini selesai. Silakan berikan ulasan balik untuk klien.</p>
+                                <button type="button" class="btn btn-success fw-bold w-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#reviewClientModal">
+                                    <i class="bi bi-star-fill me-1"></i> Beri Ulasan Klien
+                                </button>
+                            @else
+                                <div class="text-center">
+                                    <i class="bi bi-tools text-primary fs-1 mb-2"></i>
+                                    <h6 class="fw-bold text-main mb-1">Sedang Dikerjakan</h6>
+                                    <p class="small text-secondary-custom mb-0">Menunggu klien menandai proyek selesai.</p>
+                                </div>
+                            @endif
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal Ulasan untuk Klien -->
+        <div class="modal fade" id="reviewClientModal" tabindex="-1" aria-labelledby="reviewClientModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h5 class="modal-title fw-bold text-main" id="reviewClientModalLabel">Beri Ulasan ke Klien</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#" method="POST">
+                            @csrf
+                            <div class="text-center mb-4">
+                                <div class="avatar-sm bg-light text-secondary mx-auto mb-2" style="width: 60px; height: 60px; font-size: 24px;"><i class="bi bi-building"></i></div>
+                                <h6 class="fw-bold mb-0">PT Jaya Abadi</h6>
+                            </div>
+
+                            <div class="mb-3 text-center">
+                                <label class="form-label fw-semibold d-block">Rating Anda</label>
+                                <div class="fs-2 text-star" style="cursor: pointer;">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                                <input type="hidden" name="rating" value="5">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="reviewClientText" class="form-label fw-semibold">Pengalaman Bekerja Sama</label>
+                                <textarea class="form-control" id="reviewClientText" name="review" rows="4" placeholder="Bagaimana pengalaman Anda bekerja dengan klien ini? (Komunikasi, kejelasan instruksi, dll)" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success fw-bold w-100 py-2">Kirim Ulasan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
 
 @endsection
 
