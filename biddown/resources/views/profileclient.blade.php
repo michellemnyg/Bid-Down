@@ -111,7 +111,7 @@
         @php
             $totalProjectsClient = App\Models\Project::where('client_id', $client->id)->count();
             $hiredProjects = App\Models\Project::where('client_id', $client->id)->whereNotNull('winner_bid_id')->count();
-            $completedProjectsClient = App\Models\Project::where('client_id', $client->id)->where('status', 'completed')->count();
+            $completedProjectsClient = App\Models\Project::where('client_id', $client->id)->whereIn('status', ['completed', 'reviewed'])->count();
             $hireRate = $totalProjectsClient > 0 ? round(($hiredProjects / $totalProjectsClient) * 100) : 0;
         @endphp
         <div class="row align-items-center text-center">
