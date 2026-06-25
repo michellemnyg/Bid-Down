@@ -51,3 +51,12 @@ Route::middleware(['auth', 'role:freelancer'])->group(function () {
     Route::delete('/bids/{bid}', [BidController::class, 'destroy'])->name('bids.destroy');
     Route::post('/projects/{project}/review', [ProjectController::class, 'leaveReview'])->name('projects.review');
 });
+
+Route::get('/seed', function () {
+    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+        '--seed' => true,
+        '--force' => true
+    ]);
+    return 'Database migrated and seeded successfully! You can go back now.';
+});
+
