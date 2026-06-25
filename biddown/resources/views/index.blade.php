@@ -204,7 +204,7 @@
 </head>
 <body>
     @include('partials.flash')
-    
+
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container-lg">
             <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center gap-2" href="#">
@@ -259,7 +259,7 @@
                     <p class="fs-5 mb-5 opacity-75 fw-normal px-md-5" style="line-height: 1.6;">
                         Klien memposting budget yang tersedia. Freelancer bersaing dengan menawarkan harga terbaik. Adil, transparan, dan menguntungkan kedua belah pihak.
                     </p>
-                    
+
                     <div class="d-flex gap-3 justify-content-center flex-column flex-sm-row">
                         <a href="{{ route('explore') }}" class="btn btn-light btn-lg rounded-pill px-5 d-flex align-items-center justify-content-center gap-2">
                             <i class="bi bi-search fs-5"></i> Cari Proyek
@@ -333,7 +333,7 @@
             </div>
 
             <div class="row g-4">
-                
+
                 @foreach($latestProjects as $project)
                 <div class="col-md-6 col-xl-4">
                     <div class="card project-card p-4 d-flex flex-column h-100">
@@ -344,7 +344,7 @@
                             </h5>
                         </div>
                         <p class="text-secondary-custom small line-clamp-2 mb-4" style="line-height: 1.5;">{{ $project->description }}</p>
-                        
+
                         <div class="mt-auto">
                             <div class="d-flex align-items-center gap-2 small text-secondary-custom mb-3">
                                 <i class="bi bi-clock"></i>
@@ -388,5 +388,4 @@
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
-
 

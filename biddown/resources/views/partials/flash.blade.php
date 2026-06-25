@@ -44,7 +44,7 @@
     </style>
 
     <script>
-        // Auto-hide the flash message after 4 seconds
+
         setTimeout(() => {
             const flashWrap = document.querySelector('.bid-flash-wrap');
             if (flashWrap) {

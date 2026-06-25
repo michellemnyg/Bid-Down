@@ -148,7 +148,6 @@
     </button>
 </div>
 
-{{-- HEADER PROFIL --}}
 <div class="card p-4 p-md-5 mb-4">
 
     <div class="row align-items-center">
@@ -258,7 +257,6 @@
                         Website
                     </a>
                     @endif
-                
 
             </div>
 
@@ -270,12 +268,10 @@
 
 <div class="row g-4">
 
-    {{-- SIDEBAR KIRI --}}
     <div class="col-lg-4">
 
         <div class="profile-sidebar">
 
-            {{-- TENTANG SAYA --}}
             <div class="card p-4 mb-4">
 
                 <div class="d-flex align-items-center gap-2 mb-3">
@@ -291,7 +287,6 @@
 
             </div>
 
-            {{-- KEAHLIAN --}}
             <div class="card p-4">
 
                 <div class="d-flex align-items-center gap-2 mb-3">
@@ -323,10 +318,8 @@
 
     </div>
 
-    {{-- KONTEN KANAN --}}
     <div class="col-lg-8">
 
-        {{-- PORTOFOLIO --}}
         <div class="card p-4 p-md-5 mb-4">
 
             <div class="d-flex align-items-center gap-2 mb-4">
@@ -380,7 +373,6 @@
 
         </div>
 
-        {{-- ULASAN --}}
         <div class="card p-4 p-md-5">
 
             <div class="d-flex align-items-center gap-2 mb-4">

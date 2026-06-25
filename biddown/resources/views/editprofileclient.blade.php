@@ -72,7 +72,7 @@
 @endsection
 
 @section('content')
-        
+
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
             <div>
                 <h2 class="fw-bold mb-1"><i class="bi bi-gear me-2 text-primary"></i>Pengaturan Profil Klien</h2>
@@ -86,12 +86,12 @@
         <form action="{{ route('profileclient.update') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirmAction(event, 'Simpan perubahan profil Anda?', 'Ya, Simpan')">
             @csrf
             @method('PUT')
-            
+
             <div class="row g-4">
                 <div class="col-lg-4">
                     <div class="card section-card text-center p-4 h-100 d-flex flex-column justify-content-center">
                         <h5 class="fw-bold mb-4">Logo Perusahaan / Profil</h5>
-                        
+
                         <div class="avatar-upload-container mb-3">
                             <div class="avatar-preview overflow-hidden" id="imagePreview">
                                 @if($client->avatar_url)
@@ -105,7 +105,7 @@
                             </label>
                             <input type="file" id="profileUpload" name="avatar" class="d-none" accept="image/png, image/jpeg, image/jpg">
                         </div>
-                        
+
                         <p class="small text-secondary-custom mb-0 mt-3">
                             Format yang didukung: JPEG, PNG.<br>Ukuran maksimal 2MB.
                         </p>
@@ -115,7 +115,7 @@
                 <div class="col-lg-8">
                     <div class="card section-card p-4 h-100">
                         <h5 class="fw-bold mb-4 border-bottom pb-3">Informasi Dasar</h5>
-                        
+
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <label for="fullName" class="form-label fw-semibold">Nama Perusahaan / Klien <span class="text-danger">*</span></label>
@@ -164,14 +164,14 @@
 
 @section('scripts')
 <script>
-    // Preview gambar profil saat upload (Placeholder untuk fungsionalitas di masa depan)
+
     document.getElementById('profileUpload').addEventListener('change', function(e) {
         if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
-            
+
             reader.onload = function(e) {
-                // Untuk client, avatar adalah div dengan huruf, jadi kita bisa ubah menjadi image tag kalau diperlukan
-                // atau cukup tampilkan pesan. Karena ini mock, kita tidak mengimplementasi full image preview.
+
+
                 Swal.fire({
                     icon: 'info',
                     title: 'Gambar Dipilih',
@@ -179,7 +179,7 @@
                     confirmButtonColor: '#8b5e3c'
                 });
             }
-            
+
             reader.readAsDataURL(e.target.files[0]);
         }
     });

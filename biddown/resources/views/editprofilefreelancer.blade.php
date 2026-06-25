@@ -86,7 +86,7 @@
 @endsection
 
 @section('content')
-        
+
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
             <div>
                 <h2 class="fw-bold mb-1"><i class="bi bi-gear me-2 text-primary"></i>Pengaturan Profil</h2>
@@ -100,12 +100,12 @@
         <form action="{{ route('profilefreelancer.update') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirmAction(event, 'Simpan perubahan profil Anda?', 'Ya, Simpan')">
             @csrf
             @method('PUT')
-            
+
             <div class="row g-4">
                 <div class="col-lg-4">
                     <div class="card section-card text-center p-4 h-100 d-flex flex-column justify-content-center">
                         <h5 class="fw-bold mb-4">Foto Profil</h5>
-                        
+
                         <div class="avatar-upload-container mb-3">
                             @if($freelancer->avatar_url)
                                 <img src="{{ $freelancer->avatar_url }}" alt="Preview Profil" class="avatar-preview" id="imagePreview">
@@ -117,7 +117,7 @@
                             </label>
                             <input type="file" id="profileUpload" name="avatar" class="d-none" accept="image/png, image/jpeg, image/jpg">
                         </div>
-                        
+
                         <p class="small text-secondary-custom mb-0 mt-3">
                             Format yang didukung: JPEG, PNG.<br>Ukuran maksimal 2MB.
                         </p>
@@ -127,7 +127,7 @@
                 <div class="col-lg-8">
                     <div class="card section-card p-4 h-100">
                         <h5 class="fw-bold mb-4 border-bottom pb-3">Informasi Dasar</h5>
-                        
+
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <label for="fullName" class="form-label fw-semibold">Nama Lengkap <span class="text-danger">*</span></label>
@@ -166,7 +166,7 @@
 
             <div class="card section-card p-4 mt-2">
                 <h5 class="fw-bold mb-4 border-bottom pb-3">Tentang Saya & Keahlian</h5>
-                
+
                 <div class="mb-4">
                     <label for="aboutMe" class="form-label fw-semibold">Deskripsi Diri <span class="text-danger">*</span></label>
                     <textarea class="form-control" id="aboutMe" name="bio" rows="5" required>{{ old('bio', $freelancer->bio ?? 'Halo! Saya Andi, seorang Full-Stack Developer dengan pengalaman lebih dari 4 tahun dalam membangun aplikasi web dan mobile yang responsif, cepat, dan mudah digunakan. Saya berfokus pada ekosistem JavaScript (React.js, Vue.js, Node.js) dan mahir dalam merancang arsitektur database (MySQL, PostgreSQL, MongoDB).') }}</textarea>
@@ -218,8 +218,6 @@
                 </div>
             </div>
 
-
-
             <div class="d-flex justify-content-end gap-3 mb-5 mt-4">
                 <a href="{{ url('/profilefreelancer') }}" class="btn btn-outline-secondary fw-semibold px-4 py-2 bg-white">Batal</a>
                 <button type="submit" class="btn btn-primary fw-bold px-5 py-2 shadow-sm">
@@ -233,7 +231,7 @@
 
 @section('scripts')
 <script>
-    // Script sederhana untuk preview gambar profil saat diunggah
+
     document.getElementById('profileUpload').addEventListener('change', function(event) {
         if (event.target.files && event.target.files[0]) {
             const reader = new FileReader();
@@ -275,5 +273,4 @@
     }
 </script>
 @endsection
-
 

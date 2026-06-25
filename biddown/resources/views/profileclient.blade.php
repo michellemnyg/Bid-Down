@@ -78,7 +78,7 @@
 
         <div class="card section-card p-4 p-md-5 mb-5">
             <div class="row align-items-center gap-4 gap-md-0">
-                
+
                 <div class="col-md-7 d-flex align-items-center gap-4">
                     <div class="profile-avatar-xl overflow-hidden">
                         @if($client->avatar_url)
@@ -148,7 +148,6 @@
                     </a>
                     @endif
 
-                    {{-- Tampilkan jika website tersedia --}}
                     @if(!empty($client->portfolio_url))
                     <a href="{{ $client->portfolio_url }}"
                        target="_blank"
@@ -175,7 +174,7 @@
                 <i class="bi bi-briefcase text-primary fs-4"></i>
                 <h4 class="fw-bold text-main mb-0">Proyek Aktif Klien Ini</h4>
             </div>
-            
+
             <div class="row g-4">
                 @php
                     $activeProjects = App\Models\Project::where('client_id', $client->id)->where('status', 'open')->latest()->get();
@@ -266,5 +265,4 @@
         </section>
 
 @endsection
-
 

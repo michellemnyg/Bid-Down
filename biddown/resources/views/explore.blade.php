@@ -117,7 +117,7 @@
                     <span class="text-primary fw-bold">{{ isset($projects) ? $projects->count() : 8 }}</span> Proyek Ditemukan
                 </p>
             </div>
-            
+
             <div class="row g-4">
                     @forelse ($projects as $project)
                         <div class="col-md-6 col-xl-4">
@@ -158,8 +158,6 @@
                             <h5 class="text-muted">Tidak ada proyek yang sesuai dengan pencarian Anda.</h5>
                         </div>
                     @endforelse
-                
-
 
             </div>
         </section>

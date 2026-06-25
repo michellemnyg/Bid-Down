@@ -26,7 +26,7 @@
 @section('content')
 <form action="{{ route('login.store') }}" method="POST">
     @csrf
-    
+
     <input type="radio" name="role" id="roleFreelancer" class="d-none" value="freelancer" checked>
     <input type="radio" name="role" id="roleClient" class="d-none" value="client">
 
@@ -78,7 +78,7 @@
             }
         });
     });
-    // Trigger on load directly
+
     const checkedRole = document.querySelector('input[name="role"]:checked');
     if(checkedRole) checkedRole.dispatchEvent(new Event('change'));
 </script>

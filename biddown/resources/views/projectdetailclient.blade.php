@@ -85,7 +85,7 @@
         @php
             $isBiddingOpen = $project->isOpen();
         @endphp
-        
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <button onclick="history.back()" class="btn btn-outline-secondary shadow-sm fw-semibold px-4">
                 <i class="bi bi-arrow-left me-2"></i> Kembali
@@ -96,7 +96,7 @@
         </div>
 
         <div class="row g-4 mb-5">
-            
+
             <div class="col-lg-8">
                 <div class="card section-card p-4 p-md-5 h-100">
                     <div class="mb-3">
@@ -138,7 +138,7 @@
 
             <div class="col-lg-4">
                 <div class="timer-box p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-center">
-                    
+
                     <h6 class="text-secondary-custom fw-semibold text-uppercase tracking-wide mb-2">
                         @if($isBiddingOpen)
                             <i class="bi bi-alarm me-1"></i> Sisa Waktu Bidding
@@ -146,7 +146,7 @@
                             <i class="bi bi-award me-1"></i> Status Pemenang
                         @endif
                     </h6>
-                    
+
                     @if($isBiddingOpen)
                         @php
                             $deadline = \Carbon\Carbon::parse($project->deadline);
@@ -186,7 +186,7 @@
         </div>
 
         <section id="bidding-area">
-            
+
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4">
                 <h4 class="fw-bold text-main mb-2 mb-sm-0"><i class="bi bi-list-ol text-primary me-2"></i> Leaderboard Bidding</h4>
                 @if($isBiddingOpen)
@@ -265,11 +265,11 @@
             <div class="col-12">
                 <div class="card section-card p-4 p-md-5 border-primary" style="border-width: 2px !important; background: linear-gradient(to right, rgba(139, 94, 60, 0.05), transparent);">
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
-                        
+
                         <div>
                             <h4 class="fw-bold text-main mb-2"><i class="bi bi-telephone-fill text-primary me-2"></i> Kontak Pemenang</h4>
                             <p class="text-secondary-custom mb-0">Hubungi freelancer untuk berdiskusi lebih lanjut tentang proyek ini di luar platform.</p>
-                            
+
                             <div class="d-flex flex-wrap gap-3 mt-4">
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $project->winnerBid->freelancer->phone) }}" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm">
                                     <i class="bi bi-whatsapp me-2"></i> {{ $project->winnerBid->freelancer->phone }}
@@ -300,8 +300,7 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Modal Ulasan -->
+
         <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow" style="border-radius: 16px;">
@@ -379,5 +378,4 @@
     });
 </script>
 @endsection
-
 

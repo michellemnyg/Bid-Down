@@ -20,7 +20,7 @@
         color: white !important;
         box-shadow: 0 4px 12px rgba(139, 94, 60, 0.2) !important;
     }
-    
+
     #tab-client:checked ~ .form-wrapper .form-client {
         display: block;
     }
@@ -40,7 +40,7 @@
 </div>
 
 <div class="form-wrapper">
-    
+
     <div class="form-client">
         <form action="{{ route('register.store') }}" method="POST">
             @csrf
@@ -68,7 +68,7 @@
                 <label for="client-website" class="form-label">Link Website Perusahaan <span class="fw-normal text-secondary-custom">(Opsional)</span></label>
                 <input type="url" class="form-control" id="client-website" name="website_url" value="{{ old('website_url') }}" placeholder="https://perusahaan.com">
             </div>
-            
+
             <div class="form-check mb-4">
                 <input class="form-check-input" type="checkbox" id="client-terms" required>
                 <label class="form-check-label text-secondary-custom" for="client-terms">
@@ -119,7 +119,7 @@
                 <label for="freelancer-portfolio" class="form-label">Link Portofolio <span class="fw-normal text-secondary-custom">(Opsional)</span></label>
                 <input type="url" class="form-control" id="freelancer-portfolio" name="portfolio_url" value="{{ old('portfolio_url') }}" placeholder="https://github.com/...">
             </div>
-            
+
             <div class="form-check mb-4">
                 <input class="form-check-input" type="checkbox" id="freelancer-terms" required>
                 <label class="form-check-label text-secondary-custom" for="freelancer-terms">
@@ -147,7 +147,7 @@
         radio.addEventListener('change', function() {
             document.querySelectorAll('.role-label').forEach(lbl => lbl.classList.remove('active-role'));
             document.querySelectorAll('.form-client, .form-freelancer').forEach(form => form.style.display = 'none');
-            
+
             if(this.id === 'tab-client') {
                 document.querySelector('.label-client').classList.add('active-role');
                 document.querySelector('.form-client').style.display = 'block';
@@ -157,11 +157,11 @@
             }
         });
     });
-    
-    // Trigger on load directly
+
+
     const checkedRole = document.querySelector('input[name="role_toggle"]:checked');
     if(checkedRole) checkedRole.dispatchEvent(new Event('change'));
-    
+
     document.querySelectorAll('.phone-format').forEach(function(input) {
         input.addEventListener('input', function(e) {
             let val = this.value.replace(/\D/g, ''); 

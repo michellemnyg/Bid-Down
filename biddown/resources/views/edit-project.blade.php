@@ -53,7 +53,7 @@
         <form action="{{ route('projects.update', $project->id) }}" method="POST">
             @csrf
             @method('PUT')
-            
+
             <div class="card section-card">
                 <div class="card-header">
                     <h5 class="fw-bold text-main mb-0">1. Informasi Dasar Proyek</h5>

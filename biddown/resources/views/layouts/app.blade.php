@@ -1036,7 +1036,7 @@ body{
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">
                     @yield('nav-links')
-                    
+
                     <li class="nav-item ms-lg-3 mt-3 mt-lg-0 dropdown">
                         <a class="profile-dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="profile-avatar">
@@ -1085,12 +1085,12 @@ body{
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <script>
     function confirmAction(event, message, confirmText = 'Ya, Lanjutkan') {
         event.preventDefault();
-        
-        // Simpan referensi form secara sinkron agar tidak hilang di dalam Promise
+
+
         const formElement = event.target;
 
         Swal.fire({
@@ -1141,7 +1141,7 @@ body{
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                // Submit form secara terprogram
+
                 formElement.submit();
             }
         });

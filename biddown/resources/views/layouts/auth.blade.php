@@ -149,8 +149,7 @@
             }
         }
     </style>
-    
-    <!-- Auth specific overrides -->
+
     @yield('styles')
 </head>
 <body>

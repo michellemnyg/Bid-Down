@@ -145,7 +145,6 @@
 <form action="{{ route('projects.store') }}" method="POST">
     @csrf
 
-    {{-- INFORMASI DASAR --}}
     <div class="card section-card">
 
         <div class="card-header d-flex align-items-center gap-3">
@@ -243,7 +242,6 @@
         </div>
     </div>
 
-    {{-- BIDDING --}}
     <div class="card section-card">
 
         <div class="card-header d-flex align-items-center gap-3">
@@ -390,7 +388,6 @@
         </div>
     </div>
 
-    {{-- ACTION --}}
     <div class="publish-bar mb-5">
 
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
