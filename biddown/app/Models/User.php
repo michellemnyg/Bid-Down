@@ -57,6 +57,16 @@ class User extends Authenticatable
         return $this->hasMany(Portfolio::class);
     }
 
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
+    public function reviewsGiven()
+    {
+        return $this->hasMany(Review::class, 'reviewer_id');
+    }
+
     public function isClient(): bool
     {
         return $this->role === 'client';

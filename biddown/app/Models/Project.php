@@ -42,6 +42,11 @@ class Project extends Model
         return $this->hasMany(Bid::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function lowestBid()
     {
         return $this->hasOne(Bid::class)->orderBy('amount');
