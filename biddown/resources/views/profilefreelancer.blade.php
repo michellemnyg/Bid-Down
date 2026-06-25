@@ -197,7 +197,7 @@
         </div>
 
         @php
-            $freelancerCompletedProjects = App\Models\Project::where('status', 'completed')->whereHas('winnerBid', function($q) use ($freelancer) {
+            $freelancerCompletedProjects = App\Models\Project::whereIn('status', ['completed', 'reviewed'])->whereHas('winnerBid', function($q) use ($freelancer) {
                 $q->where('freelancer_id', $freelancer->id);
             })->count();
             $freelancerAvgRating = App\Models\Review::where('reviewee_id', $freelancer->id)->avg('rating');

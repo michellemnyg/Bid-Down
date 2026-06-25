@@ -184,7 +184,7 @@
                             </div>
                             <a href="{{ route('projectdetailfreelancer', $project->id) }}" class="fw-semibold text-decoration-none hover-link d-block">{{ $project->title }}</a>
                             <div class="d-flex align-items-center gap-2 mt-1">
-                                <a href="#" class="text-primary small text-decoration-none hover-link fw-medium"><i class="bi bi-building me-1"></i> {{ $project->client->name }}</a>
+                                <a href="{{ route('profileclient', ['id' => $project->client->id]) }}" class="text-primary small text-decoration-none hover-link fw-medium"><i class="bi bi-building me-1"></i> {{ $project->client->name }}</a>
                                 <span class="text-secondary-custom small">&bull;</span>
                                 <span class="text-secondary-custom small">Tgl Deal: {{ $project->updated_at->format('d M Y') }}</span>
                             </div>
