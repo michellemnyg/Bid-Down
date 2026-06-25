@@ -189,7 +189,7 @@
                         </td>
                         <td class="text-center">
                             @if($project->status === 'closed')
-                            <form action="#" method="POST" class="m-0 d-inline" onsubmit="return confirmAction(event, 'Konfirmasi bahwa pengerjaan proyek ini telah selesai?', 'Ya, Selesai')">
+                            <form action="{{ route('projects.complete', $project->id) }}" method="POST" class="m-0 d-inline" onsubmit="return confirmAction(event, 'Konfirmasi bahwa pengerjaan proyek ini telah selesai?', 'Ya, Selesai')">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-success fw-medium px-3"><i class="bi bi-check-circle me-1"></i> Selesai</button>
                             </form>
